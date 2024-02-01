@@ -1,1 +1,2 @@
-# github-actions
+# A collection of Digdir GitHub actions
+
