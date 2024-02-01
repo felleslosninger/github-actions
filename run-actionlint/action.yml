@@ -1,0 +1,16 @@
+name: Run actionlint
+description: Runs actionlint - a static checker for GitHub Actions workflow files
+author: Digdir Plattform Team
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+
+    - name: Download actionlint
+      id: download-actionlint
+      run: bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+      shell: bash
+
+    - name: Check workflow files
+      run: ${{ steps.download-actionlint.outputs.executable }} -color
+      shell: bash
