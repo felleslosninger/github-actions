@@ -1,9 +1,9 @@
-name: "Writes JSON to workload summary"
+name: "Write JSON to workload summary"
 description: |
-  This GitHub Action is designed to enhance visibility by writing JSON content to the workflow summary. 
+  This GitHub Action is designed to write JSON content to the workflow summary. 
   It enables you to present structured data in a clear and readable format in the GitHub Actions UI. 
-  The action accepts a JSON input and an optional title, providing flexibility in customization.
-author: "DigDir Plattform Team"
+  The action accepts a JSON input and an optional title.
+author: "Digdir Plattform Team"
 inputs:
   json:
     required: true

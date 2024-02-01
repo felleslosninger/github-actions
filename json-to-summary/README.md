@@ -6,7 +6,7 @@ This GitHub Action is designed to write JSON content to the workflow summary. It
 
 ## Author
 
-**DigDir Plattform Team**
+**Digdir Plattform Team**
 
 ## Inputs
 
