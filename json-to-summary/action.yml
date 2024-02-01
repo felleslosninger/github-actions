@@ -16,6 +16,8 @@ runs:
   using: "composite"
   steps:
     - name: Write JSON To Summary
+      id: write-json-to-summary
+      shell: bash
       run: |
         {
           echo '### ${{ inputs.title }}'
