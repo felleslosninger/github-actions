@@ -1,0 +1,67 @@
+name: Write Deployment To Grafana
+description:
+author: Digdir Platform Team
+
+inputs:
+  dashboard-id:
+    required: true
+    type: string
+  panel-id:
+    required: true
+    type: string
+  annotation-text:
+    required: true
+    type: string
+  annotation-url:
+    type: string
+    default: ""
+
+runs:
+  using: composite
+  env:
+    GRAFANA_URL: https://digdir.grafana.net/api/annotations/
+  steps:
+    - name: Write deployment text annotation to Grafana
+      id: write-annotation-to-grafana
+      shell: bash
+      run: |
+        if [ -z "${{ inputs.annotation-url }}" ]; then
+          annotation_text="${{ inputs.annotation-text }}"
+        else
+          annotation_text="<a href=\"${{ inputs.annotation-url }}\">${{ inputs.annotation-text }}</a>"
+        fi
+
+        RESPONSE_HTTP_CODE=$(
+          curl \
+            --write-out "%{http_code}" \
+            -i -X POST ${{ env.GRAFANA_URL }} \
+            --header "Accept: application/json" \
+            --header "Content-Type: application/json" \
+            --header "Authorization: Bearer ${{ secrets.DIGDIR_GRAFANA_CLOUD_TOKEN }}" \
+            -d '{ \
+            "dashboardId": ${{ inputs.dashboard-id }}, \
+            "panelId": ${{ inputs.panel-id }}, \
+            "text": "'"$annotation_text"'" \
+            }'
+        );  
+
+        echo "response-http-code=$RESPONSE_HTTP_CODE" >> $GITHUB_OUTPUT
+
+    - name: Log outputs
+      id: log-outputs
+      shell: bash
+      run: |
+        if [ "${{ steps.write-annotation-to-grafana.outputs.response-http-code }}" == "200" ]; then
+          echo "- Annotation added to Grafana :white_check_mark:" >> "$GITHUB_STEP_SUMMARY"
+        else
+          echo "- Failed to add annotation to Grafana :x:" >> "$GITHUB_STEP_SUMMARY"
+        fi
+
+        {
+          echo "  ```json"
+          echo "  dashboard-id: ${{ inputs.dashboard-id }}"
+          echo "  panel-id: ${{ inputs.panel-id }}"
+          echo "  annotation-text: \"${{ inputs.annotation-text }}\""
+          echo "  annotation-url: \"${{ inputs.annotation-url }}\""
+          echo "  ```"
+        } >> "$GITHUB_STEP_SUMMARY"
