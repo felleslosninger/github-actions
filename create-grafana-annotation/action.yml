@@ -12,37 +12,42 @@ inputs:
   annotation-text:
     required: true
     type: string
+  grafana-token:
+    required: true
+    type: string
   annotation-url:
     type: string
     default: ""
 
 runs:
   using: composite
-  env:
-    GRAFANA_URL: https://digdir.grafana.net/api/annotations/
+
   steps:
     - name: Write deployment text annotation to Grafana
       id: write-annotation-to-grafana
       shell: bash
+      env:
+        GRAFANA_URL: https://digdir.grafana.net/api/annotations/
       run: |
-        if [ -z "${{ inputs.annotation-url }}" ]; then
-          annotation_text="${{ inputs.annotation-text }}"
-        else
-          annotation_text="<a href=\"${{ inputs.annotation-url }}\">${{ inputs.annotation-text }}</a>"
-        fi
+        set -o allexport; source "${{ github.action_path }}/helpers.sh"; set +o allexport;
+
+        ANNOTATION_JSON=$(
+          create_json_payload \
+            "${{ inputs.dashboard-id }}" \
+            "${{ inputs.panel-id }}" \
+            "${{ inputs.annotation-text }}" \
+            "${{ inputs.annotation-url }}" \
+        )
 
         RESPONSE_HTTP_CODE=$(
           curl \
-            --write-out "%{http_code}" \
-            -i -X POST ${{ env.GRAFANA_URL }} \
+            -X POST ${{ env.GRAFANA_URL }} \
+            --write-out "%{http_code}\n" \
+            -o /dev/null \
             --header "Accept: application/json" \
             --header "Content-Type: application/json" \
-            --header "Authorization: Bearer ${{ secrets.DIGDIR_GRAFANA_CLOUD_TOKEN }}" \
-            -d '{ \
-            "dashboardId": ${{ inputs.dashboard-id }}, \
-            "panelId": ${{ inputs.panel-id }}, \
-            "text": "'"$annotation_text"'" \
-            }'
+            --header "Authorization: Bearer ${{ inputs.grafana-token }}" \
+            -d "$ANNOTATION_JSON"
         );  
 
         echo "response-http-code=$RESPONSE_HTTP_CODE" >> $GITHUB_OUTPUT
@@ -54,14 +59,18 @@ runs:
         if [ "${{ steps.write-annotation-to-grafana.outputs.response-http-code }}" == "200" ]; then
           echo "- Annotation added to Grafana :white_check_mark:" >> "$GITHUB_STEP_SUMMARY"
         else
-          echo "- Failed to add annotation to Grafana :x:" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Failed to add annotation to Grafana (HTTP response: ${{ steps.write-annotation-to-grafana.outputs.response-http-code }}) :x:" >> "$GITHUB_STEP_SUMMARY"
         fi
 
         {
-          echo "  ```json"
+          echo '  ```'
           echo "  dashboard-id: ${{ inputs.dashboard-id }}"
           echo "  panel-id: ${{ inputs.panel-id }}"
           echo "  annotation-text: \"${{ inputs.annotation-text }}\""
           echo "  annotation-url: \"${{ inputs.annotation-url }}\""
-          echo "  ```"
+          echo '  ```'
         } >> "$GITHUB_STEP_SUMMARY"
+
+        if [ "${{ steps.write-annotation-to-grafana.outputs.response-http-code }}" != "200" ]; then
+          exit 1
+        fi

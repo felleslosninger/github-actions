@@ -1,6 +1,6 @@
 name: Run actionlint
 description: Runs actionlint - a static checker for GitHub Actions workflow files
-author: Digdir Plattform Team
+author: Digdir Platform Team
 runs:
   using: composite
   steps:
