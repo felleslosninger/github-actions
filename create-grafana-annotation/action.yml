@@ -59,12 +59,12 @@ runs:
         fi
 
         {
-          echo "  ```json"
+          echo '  ```json'
           echo "  dashboard-id: ${{ inputs.dashboard-id }}"
           echo "  panel-id: ${{ inputs.panel-id }}"
           echo "  annotation-text: \"${{ inputs.annotation-text }}\""
           echo "  annotation-url: \"${{ inputs.annotation-url }}\""
-          echo "  ```"
+          echo '  ```'
         } >> "$GITHUB_STEP_SUMMARY"
 
         if [ "${{ steps.write-annotation-to-grafana.outputs.response-http-code }}" != "200" ]; then
