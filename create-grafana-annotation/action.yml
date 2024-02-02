@@ -12,6 +12,9 @@ inputs:
   annotation-text:
     required: true
     type: string
+  grafana-token:
+    required: true
+    type: string
   annotation-url:
     type: string
     default: ""
@@ -38,7 +41,7 @@ runs:
             -i -X POST ${{ env.GRAFANA_URL }} \
             --header "Accept: application/json" \
             --header "Content-Type: application/json" \
-            --header "Authorization: Bearer ${{ secrets.DIGDIR_GRAFANA_CLOUD_TOKEN }}" \
+            --header "Authorization: Bearer ${{ inputs.grafana-token }}" \
             -d '{ \
             "dashboardId": ${{ inputs.dashboard-id }}, \
             "panelId": ${{ inputs.panel-id }}, \
