@@ -43,7 +43,7 @@ runs:
             --header "Accept: application/json" \
             --header "Content-Type: application/json" \
             --header "Authorization: Bearer ${{ inputs.grafana-token }}" \
-            -d '{ "dashboardId": ${{ inputs.dashboard-id }}, "panelId": ${{ inputs.panel-id }}, "text": "'$ANNOTATION_TEXT'" }'
+            -d '{ "dashboardId": ${{ inputs.dashboard-id }}, "panelId": ${{ inputs.panel-id }}, "text": "'"$ANNOTATION_TEXT"'" }'
         );  
 
         echo "response-http-code=$RESPONSE_HTTP_CODE" >> $GITHUB_OUTPUT
