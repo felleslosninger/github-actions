@@ -16,25 +16,25 @@ jobs:
 
       - name: Checkout code
         id: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Run Bats Tests
         id: run-bats-tests
         run: |
           BATS_OUTPUT=$(bats ./**/*.bats)
 
-          BATS_OUTPUT="${BATS_OUTPUT//'%'/'%25'}"
           BATS_OUTPUT="${BATS_OUTPUT//$'\n'/'%0A'}"
-          BATS_OUTPUT="${BATS_OUTPUT//$'\r'/'%0D'}"
 
           echo "test-results=$BATS_OUTPUT" >> $GITHUB_OUTPUT
 
       - name: Display Test Results
         id: summary
         run: |
+          TEST_RESULTS="${${{ steps.run-bats-tests.outputs.test-results }}//$'%0A'/'\n'}"
+
           {
             echo "## Test results"
             echo '```'
-            echo "${{ steps.run-bats-tests.outputs.test-results }}"
+            echo -e "$TEST_RESULTS"
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
