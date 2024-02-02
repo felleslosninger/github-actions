@@ -18,12 +18,13 @@ inputs:
 
 runs:
   using: composite
-  env:
-    GRAFANA_URL: https://digdir.grafana.net/api/annotations/
+
   steps:
     - name: Write deployment text annotation to Grafana
       id: write-annotation-to-grafana
       shell: bash
+      env:
+        GRAFANA_URL: https://digdir.grafana.net/api/annotations/
       run: |
         if [ -z "${{ inputs.annotation-url }}" ]; then
           annotation_text="${{ inputs.annotation-text }}"
