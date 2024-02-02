@@ -37,8 +37,9 @@ runs:
 
         RESPONSE_HTTP_CODE=$(
           curl \
-            --write-out "%{http_code}\n" \
             -X POST ${{ env.GRAFANA_URL }} \
+            --write-out "%{http_code}\n" \
+            -o /dev/null
             --header "Accept: application/json" \
             --header "Content-Type: application/json" \
             --header "Authorization: Bearer ${{ inputs.grafana-token }}" \
