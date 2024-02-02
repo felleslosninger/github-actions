@@ -11,10 +11,23 @@ jobs:
 
     steps:
       - name: Setup BATS testing framework
+        id: setup
         uses: mig4/setup-bats@v1.2.0
 
       - name: Checkout code
+        id: checkout
         uses: actions/checkout@v2
 
       - name: Run Bats Tests
-        run: bats ./**/*.bats
+        id: run-bats-tests
+        run: |
+          BATS_OUTPUT=$(bats ./**/*.bats)
+          echo "test-results=$BATS_OUTPUT" >> $GITHUB_OUTPUT
+
+      - name: Display Test Results
+        id: summary
+        run: |
+          {
+            echo "## Test results"
+            echo "${{ steps.run-bats-tests.outputs.test-results }}" 
+          } >> "$GITHUB_STEP_SUMMARY"
