@@ -22,6 +22,11 @@ jobs:
         id: run-bats-tests
         run: |
           BATS_OUTPUT=$(bats ./**/*.bats)
+
+          BATS_OUTPUT="${BATS_OUTPUT//'%'/'%25'}"
+          BATS_OUTPUT="${BATS_OUTPUT//$'\n'/'%0A'}"
+          BATS_OUTPUT="${BATS_OUTPUT//$'\r'/'%0D'}"
+
           echo "test-results=$BATS_OUTPUT" >> $GITHUB_OUTPUT
 
       - name: Display Test Results
@@ -29,5 +34,7 @@ jobs:
         run: |
           {
             echo "## Test results"
-            echo "${{ steps.run-bats-tests.outputs.test-results }}" 
+            echo '```'
+            echo "${{ steps.run-bats-tests.outputs.test-results }}"
+            echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
