@@ -30,9 +30,9 @@ runs:
         GRAFANA_URL: https://digdir.grafana.net/api/annotations/
       run: |
         if [ -z "${{ inputs.annotation-url }}" ]; then
-          annotation_text="${{ inputs.annotation-text }}"
+          ANNOTATION_TEXT="${{ inputs.annotation-text }}"
         else
-          annotation_text="<a href=\"${{ inputs.annotation-url }}\">${{ inputs.annotation-text }}</a>"
+          ANNOTATION_TEXT="<a href=\"${{ inputs.annotation-url }}\">${{ inputs.annotation-text }}</a>"
         fi
 
         RESPONSE_HTTP_CODE=$(
@@ -43,7 +43,7 @@ runs:
             --header "Accept: application/json" \
             --header "Content-Type: application/json" \
             --header "Authorization: Bearer ${{ inputs.grafana-token }}" \
-            -d "{ \"dashboardId\": ${{ inputs.dashboard-id }}, \"panelId\": ${{ inputs.panel-id }}, \"text\": \"${ annotation_text }\" }"
+            -d '{ "dashboardId": ${{ inputs.dashboard-id }}, "panelId": ${{ inputs.panel-id }}, "text": "'$ANNOTATION_TEXT'" }'
         );  
 
         echo "response-http-code=$RESPONSE_HTTP_CODE" >> $GITHUB_OUTPUT
