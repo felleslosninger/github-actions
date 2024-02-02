@@ -35,8 +35,8 @@ runs:
           create_json_payload \
             "${{ inputs.dashboard-id }}" \
             "${{ inputs.panel-id }}" \
-            "${{ inputs.annotation-text }}" 
-            "${{ inputs.annotation-url }}"
+            "${{ inputs.annotation-text }}" \
+            "${{ inputs.annotation-url }}" \
         )
 
         RESPONSE_HTTP_CODE=$(
