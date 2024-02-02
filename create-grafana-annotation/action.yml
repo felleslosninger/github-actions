@@ -29,6 +29,8 @@ runs:
       env:
         GRAFANA_URL: https://digdir.grafana.net/api/annotations/
       run: |
+        set -o allexport; source "${{ github.action_path }}/helpers.sh"; set +o allexport;
+
         ANNOTATION_JSON=$(
           create_json_payload \
             "${{ inputs.dashboard-id }}" \
