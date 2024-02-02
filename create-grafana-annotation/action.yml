@@ -45,7 +45,7 @@ runs:
             -d '{ \
             "dashboardId": ${{ inputs.dashboard-id }}, \
             "panelId": ${{ inputs.panel-id }}, \
-            "text": "'"$annotation_text"'" \
+            "text": "${ annotation_text }" \
             }'
         );  
 
