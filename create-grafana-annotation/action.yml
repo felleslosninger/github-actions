@@ -59,7 +59,7 @@ runs:
         fi
 
         {
-          echo '  ```json'
+          echo '  ```'
           echo "  dashboard-id: ${{ inputs.dashboard-id }}"
           echo "  panel-id: ${{ inputs.panel-id }}"
           echo "  annotation-text: \"${{ inputs.annotation-text }}\""
