@@ -29,11 +29,24 @@ runs:
       env:
         GRAFANA_URL: https://digdir.grafana.net/api/annotations/
       run: |
-        if [ -z "${{ inputs.annotation-url }}" ]; then
-          ANNOTATION_TEXT="${{ inputs.annotation-text }}"
-        else
-          ANNOTATION_TEXT="<a href=\"${{ inputs.annotation-url }}\">${{ inputs.annotation-text }}</a>"
-        fi
+        create_json_payload() {
+          local dashboard_id=$1
+          local panel_id=$2
+          local annotation_text=$3
+          local annotation_url=$4
+
+          if [ -n "$annotation_url" ]; then
+              annotation_text="<a href=\"$annotation_url\">$annotation_text</a>"
+          fi
+
+          jq -n \
+              --arg dashboard_id "$dashboard_id" \
+              --arg panel_id "$panel_id" \
+              --arg text "$annotation_text" \
+              '{"dashboardId": $dashboard_id | tonumber, "panelId": $panel_id | tonumber, "text": $text}'
+          }
+
+        ANNOTATION_JSON=$(create_json_payload "${{ inputs.dashboard-id }}" "${{ inputs.panel-id }}" "${{ inputs.annotation-text }}" "${{ inputs.annotation-url }}")
 
         RESPONSE_HTTP_CODE=$(
           curl \
@@ -43,7 +56,7 @@ runs:
             --header "Accept: application/json" \
             --header "Content-Type: application/json" \
             --header "Authorization: Bearer ${{ inputs.grafana-token }}" \
-            -d '{ "dashboardId": ${{ inputs.dashboard-id }}, "panelId": ${{ inputs.panel-id }}, "text": "$ANNOTATION_TEXT" }'
+            -d "$ANNOTATION_JSON"
         );  
 
         echo "response-http-code=$RESPONSE_HTTP_CODE" >> $GITHUB_OUTPUT

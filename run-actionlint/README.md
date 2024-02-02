@@ -11,28 +11,16 @@ This GitHub Action runs actionlint, which is a static checker for GitHub Actions
 ## Usage
 
 ```yaml
-name: Your Workflow Name
-
-on:
-  push:
-    branches:
-      - main
+name: Syntax check workflows files (actionlint)
+run-name: "actionlint"
+on: [push]
 
 jobs:
-  run-actionlint:
+  actionlint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Download actionlint
-        id: download-actionlint
-        run: bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
-        shell: bash
-
-      - name: Check workflow files
-        run: ${{ steps.download-actionlint.outputs.executable }} -color
-        shell: bash
+      - name: "Run actionlint"
+        uses: felleslosninger/github-actions/run-actionlint@v1
 ```
 
 ## How it Works

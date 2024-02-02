@@ -1,0 +1,56 @@
+name: Build and publish Docker image
+
+on:
+  workflow_call:
+    inputs:
+      java-version:
+        type: number
+      slack-channel-id:
+        type: string
+      application-name:
+        type: string
+      product-name:
+        type: string
+      kubernetes-repo:
+        type: string
+      image-name:
+        type: string
+      deployment-environment:
+        type: string
+
+jobs:
+  call-workflow-image-build-publish:
+    uses: build-image.yml
+    with:
+      java-version: ${{ inputs.java-version }}
+      slack-channel-id: ${{ inputs.slack-channel-id }}
+    secrets: inherit
+
+  call-update-image-version:
+    uses: felleslosninger/github-workflows/.github/workflows/ci-call-update-image.yml@main
+    needs: [call-workflow-image-build-publish]
+    with:
+      application-name: ${{ inputs.application-name }}
+      product-name: ${{ inputs.product-name }}
+      kubernetes-repo: ${{ inputs.kubernetes-repo }}
+      image-version: ${{ needs.call-workflow-image-build-publish.outputs.image-version }}
+      image-digest: ${{ needs.call-workflow-image-build-publish.outputs.image-digest }}
+      image-name: ${{ inputs.image-name }}
+      deployment-environment: ${{ inputs.deployment-environment }}
+    secrets: inherit
+
+  call-check-for-cve-changes:
+    uses: felleslosninger/github-workflows-internal/.github/workflows/check-for-cve-suppression-changes.yml@main
+    needs: call-workflow-image-build-publish
+    secrets: inherit
+
+  notify-on-errors:
+    runs-on: ubuntu-latest
+    needs: [call-workflow-image-build-publish, call-update-image-version]
+    if: ${{ always() && contains(needs.*.result, 'failure') }}
+    steps:
+      - name: Send Slack notification
+        uses: felleslosninger/github-actions/send-slack-notification@v0.0.3-alpha
+        with:
+          slack-channel-id: ${{ inputs.slack-channel-id }}
+          slack-bot-token: ${{ secrets.SLACK_CICD_NOTIFICATION_TOKEN }}
