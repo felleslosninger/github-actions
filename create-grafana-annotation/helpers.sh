@@ -7,7 +7,7 @@ create_json_payload() {
   local annotation_url=$4
 
   if [ -n "$annotation_url" ]; then
-    annotation_text="<a href=\"$annotation_url\">$annotation_text</a>"
+    annotation_text="<a href=\"$annotation_url\" target=\"_blank\">$annotation_text</a>"
   fi
 
   jq -n \
