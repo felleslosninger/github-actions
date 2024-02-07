@@ -7,8 +7,10 @@ author: Digdir Platform Team
 inputs:
   slack-channel-id:
     type: string
-    required: false
-    default: ""
+    required: true
+  slack-bot-token:
+    type: string
+    required: true
 
 runs:
   using: composite
@@ -34,7 +36,7 @@ runs:
       id: slack
       uses: slackapi/slack-github-action@v1.25.0
       env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_CICD_NOTIFICATION_TOKEN }}
+        SLACK_BOT_TOKEN: ${{ inputs.slack-bot-token }}
       with:
         channel-id: ${{ inputs.slack-channel-id }}
         payload: |
