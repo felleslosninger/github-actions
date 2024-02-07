@@ -1,0 +1,19 @@
+name: Publish release draft
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Create Release
+        run: gh release create ${{ github.ref }} --title "${{ github.ref }}" --notes "auto" --draft true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
