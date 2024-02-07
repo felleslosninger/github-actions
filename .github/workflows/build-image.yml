@@ -41,16 +41,18 @@ jobs:
     env:
       REPOSITORY-NAME: ${{ github.event.repository.name }}
       DOCKLE_HOST: "unix:///var/run/docker.sock"
-      #TRIVY_TIMEOUT: "15m"
       TRIVY_OFFLINE_SCAN: ${{ inputs.container-scan-offline-mode }}
+      IMAGE-NAME: ""
+      IMAGETAG: ""
 
     outputs:
       imagetag: ${{ steps.output-image-tag.outputs.imagetag }}
       imagedigest: ${{ steps.output-image-digest.outputs.imagedigest }}
 
     steps:
-      - name: Set imagetag as env variable
-        run: echo "IMAGETAG=$(date +'%Y-%m-%d-%H%M')-${GITHUB_SHA::8}" >> "$GITHUB_ENV"
+      - name: Set IMAGETAG env variable
+        run: |
+          echo "IMAGETAG=$(date +'%Y-%m-%d-%H%M')-${GITHUB_SHA::8}" >> "$GITHUB_ENV"
 
       - name: Set IMAGE-NAME env variable
         run: |
@@ -145,6 +147,7 @@ jobs:
     if: ${{ always() && contains(needs.*.result, 'failure') }}
     steps:
       - name: Send Slack notification
-        uses: felleslosninger/github-actions/send-slack-notification@v0.0.3-alpha
+        uses: felleslosninger/github-actions/send-slack-notification@v0.2.1
         with:
           slack-channel-id: ${{ inputs.slack-channel-id }}
+          slack-bot-token: ${{ secrets.SLACK_CICD_NOTIFICATION_TOKEN }}
