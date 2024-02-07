@@ -11,9 +11,15 @@ This GitHub Action is designed to notify designated Slack channels about workflo
 ## Inputs
 
 - `slack-channel-id`:
+
   - **Description**: The ID of the Slack channel to which notifications will be sent.
-  - **Required**: false
-  - **Default**: ""
+  - **Required**: true
+  - **Type**: string
+
+- `slack-bot-token`:
+  - **Description**: The Slack Bot token required to send notifications.
+  - **Required**: true
+  - **Type**: string
 
 ## Example Usage
 
@@ -33,9 +39,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Send Slack Notification
-        uses: felleslosninger/github-actions/send-slack-notification@v1
+        uses: felleslosninger/github-actions/send-slack-notification@v0.2.2
         with:
           slack-channel-id: "your-slack-channel-id"
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
 ```
 
 ## How it Works
