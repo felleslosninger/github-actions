@@ -5,18 +5,25 @@ on:
     inputs:
       java-version:
         type: number
+        required: true
       slack-channel-id:
         type: string
+        required: true
       application-name:
         type: string
+        required: true
       product-name:
         type: string
+        required: true
       kubernetes-repo:
         type: string
+        required: true
       image-name:
         type: string
+        required: true
       deployment-environment:
         type: string
+        required: true
 
 jobs:
   call-workflow-image-build-publish:
