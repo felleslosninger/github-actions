@@ -27,7 +27,7 @@ on:
 
 jobs:
   call-workflow-image-build-publish:
-    uses: ./.github/workflows/build-image.yml
+    uses: felleslosninger/github-actions/.github/workflows/build-image.yml@v0.2.3
     with:
       java-version: ${{ inputs.java-version }}
       slack-channel-id: ${{ inputs.slack-channel-id }}
