@@ -10,10 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Setup BATS testing framework
-        id: setup
-        uses: mig4/setup-bats@v1.2.0
-
       - name: Checkout code
         id: checkout
         uses: actions/checkout@v4
