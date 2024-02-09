@@ -4,8 +4,6 @@
 # Usage: file_exists <file_path>
 file_exists() {
   local file_path=$1
-  local output_file=${2:-$}
-  local summary_file=${3:-$GITHUB_STEP_SUMMARY}
 
   if [ -f "$file_path" ]; then
     echo "exists=true" >> "$GITHUB_OUTPUT"
