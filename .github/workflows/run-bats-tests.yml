@@ -17,6 +17,8 @@ jobs:
       - name: Checkout code
         id: checkout
         uses: actions/checkout@v4
+        with:
+          submodules: "true"
 
       - name: Run Bats Tests
         id: run-bats-tests
