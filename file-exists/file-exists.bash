@@ -1,7 +1,7 @@
 #!/bin/env bash
 
-# Check if a file exists and write the result to an output file and summary file
-# Usage: file_exists <file_path> [<output_file>] [<summary_file>]
+# Check if a file exists and write the result to $GITHUB_OUTPUT and $GITHUB_STEP_SUMMARY
+# Usage: file_exists <file_path>
 file_exists() {
   local file_path=$1
   local output_file=${2:-$}

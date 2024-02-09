@@ -47,5 +47,3 @@ jobs:
 ## How it Works
 
 This action uses a composite run to execute a Bash script. The script dynamically constructs a Markdown-formatted section in the workflow summary, including the specified title and JSON content.
-
-## License
