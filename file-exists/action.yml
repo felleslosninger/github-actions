@@ -1,0 +1,24 @@
+name: File Exists
+description:
+author: Digdir Platform Team
+
+inputs:
+  file-path:
+    required: true
+    type: string
+
+outputs:
+  exists:
+    type: string
+
+runs:
+  using: composite
+
+  steps:
+    - name: Check if file exists
+      id: check-if-file-exists
+      shell: bash
+      run: |
+        set -o allexport; source "${{ github.action_path }}/file-exists.bash"; set +o allexport;
+
+        file_exists ${{inputs.file-path}}
