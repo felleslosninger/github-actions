@@ -1,23 +1,17 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
-
-# Add your action's branding here. This will appear on the GitHub Marketplace.
-branding:
-  icon: 'heart'
-  color: 'red'
+name: "Write to InfluxDB"
+description: "Provide a description here"
+author: "Digdir Platform Team"
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  json:
+    description: "Tags and fields data"
     required: true
-    default: '1000'
 
 # Define your outputs here.
 outputs:
-  time:
-    description: 'Your output description here'
+  success:
+    description: "True if data was successfully written to InfluxDB"
 
 runs:
   using: node20
