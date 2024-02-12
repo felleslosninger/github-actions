@@ -2735,7 +2735,64 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ 15:
+/***/ 857:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.toInputData = void 0;
+function toInputData(jsonAsString) {
+    const jsonObject = JSON.parse(jsonAsString);
+    return jsonObject;
+}
+exports.toInputData = toInputData;
+
+
+/***/ }),
+
+/***/ 293:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.toPoint = void 0;
+const influxdb_client_1 = __nccwpck_require__(659);
+function toPoint(measurementName, inputData) {
+    const point = new influxdb_client_1.Point(measurementName);
+    for (const [key, value] of Object.entries(inputData.tags)) {
+        point.tag(key, value);
+    }
+    for (const [key, value] of Object.entries(inputData.stringFields)) {
+        point.stringField(key, value);
+    }
+    return point;
+}
+exports.toPoint = toPoint;
+
+
+/***/ }),
+
+/***/ 727:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.toWritePrecisionType = void 0;
+function toWritePrecisionType(precision) {
+    if (["ns", "us", "ms", "s"].includes(precision)) {
+        return precision;
+    }
+    throw new Error(`Unsupported precision type: ${precision}`);
+}
+exports.toWritePrecisionType = toWritePrecisionType;
+
+
+/***/ }),
+
+/***/ 694:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -2764,36 +2821,71 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ConvertToPoint = exports.getJsonInput = exports.getPrecisionInput = void 0;
+exports.loadInputs = void 0;
 const core = __importStar(__nccwpck_require__(186));
-const influxdb_client_1 = __nccwpck_require__(659);
-function getPrecisionInput() {
-    const precision = core.getInput("precision");
-    if (["ns", "us", "ms", "s"].includes(precision)) {
-        return precision;
-    }
-    throw new Error(`Unsupported precision type: ${precision}`);
+const input_to_input_data_1 = __nccwpck_require__(857);
+const input_to_write_precision_type_1 = __nccwpck_require__(727);
+function loadInputs() {
+    const influxdbUrl = core.getInput("influxdb-url");
+    const influxdbToken = core.getInput("influxdb-token");
+    const organization = core.getInput("organization");
+    const bucket = core.getInput("bucket");
+    const inputData = (0, input_to_input_data_1.toInputData)(core.getInput("json"));
+    const measurementName = core.getInput("measurement-name");
+    const precision = (0, input_to_write_precision_type_1.toWritePrecisionType)(core.getInput("precision"));
+    return {
+        measurementName,
+        inputData,
+        influxdbUrl,
+        influxdbToken,
+        organization,
+        bucket,
+        precision
+    };
 }
-exports.getPrecisionInput = getPrecisionInput;
-function getJsonInput() {
-    const jsonAsString = core.getInput("json");
-    const jsonObject = JSON.parse(jsonAsString);
-    return jsonObject;
-}
-exports.getJsonInput = getJsonInput;
-function ConvertToPoint(measurementName, inputData) {
-    const point = new influxdb_client_1.Point(measurementName);
-    for (const [key, value] of Object.entries(inputData.tags)) {
-        core.debug(`Tag key: ${key}, Tag value: ${value}`);
-        point.tag(key, value);
+exports.loadInputs = loadInputs;
+
+
+/***/ }),
+
+/***/ 86:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
     }
-    for (const [key, value] of Object.entries(inputData.stringFields)) {
-        core.debug(`StringField key: ${key}, StringField value: ${value}`);
-        point.stringField(key, value);
-    }
-    return point;
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.write = void 0;
+const core = __importStar(__nccwpck_require__(186));
+function write(point) {
+    core.summary
+        .addHeading("JSON Data", 3)
+        .addCodeBlock(JSON.stringify(point, null, "\t"), "json")
+        .write();
 }
-exports.ConvertToPoint = ConvertToPoint;
+exports.write = write;
 
 
 /***/ }),
@@ -2830,30 +2922,23 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(186));
 const influxdb_client_1 = __nccwpck_require__(659);
-const helpers_1 = __nccwpck_require__(15);
+const input_to_point_1 = __nccwpck_require__(293);
+const load_inputs_1 = __nccwpck_require__(694);
+const summary = __importStar(__nccwpck_require__(86));
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 async function run() {
     try {
-        const influxdbUrl = core.getInput("influxdb-url");
-        const influxdbToken = core.getInput("influxdb-token");
-        const organization = core.getInput("organization");
-        const bucket = core.getInput("bucket");
-        const inputData = (0, helpers_1.getJsonInput)();
-        const measurementName = core.getInput("measurement-name");
-        const precision = (0, helpers_1.getPrecisionInput)();
-        const point = (0, helpers_1.ConvertToPoint)(measurementName, inputData);
+        const { measurementName, inputData, influxdbUrl, influxdbToken, organization, bucket, precision } = (0, load_inputs_1.loadInputs)();
+        const point = (0, input_to_point_1.toPoint)(measurementName, inputData);
         const client = new influxdb_client_1.InfluxDB({
             url: influxdbUrl,
-            token: influxdbToken,
+            token: influxdbToken
         }).getWriteApi(organization, bucket, precision);
         client.writePoint(point);
-        core.summary
-            .addHeading("JSON Data", 3)
-            .addCodeBlock(JSON.stringify(point, null, "\t"), "json")
-            .write();
+        summary.write(point);
         // Flush pending writes and close client.
         await client.close();
         core.debug("Write finished");

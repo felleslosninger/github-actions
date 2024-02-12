@@ -1,92 +1,97 @@
-// /**
-//  * Unit tests for the action's main functionality, src/main.ts
-//  *
-//  * These should be run as if the action was called from a workflow.
-//  * Specifically, the inputs listed in `action.yml` should be set as environment
-//  * variables following the pattern `INPUT_<INPUT_NAME>`.
-//  */
+import * as core from "@actions/core";
+import { InfluxDB } from "@influxdata/influxdb-client";
+import { run } from "../src/main";
+import { toPoint } from "../src/converters/input-to-point";
+import { loadInputs } from "../src/helpers/load-inputs";
+import { write } from "../src/helpers/summary";
 
-// import * as core from "@actions/core";
-// import * as main from "../src/main";
+jest.mock("@actions/core");
+jest.mock("@influxdata/influxdb-client");
+jest.mock("../src/converters/input-to-point");
+jest.mock("../src/helpers/load-inputs");
+jest.mock("../src/helpers/summary");
 
-// // Mock the action's main function
-// const runMock = jest.spyOn(main, "run");
+describe("run", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-// // Other utilities
-// const timeRegex = /^\d{2}:\d{2}:\d{2}/;
+  it("writes point to InfluxDB and summary", async () => {
+    // Mock loadInputs function to return sample inputs
+    const sampleInputs = {
+      measurementName: "testMeasurement",
+      inputData: { tags: {}, stringFields: {} },
+      influxdbUrl: "http://example.com",
+      influxdbToken: "token",
+      organization: "org",
+      bucket: "bucket",
+      precision: "s"
+    };
+    (loadInputs as jest.Mock).mockReturnValue(sampleInputs);
 
-// // Mock the GitHub Actions core library
-// let debugMock: jest.SpyInstance;
-// let errorMock: jest.SpyInstance;
-// let getInputMock: jest.SpyInstance;
-// let setFailedMock: jest.SpyInstance;
-// let setOutputMock: jest.SpyInstance;
+    // Mock convertToPoint function to return sample point
+    const samplePoint = {
+      measurement: "testMeasurement",
+      fields: {},
+      tags: {}
+    };
+    (toPoint as jest.Mock).mockReturnValue(samplePoint);
 
-// describe("action", () => {
-//   beforeEach(() => {
-//     jest.clearAllMocks();
+    // Mock InfluxDB client methods
+    const writePointMock = jest.fn();
+    const closeMock = jest.fn();
+    const getWriteApiMock = jest
+      .fn()
+      .mockReturnValue({ writePoint: writePointMock, close: closeMock });
+    (InfluxDB as jest.Mock).mockImplementation(() => ({
+      getWriteApi: getWriteApiMock
+    }));
 
-//     debugMock = jest.spyOn(core, "debug").mockImplementation();
-//     errorMock = jest.spyOn(core, "error").mockImplementation();
-//     getInputMock = jest.spyOn(core, "getInput").mockImplementation();
-//     setFailedMock = jest.spyOn(core, "setFailed").mockImplementation();
-//     setOutputMock = jest.spyOn(core, "setOutput").mockImplementation();
-//   });
+    // Run the function
+    await run();
 
-//   it("sets the time output", async () => {
-//     // Set the action's inputs as return values from core.getInput()
-//     getInputMock.mockImplementation((name: string): string => {
-//       switch (name) {
-//         case "milliseconds":
-//           return "500";
-//         default:
-//           return "";
-//       }
-//     });
+    // Verify that loadInputs is called
+    expect(loadInputs).toHaveBeenCalled();
 
-//     await main.run();
-//     expect(runMock).toHaveReturned();
+    // Verify that convertToPoint is called with sample inputs
+    expect(toPoint).toHaveBeenCalledWith(
+      sampleInputs.measurementName,
+      sampleInputs.inputData
+    );
 
-//     // Verify that all of the core library functions were called correctly
-//     expect(debugMock).toHaveBeenNthCalledWith(
-//       1,
-//       "Waiting 500 milliseconds ...",
-//     );
-//     expect(debugMock).toHaveBeenNthCalledWith(
-//       2,
-//       expect.stringMatching(timeRegex),
-//     );
-//     expect(debugMock).toHaveBeenNthCalledWith(
-//       3,
-//       expect.stringMatching(timeRegex),
-//     );
-//     expect(setOutputMock).toHaveBeenNthCalledWith(
-//       1,
-//       "time",
-//       expect.stringMatching(timeRegex),
-//     );
-//     expect(errorMock).not.toHaveBeenCalled();
-//   });
+    // Verify that InfluxDB client is created with correct parameters
+    expect(InfluxDB).toHaveBeenCalledWith({
+      url: sampleInputs.influxdbUrl,
+      token: sampleInputs.influxdbToken
+    });
+    expect(getWriteApiMock).toHaveBeenCalledWith(
+      sampleInputs.organization,
+      sampleInputs.bucket,
+      sampleInputs.precision
+    );
 
-//   it("sets a failed status", async () => {
-//     // Set the action's inputs as return values from core.getInput()
-//     getInputMock.mockImplementation((name: string): string => {
-//       switch (name) {
-//         case "milliseconds":
-//           return "this is not a number";
-//         default:
-//           return "";
-//       }
-//     });
+    // Verify that writePoint and close are called on InfluxDB client
+    expect(writePointMock).toHaveBeenCalledWith(samplePoint);
+    expect(closeMock).toHaveBeenCalled();
 
-//     await main.run();
-//     expect(runMock).toHaveReturned();
+    // Verify that writeSummary is called with sample point
+    expect(write).toHaveBeenCalledWith(samplePoint);
 
-//     // Verify that all of the core library functions were called correctly
-//     expect(setFailedMock).toHaveBeenNthCalledWith(
-//       1,
-//       "milliseconds not a number",
-//     );
-//     expect(errorMock).not.toHaveBeenCalled();
-//   });
-// });
+    // Verify that core.setFailed is not called
+    expect(core.setFailed).not.toHaveBeenCalled();
+  });
+
+  it("fails when an error occurs", async () => {
+    // Mock loadInputs function to throw an error
+    const error = new Error("Error occurred");
+    (loadInputs as jest.Mock).mockImplementation(() => {
+      throw error;
+    });
+
+    // Run the function
+    await run();
+
+    // Verify that core.setFailed is called with the error message
+    expect(core.setFailed).toHaveBeenCalledWith(error.message);
+  });
+});

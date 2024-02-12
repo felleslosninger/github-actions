@@ -1,7 +1,9 @@
 import * as core from "@actions/core";
-import { InputData } from "./interfaces/input-data.interface";
-import { InfluxDB, WritePrecisionType } from "@influxdata/influxdb-client";
-import { ConvertToPoint, getJsonInput, getPrecisionInput } from "./helpers";
+import { InfluxDB } from "@influxdata/influxdb-client";
+import { toPoint } from "./converters/input-to-point";
+import { loadInputs } from "./helpers/load-inputs";
+import * as summary from "./helpers/summary";
+import { Inputs } from "./interfaces/inputs";
 
 /**
  * The main function for the action.
@@ -9,27 +11,26 @@ import { ConvertToPoint, getJsonInput, getPrecisionInput } from "./helpers";
  */
 export async function run(): Promise<void> {
   try {
-    const influxdbUrl: string = core.getInput("influxdb-url");
-    const influxdbToken: string = core.getInput("influxdb-token");
-    const organization: string = core.getInput("organization");
-    const bucket: string = core.getInput("bucket");
-    const inputData: InputData = getJsonInput();
-    const measurementName: string = core.getInput("measurement-name");
-    const precision: WritePrecisionType = getPrecisionInput();
+    const {
+      measurementName,
+      inputData,
+      influxdbUrl,
+      influxdbToken,
+      organization,
+      bucket,
+      precision
+    }: Inputs = loadInputs();
 
-    const point = ConvertToPoint(measurementName, inputData);
+    const point = toPoint(measurementName, inputData);
 
     const client = new InfluxDB({
       url: influxdbUrl,
-      token: influxdbToken,
+      token: influxdbToken
     }).getWriteApi(organization, bucket, precision);
 
     client.writePoint(point);
 
-    core.summary
-      .addHeading("JSON Data", 3)
-      .addCodeBlock(JSON.stringify(point, null, "\t"), "json")
-      .write();
+    summary.write(point);
 
     // Flush pending writes and close client.
     await client.close();
