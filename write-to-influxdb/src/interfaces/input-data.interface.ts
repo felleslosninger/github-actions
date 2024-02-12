@@ -1,7 +1,7 @@
 import { StringField } from "./string-field.interface";
 import { Tag } from "./tag.interface";
 
-export interface Point {
+export interface InputData {
   tags: Tag[];
   stringFields: StringField[];
 }
