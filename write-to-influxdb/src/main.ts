@@ -1,5 +1,5 @@
 import * as core from "@actions/core";
-import { wait } from "./wait";
+import { InputData } from "./interfaces/input-data.interface";
 
 /**
  * The main function for the action.
@@ -7,15 +7,17 @@ import { wait } from "./wait";
  */
 export async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput("milliseconds");
+    const jsonAsString: string = core.getInput("json");
 
     // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Waiting ${ms} milliseconds ...`);
+    core.debug(`JSON string: ${jsonAsString}`);
 
-    // Log the current timestamp, wait, then log the new timestamp
-    core.debug(new Date().toTimeString());
-    await wait(parseInt(ms, 10));
-    core.debug(new Date().toTimeString());
+    const jsonObject = JSON.parse(jsonAsString);
+
+    const event = jsonObject as InputData;
+
+    core.debug(`Tags: ${event.tags}`);
+    core.debug(`StringFields: ${event.stringFields}`);
 
     // Set outputs for other workflow steps to use
     core.setOutput("time", new Date().toTimeString());
