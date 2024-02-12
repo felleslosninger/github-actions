@@ -1,5 +1,7 @@
 import * as core from "@actions/core";
 import { InputData } from "./interfaces/input-data.interface";
+import { InfluxDB, WritePrecisionType } from "@influxdata/influxdb-client";
+import { ConvertToPoint, getJsonInput, getPrecisionInput } from "./helpers";
 
 /**
  * The main function for the action.
@@ -7,28 +9,31 @@ import { InputData } from "./interfaces/input-data.interface";
  */
 export async function run(): Promise<void> {
   try {
-    const jsonAsString: string = core.getInput("json");
+    const influxdbUrl: string = core.getInput("influxdb-url");
+    const influxdbToken: string = core.getInput("influxdb-token");
+    const organization: string = core.getInput("organization");
+    const bucket: string = core.getInput("bucket");
+    const inputData: InputData = getJsonInput();
+    const measurementName: string = core.getInput("measurement-name");
+    const precision: WritePrecisionType = getPrecisionInput();
 
-    // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`JSON string: ${jsonAsString}`);
+    const point = ConvertToPoint(measurementName, inputData);
 
-    const jsonObject = JSON.parse(jsonAsString);
+    const client = new InfluxDB({
+      url: influxdbUrl,
+      token: influxdbToken,
+    }).getWriteApi(organization, bucket, precision);
 
-    const inputData = jsonObject as InputData;
+    client.writePoint(point);
 
-    core.debug("Tags:");
-    for (const [key, value] of Object.entries(inputData.tags)) {
-      core.debug(`Tag key: ${key}, Tag value: ${value}`);
-    }
+    core.summary
+      .addHeading("JSON Data", 3)
+      .addCodeBlock(JSON.stringify(point, null, "\t"), "json")
+      .write();
 
-    // Iterate through stringFields
-    core.debug("StringFields:");
-    for (const [key, value] of Object.entries(inputData.stringFields)) {
-      core.debug(`StringField key: ${key}, StringField value: ${value}`);
-    }
-
-    // Set outputs for other workflow steps to use
-    core.setOutput("time", new Date().toTimeString());
+    // Flush pending writes and close client.
+    await client.close();
+    core.debug("Write finished");
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message);
