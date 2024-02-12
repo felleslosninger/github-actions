@@ -16,10 +16,13 @@ export async function run(): Promise<void> {
 
     const inputData = jsonObject as InputData;
 
+    core.debug("Tags:");
     for (const [key, value] of Object.entries(inputData.tags)) {
       core.debug(`Tag key: ${key}, Tag value: ${value}`);
     }
 
+    // Iterate through stringFields
+    core.debug("StringFields:");
     for (const [key, value] of Object.entries(inputData.stringFields)) {
       core.debug(`StringField key: ${key}, StringField value: ${value}`);
     }

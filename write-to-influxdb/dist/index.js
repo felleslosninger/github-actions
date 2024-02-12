@@ -2764,9 +2764,12 @@ async function run() {
         core.debug(`JSON string: ${jsonAsString}`);
         const jsonObject = JSON.parse(jsonAsString);
         const inputData = jsonObject;
+        core.debug("Tags:");
         for (const [key, value] of Object.entries(inputData.tags)) {
             core.debug(`Tag key: ${key}, Tag value: ${value}`);
         }
+        // Iterate through stringFields
+        core.debug("StringFields:");
         for (const [key, value] of Object.entries(inputData.stringFields)) {
             core.debug(`StringField key: ${key}, StringField value: ${value}`);
         }

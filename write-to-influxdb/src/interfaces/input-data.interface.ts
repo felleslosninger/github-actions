@@ -1,7 +1,4 @@
-import { StringField } from "./string-field.interface";
-import { Tag } from "./tag.interface";
-
 export interface InputData {
-  tags: Tag[];
-  stringFields: StringField[];
+  tags: { [key: string]: string };
+  stringFields: { [key: string]: string };
 }
