@@ -14,10 +14,15 @@ export async function run(): Promise<void> {
 
     const jsonObject = JSON.parse(jsonAsString);
 
-    const event = jsonObject as InputData;
+    const inputData = jsonObject as InputData;
 
-    core.debug(`Tags: ${event.tags}`);
-    core.debug(`StringFields: ${event.stringFields}`);
+    for (const tag of inputData.tags) {
+      core.debug(`Tag: ${tag}`);
+    }
+
+    for (const stringField of inputData.stringFields) {
+      core.debug(`StringField: ${stringField}`);
+    }
 
     // Set outputs for other workflow steps to use
     core.setOutput("time", new Date().toTimeString());

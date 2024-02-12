@@ -2763,9 +2763,13 @@ async function run() {
         // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
         core.debug(`JSON string: ${jsonAsString}`);
         const jsonObject = JSON.parse(jsonAsString);
-        const event = jsonObject;
-        core.debug(`Tags: ${event.tags}`);
-        core.debug(`StringFields: ${event.stringFields}`);
+        const inputData = jsonObject;
+        for (const tag of inputData.tags) {
+            core.debug(`Tag: ${tag}`);
+        }
+        for (const stringField of inputData.stringFields) {
+            core.debug(`StringField: ${stringField}`);
+        }
         // Set outputs for other workflow steps to use
         core.setOutput("time", new Date().toTimeString());
     }
