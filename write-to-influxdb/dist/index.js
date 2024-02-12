@@ -2764,11 +2764,11 @@ async function run() {
         core.debug(`JSON string: ${jsonAsString}`);
         const jsonObject = JSON.parse(jsonAsString);
         const inputData = jsonObject;
-        for (const tag of inputData.tags) {
-            core.debug(`Tag key: ${tag.key}, Tag value: ${tag.value}`);
+        for (const [key, value] of Object.entries(inputData.tags)) {
+            core.debug(`Tag key: ${key}, Tag value: ${value}`);
         }
-        for (const stringField of inputData.stringFields) {
-            core.debug(`StringField key: ${stringField.key}, StringField value: ${stringField.value}`);
+        for (const [key, value] of Object.entries(inputData.stringFields)) {
+            core.debug(`StringField key: ${key}, StringField value: ${value}`);
         }
         // Set outputs for other workflow steps to use
         core.setOutput("time", new Date().toTimeString());

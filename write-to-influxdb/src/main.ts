@@ -16,14 +16,12 @@ export async function run(): Promise<void> {
 
     const inputData = jsonObject as InputData;
 
-    for (const tag of inputData.tags) {
-      core.debug(`Tag key: ${tag.key}, Tag value: ${tag.value}`);
+    for (const [key, value] of Object.entries(inputData.tags)) {
+      core.debug(`Tag key: ${key}, Tag value: ${value}`);
     }
 
-    for (const stringField of inputData.stringFields) {
-      core.debug(
-        `StringField key: ${stringField.key}, StringField value: ${stringField.value}`
-      );
+    for (const [key, value] of Object.entries(inputData.stringFields)) {
+      core.debug(`StringField key: ${key}, StringField value: ${value}`);
     }
 
     // Set outputs for other workflow steps to use
