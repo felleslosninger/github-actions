@@ -5,7 +5,7 @@ import { InputData } from "./interfaces/input-data.interface";
 export function getPrecisionInput(): WritePrecisionType {
   const precision: string = core.getInput("precision");
 
-  if (precision in ["ns", "us", "ms", "s"]) {
+  if (["ns", "us", "ms", "s"].includes(precision)) {
     return precision as WritePrecisionType;
   }
 
@@ -22,7 +22,7 @@ export function getJsonInput(): InputData {
 
 export function ConvertToPoint(
   measurementName: string,
-  inputData: InputData,
+  inputData: InputData
 ): Point {
   const point = new Point(measurementName);
 

@@ -2769,7 +2769,7 @@ const core = __importStar(__nccwpck_require__(186));
 const influxdb_client_1 = __nccwpck_require__(659);
 function getPrecisionInput() {
     const precision = core.getInput("precision");
-    if (precision in ["ns", "us", "ms", "s"]) {
+    if (["ns", "us", "ms", "s"].includes(precision)) {
         return precision;
     }
     throw new Error(`Unsupported precision type: ${precision}`);
