@@ -98,10 +98,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Write Data to InfluxDB
-        uses: your-username/write-to-influxdb-action@v1.0.0
+        uses: felleslosninger/github-actions/write-to-influxdb@v1.0.0
         with:
-          json:
-            '{"tag1": "value1", "tag2": "value2", "field1": 10, "field2": 20}'
+          json: '{"tags":{"repository":"felleslosninger/test-app","application":"test-app"},"stringFields":{"version":"a9dea392","deployment_started":"1990-01-01T09:55:09Z","deployment_finished":"1990-01-01T09:55:10Z"}}'
           influxdb-url: "https://your-influxdb-instance.com"
           influxdb-token: ${{ secrets.INFLUXDB_TOKEN }}
           organization: "your-organization"
