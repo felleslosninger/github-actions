@@ -52,5 +52,6 @@ jobs:
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_JAVASCRIPT_STANDARD: false
           VALIDATE_JSCPD: false
+          FILTER_REGEX_INCLUDE: .*${{ matrix.folder }}.*
         with:
           args: ${{ matrix.folder }}
