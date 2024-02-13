@@ -79,6 +79,7 @@ describe("run", () => {
 
     // Verify that core.setFailed is not called
     expect(core.setFailed).not.toHaveBeenCalled();
+    expect(core.setOutput).toHaveBeenCalledWith("success", "true");
   });
 
   it("fails when an error occurs", async () => {

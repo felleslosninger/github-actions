@@ -7,8 +7,6 @@ inputs:
   json:
     description: "Tags and fields data"
     required: true
-  precision:
-    default: "ns"
   influxdb-url:
     type: string
     required: true
@@ -24,6 +22,8 @@ inputs:
   measurement-name:
     type: string
     required: true
+  precision:
+    default: "ns"
 
 # Define your outputs here.
 outputs:

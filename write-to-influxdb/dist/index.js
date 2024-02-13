@@ -2941,7 +2941,7 @@ async function run() {
         summary.write(point);
         // Flush pending writes and close client.
         await client.close();
-        core.debug("Write finished");
+        core.setOutput("success", "true");
     }
     catch (error) {
         // Fail the workflow run if an error occurs

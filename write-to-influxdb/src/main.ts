@@ -34,7 +34,7 @@ export async function run(): Promise<void> {
 
     // Flush pending writes and close client.
     await client.close();
-    core.debug("Write finished");
+    core.setOutput("success", "true");
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message);
