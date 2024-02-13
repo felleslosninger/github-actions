@@ -1,5 +1,4 @@
-import { toInputData } from "../src/converters/input-to-input-data";
-import { expect } from "@jest/globals";
+import { toInputData } from "../src/converters";
 
 describe("toInputData", () => {
   it("parses valid JSON input", () => {

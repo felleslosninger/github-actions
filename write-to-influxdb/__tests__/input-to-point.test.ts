@@ -1,6 +1,5 @@
 import { Point } from "@influxdata/influxdb-client";
-import { toPoint } from "../src/converters/input-to-point";
-import { expect } from "@jest/globals";
+import { toPoint } from "../src/converters";
 
 describe("convertToPoint", () => {
   it("converts input data to Point object correctly", () => {

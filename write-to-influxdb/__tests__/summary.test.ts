@@ -1,7 +1,6 @@
 import { Point } from "@influxdata/influxdb-client";
-import { writeToSummary } from "../src/helpers/summary";
+import { writeToSummary } from "../src/helpers";
 import * as core from "@actions/core";
-import { expect } from "@jest/globals";
 
 jest.mock("@actions/core");
 

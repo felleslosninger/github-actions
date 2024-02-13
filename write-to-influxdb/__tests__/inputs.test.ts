@@ -1,4 +1,4 @@
-import { loadInputs } from "../src/helpers/inputs";
+import { loadInputs } from "../src/helpers";
 
 jest.mock("@actions/core");
 jest.mock("@influxdata/influxdb-client");
