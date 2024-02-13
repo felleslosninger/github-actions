@@ -1,6 +1,7 @@
 import { Point } from "@influxdata/influxdb-client";
-import { write } from "../src/helpers/summary";
+import { writeToSummary } from "../src/helpers/summary";
 import * as core from "@actions/core";
+import { expect } from "@jest/globals";
 
 jest.mock("@actions/core");
 
@@ -25,7 +26,7 @@ describe("writeSummary", () => {
     const point = new Point("foo");
 
     // Call the function
-    write(point);
+    writeToSummary(point);
 
     // Verify that core.summary methods are called correctly
     expect(addHeadingSpy).toHaveBeenCalledWith("JSON Data", 3);

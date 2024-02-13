@@ -1,7 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 351:
+/***/ 7351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -27,8 +27,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.issue = exports.issueCommand = void 0;
-const os = __importStar(__nccwpck_require__(37));
-const utils_1 = __nccwpck_require__(278);
+const os = __importStar(__nccwpck_require__(2037));
+const utils_1 = __nccwpck_require__(5278);
 /**
  * Commands
  *
@@ -100,7 +100,7 @@ function escapeProperty(s) {
 
 /***/ }),
 
-/***/ 186:
+/***/ 2186:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -135,12 +135,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getIDToken = exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.notice = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
-const command_1 = __nccwpck_require__(351);
+const command_1 = __nccwpck_require__(7351);
 const file_command_1 = __nccwpck_require__(717);
-const utils_1 = __nccwpck_require__(278);
-const os = __importStar(__nccwpck_require__(37));
-const path = __importStar(__nccwpck_require__(17));
-const oidc_utils_1 = __nccwpck_require__(41);
+const utils_1 = __nccwpck_require__(5278);
+const os = __importStar(__nccwpck_require__(2037));
+const path = __importStar(__nccwpck_require__(1017));
+const oidc_utils_1 = __nccwpck_require__(8041);
 /**
  * The code to exit an action
  */
@@ -425,17 +425,17 @@ exports.getIDToken = getIDToken;
 /**
  * Summary exports
  */
-var summary_1 = __nccwpck_require__(327);
+var summary_1 = __nccwpck_require__(1327);
 Object.defineProperty(exports, "summary", ({ enumerable: true, get: function () { return summary_1.summary; } }));
 /**
  * @deprecated use core.summary
  */
-var summary_2 = __nccwpck_require__(327);
+var summary_2 = __nccwpck_require__(1327);
 Object.defineProperty(exports, "markdownSummary", ({ enumerable: true, get: function () { return summary_2.markdownSummary; } }));
 /**
  * Path exports
  */
-var path_utils_1 = __nccwpck_require__(981);
+var path_utils_1 = __nccwpck_require__(2981);
 Object.defineProperty(exports, "toPosixPath", ({ enumerable: true, get: function () { return path_utils_1.toPosixPath; } }));
 Object.defineProperty(exports, "toWin32Path", ({ enumerable: true, get: function () { return path_utils_1.toWin32Path; } }));
 Object.defineProperty(exports, "toPlatformPath", ({ enumerable: true, get: function () { return path_utils_1.toPlatformPath; } }));
@@ -472,10 +472,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.prepareKeyValueMessage = exports.issueFileCommand = void 0;
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const fs = __importStar(__nccwpck_require__(147));
-const os = __importStar(__nccwpck_require__(37));
-const uuid_1 = __nccwpck_require__(840);
-const utils_1 = __nccwpck_require__(278);
+const fs = __importStar(__nccwpck_require__(7147));
+const os = __importStar(__nccwpck_require__(2037));
+const uuid_1 = __nccwpck_require__(5840);
+const utils_1 = __nccwpck_require__(5278);
 function issueFileCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`];
     if (!filePath) {
@@ -508,7 +508,7 @@ exports.prepareKeyValueMessage = prepareKeyValueMessage;
 
 /***/ }),
 
-/***/ 41:
+/***/ 8041:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -524,9 +524,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OidcClient = void 0;
-const http_client_1 = __nccwpck_require__(255);
-const auth_1 = __nccwpck_require__(526);
-const core_1 = __nccwpck_require__(186);
+const http_client_1 = __nccwpck_require__(6255);
+const auth_1 = __nccwpck_require__(5526);
+const core_1 = __nccwpck_require__(2186);
 class OidcClient {
     static createHttpClient(allowRetry = true, maxRetry = 10) {
         const requestOptions = {
@@ -592,7 +592,7 @@ exports.OidcClient = OidcClient;
 
 /***/ }),
 
-/***/ 981:
+/***/ 2981:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -618,7 +618,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.toPlatformPath = exports.toWin32Path = exports.toPosixPath = void 0;
-const path = __importStar(__nccwpck_require__(17));
+const path = __importStar(__nccwpck_require__(1017));
 /**
  * toPosixPath converts the given path to the posix form. On Windows, \\ will be
  * replaced with /.
@@ -657,7 +657,7 @@ exports.toPlatformPath = toPlatformPath;
 
 /***/ }),
 
-/***/ 327:
+/***/ 1327:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -673,8 +673,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.summary = exports.markdownSummary = exports.SUMMARY_DOCS_URL = exports.SUMMARY_ENV_VAR = void 0;
-const os_1 = __nccwpck_require__(37);
-const fs_1 = __nccwpck_require__(147);
+const os_1 = __nccwpck_require__(2037);
+const fs_1 = __nccwpck_require__(7147);
 const { access, appendFile, writeFile } = fs_1.promises;
 exports.SUMMARY_ENV_VAR = 'GITHUB_STEP_SUMMARY';
 exports.SUMMARY_DOCS_URL = 'https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary';
@@ -947,7 +947,7 @@ exports.summary = _summary;
 
 /***/ }),
 
-/***/ 278:
+/***/ 5278:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -994,7 +994,7 @@ exports.toCommandProperties = toCommandProperties;
 
 /***/ }),
 
-/***/ 526:
+/***/ 5526:
 /***/ (function(__unused_webpack_module, exports) {
 
 "use strict";
@@ -1082,7 +1082,7 @@ exports.PersonalAccessTokenCredentialHandler = PersonalAccessTokenCredentialHand
 
 /***/ }),
 
-/***/ 255:
+/***/ 6255:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -1118,10 +1118,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.HttpClient = exports.isHttps = exports.HttpClientResponse = exports.HttpClientError = exports.getProxyUrl = exports.MediaTypes = exports.Headers = exports.HttpCodes = void 0;
-const http = __importStar(__nccwpck_require__(685));
-const https = __importStar(__nccwpck_require__(687));
-const pm = __importStar(__nccwpck_require__(835));
-const tunnel = __importStar(__nccwpck_require__(294));
+const http = __importStar(__nccwpck_require__(3685));
+const https = __importStar(__nccwpck_require__(5687));
+const pm = __importStar(__nccwpck_require__(9835));
+const tunnel = __importStar(__nccwpck_require__(4294));
 var HttpCodes;
 (function (HttpCodes) {
     HttpCodes[HttpCodes["OK"] = 200] = "OK";
@@ -1707,7 +1707,7 @@ const lowercaseKeys = (obj) => Object.keys(obj).reduce((c, k) => ((c[k.toLowerCa
 
 /***/ }),
 
-/***/ 835:
+/***/ 9835:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -1796,7 +1796,7 @@ function isLoopbackAddress(host) {
 
 /***/ }),
 
-/***/ 659:
+/***/ 6659:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -1804,32 +1804,32 @@ var Ne=Object.create;var B=Object.defineProperty;var He=Object.getOwnPropertyDes
 \r	`,["\\,","\\ ","\\n","\\r","\\t"]),quoted:st('"\\',['\\"',"\\\\"]),tag:ie(`, =
 \r	`,["\\,","\\ ","\\=","\\n","\\r","\\t"])};var k="000000000",ae=!1;function Fe(r){return ae=r&&process&&typeof process.hrtime=="function"}Fe(!0);var Oe,V,Ae=Date.now(),se=0;function oe(){if(ae){let r=process.hrtime(),e=Date.now();V?(r[0]=r[0]-V[0],r[1]=r[1]-V[1],r[1]<0&&(r[0]-=1,r[1]+=1e9),e=Oe+r[0]*1e3+Math.floor(r[1]/1e6)):(V=r,Oe=e);let t=String(r[1]%1e6);return String(e)+k.substr(0,6-t.length)+t}else{let r=Date.now();r!==Ae?(Ae=r,se=0):se++;let e=String(se);return String(r)+k.substr(0,6-e.length)+e}}function Ee(){if(ae){let r=process.hrtime(),e=String(Math.trunc(r[1]/1e3)%1e3);return String(Date.now())+k.substr(0,3-e.length)+e}else return String(Date.now())+k.substr(0,3)}function De(){return String(Date.now())}function Pe(){return String(Math.floor(Date.now()/1e3))}var le={s:Pe,ms:De,us:Ee,ns:oe,seconds:Pe,millis:De,micros:Ee,nanos:oe},ue={s:r=>`${Math.floor(r.getTime()/1e3)}`,ms:r=>`${r.getTime()}`,us:r=>`${r.getTime()}000`,ns:r=>`${r.getTime()}000000`};function fe(r){return r===void 0?oe():typeof r=="string"?r.length>0?r:void 0:r instanceof Date?`${r.getTime()}000000`:String(typeof r=="number"?Math.floor(r):r)}var Le={error(r,e){console.error("ERROR: "+r,e||"")},warn(r,e){console.warn("WARN: "+r,e||"")}},W=Le,h={error(r,e){W.error(r,e)},warn(r,e){W.warn(r,e)}};function ot(r){let e=W;return W=r,e}var E=Symbol("FLUX_VALUE"),g=class{constructor(e){this.fluxValue=e}toString(){return this.fluxValue}[E](){return this.fluxValue}};function at(r){return typeof r=="object"&&typeof r[E]=="function"}function D(r){if(r==null)return"";r=r.toString();let e,t=0;function n(){e===void 0&&(e=r.substring(0,t))}for(;t<r.length;t++){let i=r.charAt(t);switch(i){case"\r":n(),e+="\\r";break;case`
 `:n(),e+="\\n";break;case"	":n(),e+="\\t";break;case'"':case"\\":n(),e=e+"\\"+i;break;case"$":if(t+1<r.length&&r.charAt(t+1)==="{"){n(),t++,e+="\\${";break}e!=null&&(e+=i);break;default:e!=null&&(e+=i)}}return e!==void 0?e:r}function lt(r){return new g(`"${D(r)}"`)}function ce(r){let e=Number(r);if(!isFinite(e)){if(typeof r=="number")return`float(v: "${e}")`;throw new Error(`not a flux float: ${r}`)}let t=e.toString(),n=!1;for(let i of t)if(!(i>="0"&&i<="9"||i=="-")){if(i==="."){n=!0;continue}return`float(v: "${t}")`}return n?t:t+".0"}function ut(r){return new g(ce(r))}function de(r){let e=String(r),t=e.startsWith("-"),n=t?e.substring(1):e;if(n.length===0||n.length>19)throw new Error(`not a flux integer: ${e}`);for(let i of n)if(i<"0"||i>"9")throw new Error(`not a flux integer: ${e}`);if(n.length===19){if(t&&n>"9223372036854775808")throw new Error(`flux integer out of bounds: ${e}`);if(!t&&n>"9223372036854775807")throw new Error(`flux integer out of bounds: ${e}`)}return e}function ft(r){return new g(de(r))}function pt(r){return`time(v: "${D(r)}")`}function ct(r){return new g(pt(r))}function dt(r){return new g(`duration(v: "${D(r)}")`)}function Ie(r){return r instanceof RegExp?r.toString():new RegExp(r).toString()}function mt(r){return new g(Ie(r))}function ht(r){return r==="true"||r==="false"?new g(r):new g((!!r).toString())}function pe(r){return new g(String(r))}function N(r){if(r===void 0)return"";if(r===null)return"null";if(typeof r=="boolean")return r.toString();if(typeof r=="string")return`"${D(r)}"`;if(typeof r=="number")return Number.isSafeInteger(r)?de(r):ce(r);if(typeof r=="object"){if(typeof r[E]=="function")return r[E]();if(r instanceof Date)return r.toISOString();if(r instanceof RegExp)return Ie(r);if(Array.isArray(r))return`[${r.map(N).join(",")}]`}else if(typeof r=="bigint")return`${r}.0`;return N(r.toString())}function gt(r,...e){if(r.length==1&&e.length===0)return pe(r[0]);let t=new Array(r.length+e.length),n=0;for(let i=0;i<r.length;i++){let s=r[i];if(t[n++]=s,i<e.length){let a=e[i],o;if(s.endsWith('"')&&i+1<r.length&&r[i+1].startsWith('"'))o=D(a);else if(o=N(a),o===""&&!at(a))throw new Error(`Unsupported parameter literal '${a}' at index: ${i}, type: ${typeof a}`);t[n++]=o}else if(i<r.length-1)throw new Error("Too few parameters supplied!")}return pe(t.join(""))}var me=class{constructor(e){this.tags={};this.fields={};e&&(this.name=e)}measurement(e){return this.name=e,this}tag(e,t){return this.tags[e]=t,this}booleanField(e,t){return this.fields[e]=t?"T":"F",this}intField(e,t){let n;if(typeof t=="number"?n=t:n=parseInt(String(t)),isNaN(n)||n<=-9223372036854776e3||n>=9223372036854776e3)throw new Error(`invalid integer value for field '${e}': '${t}'!`);return this.fields[e]=`${Math.floor(n)}i`,this}uintField(e,t){if(typeof t=="number"){if(isNaN(t)||t<0||t>Number.MAX_SAFE_INTEGER)throw new Error(`uint value for field '${e}' out of range: ${t}`);this.fields[e]=`${Math.floor(t)}u`}else{let n=String(t);for(let i=0;i<n.length;i++){let s=n.charCodeAt(i);if(s<48||s>57)throw new Error(`uint value has an unsupported character at pos ${i}: ${t}`)}if(n.length>20||n.length===20&&n.localeCompare("18446744073709551615")>0)throw new Error(`uint value for field '${e}' out of range: ${n}`);this.fields[e]=`${n}u`}return this}floatField(e,t){let n;if(typeof t=="number"?n=t:n=parseFloat(t),!isFinite(n))throw new Error(`invalid float value for field '${e}': ${t}`);return this.fields[e]=String(n),this}stringField(e,t){return t!=null&&(typeof t!="string"&&(t=String(t)),this.fields[e]=w.quoted(t)),this}timestamp(e){return this.time=e,this}toLineProtocol(e){if(!this.name)return;let t="";if(Object.keys(this.fields).sort().forEach(a=>{if(a){let o=this.fields[a];t.length>0&&(t+=","),t+=`${w.tag(a)}=${o}`}}),t.length===0)return;let n="",i=e&&e.defaultTags?{...e.defaultTags,...this.tags}:this.tags;Object.keys(i).sort().forEach(a=>{if(a){let o=i[a];o&&(n+=",",n+=`${w.tag(a)}=${w.tag(o)}`)}});let s=this.time;return e&&e.convertTime?s=e.convertTime(s):s=fe(s),`${w.measurement(this.name)}${n} ${t}${s!==void 0?" "+s:""}`}toString(){let e=this.toLineProtocol(void 0);return e||`invalid point: ${JSON.stringify(this,void 0)}`}};var he=class{constructor(e){this.options={...re,...e},this.success()}nextDelay(e,t){let n=X(e);if(n&&n>0)return n+Math.round(Math.random()*this.options.retryJitter);if(t&&t>0){if(this.options.randomRetry){let s=Math.max(this.options.minRetryDelay,1),a=s*this.options.exponentialBase;for(let o=1;o<t;o++)if(s=a,a=a*this.options.exponentialBase,a>=this.options.maxRetryDelay){a=this.options.maxRetryDelay;break}return s+Math.round(Math.random()*(a-s)+Math.random()*this.options.retryJitter)}let i=Math.max(this.options.minRetryDelay,1);for(let s=1;s<t;s++)if(i=i*this.options.exponentialBase,i>=this.options.maxRetryDelay){i=this.options.maxRetryDelay;break}return i+Math.round(Math.random()*this.options.retryJitter)}else this.currentDelay?this.currentDelay=Math.min(Math.max(this.currentDelay*this.options.exponentialBase,1)+Math.round(Math.random()*this.options.retryJitter),this.options.maxRetryDelay):this.currentDelay=this.options.minRetryDelay+Math.round(Math.random()*this.options.retryJitter);return this.currentDelay}success(){this.currentDelay=void 0}};function Ue(r){return new he(r)}function yt(r){let e,t=r,n=r;for(;n.next;)n.next.expires<t.expires&&(e=n,t=n.next),n=n.next;return[t,e]}var P=class{constructor(e,t,n=()=>{}){this.maxLines=e;this.retryLines=t;this.onShrink=n;this.size=0;this.closed=!1;this._timeoutHandle=void 0}addLines(e,t,n,i){if(this.closed||!e.length)return;let s=Date.now()+n;if(i<s&&(s=i),this.first&&this.size+e.length>this.maxLines){let f=this.size,l=f*.7;do{let[p,c]=yt(this.first);this.size-=p.lines.length,c?c.next=p.next:(this.first=p.next,this.first&&this.scheduleRetry(this.first.retryTime-Date.now())),p.next=void 0,this.onShrink(p)}while(this.first&&this.size+e.length>l);h.error(`RetryBuffer: ${f-this.size} oldest lines removed to keep buffer size under the limit of ${this.maxLines} lines.`)}let a={lines:e,retryCount:t,retryTime:s,expires:i},o=this.first,u;for(;;){if(!o||o.retryTime>s){a.next=o,u?u.next=a:(this.first=a,this.scheduleRetry(s-Date.now()));break}u=o,o=o.next}this.size+=e.length}removeLines(){if(this.first){let e=this.first;return this.first=this.first.next,e.next=void 0,this.size-=e.lines.length,e}}scheduleRetry(e){this._timeoutHandle&&clearTimeout(this._timeoutHandle),this._timeoutHandle=setTimeout(()=>{let t=this.removeLines();t?this.retryLines(t.lines,t.retryCount,t.expires).catch(()=>{}).finally(()=>{this.first&&this.scheduleRetry(this.first.retryTime-Date.now())}):this._timeoutHandle=void 0},Math.max(e,0))}async flush(){let e;for(;e=this.removeLines();)await this.retryLines(e.lines,e.retryCount,e.expires)}close(){return this._timeoutHandle&&(clearTimeout(this._timeoutHandle),this._timeoutHandle=void 0),this.closed=!0,this.size}};function ge(r){let e=r.length;for(let t=0;t<r.length;t++){let n=r.charCodeAt(t);n<128||(n>=128&&n<=2047?e++:n>=2048&&n<=65535?n>=55296&&n<=57343?e++:e+=2:e+=3)}return e}var ye=class{constructor(e,t,n,i){this.maxChunkRecords=e;this.maxBatchBytes=t;this.flushFn=n;this.scheduleSend=i;this.length=0;this.bytes=-1;this.lines=new Array(e)}add(e){let t=ge(e);this.length===0?this.scheduleSend():this.bytes+t+1>=this.maxBatchBytes&&this.flush().catch(n=>{}),this.lines[this.length]=e,this.length++,this.bytes+=t+1,(this.length>=this.maxChunkRecords||this.bytes>=this.maxBatchBytes)&&this.flush().catch(n=>{})}flush(){let e=this.reset();return e.length>0?this.flushFn(e):Promise.resolve()}reset(){let e=this.lines.slice(0,this.length);return this.length=0,this.bytes=-1,e}},F=class{constructor(e,t,n,i,s){this.transport=e;this.closed=!1;this._timeoutHandle=void 0;this.path=`/api/v2/write?org=${encodeURIComponent(t)}&bucket=${encodeURIComponent(n)}&precision=${i}`,s!=null&&s.consistency&&(this.path+=`&consistency=${encodeURIComponent(s.consistency)}`),this.writeOptions={...ne,...s},this.currentTime=le[i],this.dateToProtocolTimestamp=ue[i],this.writeOptions.defaultTags&&this.useDefaultTags(this.writeOptions.defaultTags),this.sendOptions={method:"POST",headers:{"content-type":"text/plain; charset=utf-8",...s==null?void 0:s.headers},gzipThreshold:this.writeOptions.gzipThreshold};let a=()=>{this.writeOptions.flushInterval>0&&(this._clearFlushTimeout(),this.closed||(this._timeoutHandle=setTimeout(()=>this.sendBatch(this.writeBuffer.reset(),this.writeOptions.maxRetries).catch(o=>{}),this.writeOptions.flushInterval)))};this.writeBuffer=new ye(this.writeOptions.batchSize,this.writeOptions.maxBatchBytes,o=>(this._clearFlushTimeout(),this.sendBatch(o,this.writeOptions.maxRetries)),a),this.sendBatch=this.sendBatch.bind(this),this.retryStrategy=Ue(this.writeOptions),this.retryBuffer=new P(this.writeOptions.maxBufferLines,this.sendBatch,this.writeOptions.writeRetrySkipped)}sendBatch(e,t,n=Date.now()+this.writeOptions.maxRetryTime){let i=this,s=i.writeOptions.maxRetries+1-t;if(!this.closed&&e.length>0){if(n<=Date.now()){let a=new Error("Max retry time exceeded."),o=i.writeOptions.writeFailed.call(i,a,e,s,n);return o||(h.error(`Write to InfluxDB failed (attempt: ${s}).`,a),Promise.reject(a))}return new Promise((a,o)=>{let u,f={responseStarted(l,p){u=p},error(l){let p=i.writeOptions.writeFailed.call(i,l,e,s,n);if(p){p.then(a,o);return}if(l instanceof m&&l.json&&typeof l.json.error=="string"&&l.json.error.includes("hinted handoff queue not empty")){h.warn("Write to InfluxDB returns: "+l.json.error),u=204,f.complete();return}if(!i.closed&&t>0&&(!(l instanceof m)||l.statusCode>=429)){h.warn(`Write to InfluxDB failed (attempt: ${s}).`,l),i.retryBuffer.addLines(e,t-1,i.retryStrategy.nextDelay(l,s),n),o(l);return}h.error("Write to InfluxDB failed.",l),o(l)},complete(){if(u==204||u==null)i.writeOptions.writeSuccess.call(i,e),i.retryStrategy.success(),a();else{let l=`204 HTTP response status code expected, but ${u} returned`,p=new m(u,l,void 0,"0");p.message=l,f.error(p)}}};this.transport.send(this.path,e.join(`
-`),this.sendOptions,f)})}else return Promise.resolve()}_clearFlushTimeout(){this._timeoutHandle!==void 0&&(clearTimeout(this._timeoutHandle),this._timeoutHandle=void 0)}writeRecord(e){if(this.closed)throw new Error("writeApi: already closed!");this.writeBuffer.add(e)}writeRecords(e){if(this.closed)throw new Error("writeApi: already closed!");for(let t=0;t<e.length;t++)this.writeBuffer.add(e[t])}writePoint(e){if(this.closed)throw new Error("writeApi: already closed!");let t=e.toLineProtocol(this);t&&this.writeBuffer.add(t)}writePoints(e){if(this.closed)throw new Error("writeApi: already closed!");for(let t=0;t<e.length;t++){let n=e[t].toLineProtocol(this);n&&this.writeBuffer.add(n)}}async flush(e){if(await this.writeBuffer.flush(),e)return await this.retryBuffer.flush()}close(){return this.writeBuffer.flush().finally(()=>{let t=this.retryBuffer.close();t&&h.error(`Retry buffer closed with ${t} items that were not written to InfluxDB!`,null),this.closed=!0})}dispose(){return this._clearFlushTimeout(),this.closed=!0,this.retryBuffer.close()+this.writeBuffer.length}useDefaultTags(e){return this.defaultTags=e,this}convertTime(e){return e===void 0?this.currentTime():typeof e=="string"?e.length>0?e:void 0:e instanceof Date?this.dateToProtocolTimestamp(e):String(typeof e=="number"?Math.floor(e):e)}};var Re=__nccwpck_require__(310),$e=Q(__nccwpck_require__(685)),Me=Q(__nccwpck_require__(687)),H=__nccwpck_require__(300);var be=__nccwpck_require__(300),bt={concat(r,e){return be.Buffer.concat([r,e])},toUtf8String(r,e,t){return r.toString("utf-8",e,t)},copy(r,e,t){let n=be.Buffer.allocUnsafe(t-e);return r.copy(n,0,e,t),n}},_e=bt;var L=Q(__nccwpck_require__(796));function xe(r={}){let e=0,t={next:n=>{if(e===0&&r.next&&n!==null&&n!==void 0)return r.next(n)},error:n=>{e===0&&(e=1,r.error&&r.error(n))},complete:()=>{e===0&&(e=2,r.complete&&r.complete())},responseStarted:(n,i)=>{r.responseStarted&&r.responseStarted(n,i)}};return r.useCancellable&&(t.useCancellable=r.useCancellable.bind(r)),r.useResume&&(t.useResume=r.useResume.bind(r)),t}var Be="1.33.2";var ze=__nccwpck_require__(781),xt={flush:L.default.constants.Z_SYNC_FLUSH,finishFlush:L.default.constants.Z_SYNC_FLUSH},Rt=H.Buffer.allocUnsafe(0),we=class{constructor(){this.cancelled=!1}cancel(){this.cancelled=!0,this.resume&&(this.resume(),this.resume=void 0)}isCancelled(){return this.cancelled}},Te=class{constructor(e){this.chunkCombiner=_e;var u,f,l,p,c,d,_;let{url:t,proxyUrl:n,token:i,transportOptions:s,...a}=e,o=(0,Re.parse)(n||t);if(this.token=i,this.defaultOptions={...te,...a,...s,port:o.port,protocol:o.protocol,hostname:o.hostname},this.contextPath=n?t:(u=o.path)!=null?u:"",this.contextPath.endsWith("/")&&(this.contextPath=this.contextPath.substring(0,this.contextPath.length-1)),Object.keys(this.defaultOptions).forEach(Ce=>this.defaultOptions[Ce]===void 0&&delete this.defaultOptions[Ce]),this.contextPath.endsWith("/api/v2")&&(h.warn(`Please remove '/api/v2' context path from InfluxDB base url, using ${o.protocol}//${o.hostname}:${o.port} !`),this.contextPath=""),o.protocol==="http:")this.requestApi=(p=(l=(f=this.defaultOptions["follow-redirects"])==null?void 0:f.http)==null?void 0:l.request)!=null?p:$e.request;else if(o.protocol==="https:")this.requestApi=(_=(d=(c=this.defaultOptions["follow-redirects"])==null?void 0:c.https)==null?void 0:d.request)!=null?_:Me.request;else throw new Error(`Unsupported protocol "${o.protocol} in URL: "${e.url}"`);this.headers={"User-Agent":`influxdb-client-js/${Be}`,...e.headers},n&&(this.headers.Host=(0,Re.parse)(t).host)}send(e,t,n,i){let s=new we;i&&i.useCancellable&&i.useCancellable(s),this.createRequestMessage(e,t,n,a=>{this._request(a,s,i)},a=>(i==null?void 0:i.error)&&i.error(a))}request(e,t,n,i){t?typeof t!="string"&&(t=JSON.stringify(t)):t="";let s=Rt,a,o;return new Promise((u,f)=>{this.send(e,t,n,{responseStarted(l,p){i&&i(l,p),a=String(l["content-type"]),o=p},next:l=>{s=H.Buffer.concat([s,l])},complete:()=>{var p,c;let l=(c=(p=n.headers)==null?void 0:p.accept)!=null?c:a;try{o===204&&u(void 0),l.includes("json")?s.length?u(JSON.parse(s.toString("utf8"))):u(void 0):l.includes("text")||l.startsWith("application/csv")?u(s.toString("utf8")):u(s)}catch(d){f(d)}},error:l=>{f(l)}})})}async*iterate(e,t,n){var l;let i,s;function a(p){i=p,s(p)}let o=await new Promise((p,c)=>{s=c,this.createRequestMessage(e,t,n,p,a)});(l=o.signal)!=null&&l.addEventListener&&o.signal.addEventListener("abort",()=>{a(new b)});let u=await new Promise((p,c)=>{s=c;let d=this.requestApi(o,p);d.on("timeout",()=>a(new x)),d.on("error",a),d.write(o.body),d.end()}),f=await new Promise((p,c)=>{s=c,this._prepareResponse(u,p,a)});for await(let p of f){if(i)throw i;yield p}}createRequestMessage(e,t,n,i,s){let a=H.Buffer.from(t,"utf-8"),o={"content-type":"application/json; charset=utf-8",...this.headers};this.token&&(o.authorization="Token "+this.token);let u={...this.defaultOptions,path:this.contextPath+e,method:n.method,headers:{...o,...n.headers}};if(n.signal&&(u.signal=n.signal),n.gzipThreshold!==void 0&&n.gzipThreshold<a.length){L.default.gzip(a,(f,l)=>{if(f)return s(f);u.headers["content-encoding"]="gzip",u.body=l,i(u)});return}u.body=a,u.headers["content-length"]=u.body.length,i(u)}_prepareResponse(e,t,n){var o;e.on("aborted",()=>{n(new b)}),e.on("error",n);let i=(o=e.statusCode)!=null?o:600,s=e.headers["content-encoding"],a;if(s==="gzip"?(a=L.default.createGunzip(xt),a=(0,ze.pipeline)(e,a,u=>u&&n(u))):a=e,i>=300){let u="",f=String(e.headers["content-type"]).startsWith("application/json");a.on("data",l=>{u+=l.toString(),!f&&u.length>1e3&&(u=u.slice(0,1e3),e.resume())}),a.on("end",()=>{u===""&&!!e.headers["x-influxdb-error"]&&(u=e.headers["x-influxdb-error"].toString()),n(new m(i,e.statusMessage,u,e.headers["retry-after"],e.headers["content-type"]))})}else t(a)}_request(e,t,n){var a;let i=xe(n);if(t.isCancelled()){i.complete();return}(a=e.signal)!=null&&a.addEventListener&&e.signal.addEventListener("abort",()=>{i.error(new b)});let s=this.requestApi(e,o=>{if(t.isCancelled()){o.resume(),i.complete();return}i.responseStarted(o.headers,o.statusCode),this._prepareResponse(o,u=>{u.on("data",f=>{if(t.isCancelled())o.resume();else if(i.next(f)===!1){if(!i.useResume){i.error(new Error("Unable to pause, useResume is not configured!")),o.resume();return}o.pause();let l=()=>{o.resume()};t.resume=l,i.useResume(l)}}),u.on("end",i.complete)},i.error)});typeof s.setTimeout=="function"&&e.timeout&&s.setTimeout(e.timeout),s.on("timeout",()=>{i.error(new x)}),s.on("error",o=>{i.error(o)}),e.body&&s.write(e.body),s.end()}},Ve=Te;var ke={header:!0,delimiter:",",quoteChar:'"',commentPrefix:"#",annotations:["datatype","group","default"]},I=class{constructor(e,t,n){this.transport=e;this.createCSVResponse=t;this.options=typeof n=="string"?{org:n}:n}with(e){return new I(this.transport,this.createCSVResponse,{...this.options,...e})}response(e){let{org:t,type:n,gzip:i,headers:s}=this.options,a=`/api/v2/query?org=${encodeURIComponent(t)}`,o=JSON.stringify(this.decorateRequest({query:e.toString(),dialect:ke,type:n})),u={method:"POST",headers:{"content-type":"application/json; encoding=utf-8","accept-encoding":i?"gzip":"identity",...s}};return this.createCSVResponse(f=>this.transport.send(a,o,u,f),()=>this.transport.iterate(a,o,u))}iterateLines(e){return this.response(e).iterateLines()}iterateRows(e){return this.response(e).iterateRows()}lines(e){return this.response(e).lines()}rows(e){return this.response(e).rows()}queryLines(e,t){return this.response(e).consumeLines(t)}queryRows(e,t){return this.response(e).consumeRows(t)}collectRows(e,t){return this.response(e).collectRows(t)}collectLines(e){return this.response(e).collectLines()}queryRaw(e){let{org:t,type:n,gzip:i,headers:s}=this.options;return this.transport.request(`/api/v2/query?org=${encodeURIComponent(t)}`,JSON.stringify(this.decorateRequest({query:e.toString(),dialect:ke,type:n})),{method:"POST",headers:{accept:"text/csv","accept-encoding":i?"gzip":"identity","content-type":"application/json; encoding=utf-8",...s}})}decorateRequest(e){var t;return typeof this.options.now=="function"&&(e.now=this.options.now()),e.type=(t=this.options.type)!=null?t:"flux",e}},We=I;function wt(r,e){return e.toObject(r)}var q=class{constructor(e,t,n){this.executor=e;this.iterableResultExecutor=t;this.chunkCombiner=n}iterateLines(){return $(this.iterableResultExecutor())}iterateRows(){return G($(this.iterableResultExecutor()))}lines(){return new S(this.executor,e=>T(e,this.chunkCombiner))}rows(){return new S(this.executor,e=>T(z({next(t,n){e.next({values:t,tableMeta:n})},error(t){e.error(t)},complete(){e.complete()}}),this.chunkCombiner))}consumeLines(e){this.executor(T(e,this.chunkCombiner))}consumeRows(e){this.executor(T(z(e),this.chunkCombiner))}collectRows(e=wt){let t=[];return new Promise((n,i)=>{this.consumeRows({next(s,a){let o=e.call(this,s,a);o!==void 0&&t.push(o)},error(s){i(s)},complete(){n(t)}})})}collectLines(){let e=[];return new Promise((t,n)=>{this.consumeLines({next(i){e.push(i)},error(i){n(i)},complete(){t(e)}})})}};var U=class{constructor(e){var n;if(typeof e=="string")this._options={url:e};else if(e!==null&&typeof e=="object")this._options=e;else throw new y("No url or configuration specified!");let t=this._options.url;if(typeof t!="string")throw new y("No url specified!");t.endsWith("/")&&(this._options.url=t.substring(0,t.length-1)),this.transport=(n=this._options.transport)!=null?n:new Ve(this._options),this.processCSVResponse=(i,s)=>new q(i,s,this.transport.chunkCombiner)}getWriteApi(e,t,n="ns",i){return new F(this.transport,e,t,n,i!=null?i:this._options.writeOptions)}getQueryApi(e){return new We(this.transport,this.processCSVResponse,e)}};0&&(0);
+`),this.sendOptions,f)})}else return Promise.resolve()}_clearFlushTimeout(){this._timeoutHandle!==void 0&&(clearTimeout(this._timeoutHandle),this._timeoutHandle=void 0)}writeRecord(e){if(this.closed)throw new Error("writeApi: already closed!");this.writeBuffer.add(e)}writeRecords(e){if(this.closed)throw new Error("writeApi: already closed!");for(let t=0;t<e.length;t++)this.writeBuffer.add(e[t])}writePoint(e){if(this.closed)throw new Error("writeApi: already closed!");let t=e.toLineProtocol(this);t&&this.writeBuffer.add(t)}writePoints(e){if(this.closed)throw new Error("writeApi: already closed!");for(let t=0;t<e.length;t++){let n=e[t].toLineProtocol(this);n&&this.writeBuffer.add(n)}}async flush(e){if(await this.writeBuffer.flush(),e)return await this.retryBuffer.flush()}close(){return this.writeBuffer.flush().finally(()=>{let t=this.retryBuffer.close();t&&h.error(`Retry buffer closed with ${t} items that were not written to InfluxDB!`,null),this.closed=!0})}dispose(){return this._clearFlushTimeout(),this.closed=!0,this.retryBuffer.close()+this.writeBuffer.length}useDefaultTags(e){return this.defaultTags=e,this}convertTime(e){return e===void 0?this.currentTime():typeof e=="string"?e.length>0?e:void 0:e instanceof Date?this.dateToProtocolTimestamp(e):String(typeof e=="number"?Math.floor(e):e)}};var Re=__nccwpck_require__(7310),$e=Q(__nccwpck_require__(3685)),Me=Q(__nccwpck_require__(5687)),H=__nccwpck_require__(4300);var be=__nccwpck_require__(4300),bt={concat(r,e){return be.Buffer.concat([r,e])},toUtf8String(r,e,t){return r.toString("utf-8",e,t)},copy(r,e,t){let n=be.Buffer.allocUnsafe(t-e);return r.copy(n,0,e,t),n}},_e=bt;var L=Q(__nccwpck_require__(9796));function xe(r={}){let e=0,t={next:n=>{if(e===0&&r.next&&n!==null&&n!==void 0)return r.next(n)},error:n=>{e===0&&(e=1,r.error&&r.error(n))},complete:()=>{e===0&&(e=2,r.complete&&r.complete())},responseStarted:(n,i)=>{r.responseStarted&&r.responseStarted(n,i)}};return r.useCancellable&&(t.useCancellable=r.useCancellable.bind(r)),r.useResume&&(t.useResume=r.useResume.bind(r)),t}var Be="1.33.2";var ze=__nccwpck_require__(2781),xt={flush:L.default.constants.Z_SYNC_FLUSH,finishFlush:L.default.constants.Z_SYNC_FLUSH},Rt=H.Buffer.allocUnsafe(0),we=class{constructor(){this.cancelled=!1}cancel(){this.cancelled=!0,this.resume&&(this.resume(),this.resume=void 0)}isCancelled(){return this.cancelled}},Te=class{constructor(e){this.chunkCombiner=_e;var u,f,l,p,c,d,_;let{url:t,proxyUrl:n,token:i,transportOptions:s,...a}=e,o=(0,Re.parse)(n||t);if(this.token=i,this.defaultOptions={...te,...a,...s,port:o.port,protocol:o.protocol,hostname:o.hostname},this.contextPath=n?t:(u=o.path)!=null?u:"",this.contextPath.endsWith("/")&&(this.contextPath=this.contextPath.substring(0,this.contextPath.length-1)),Object.keys(this.defaultOptions).forEach(Ce=>this.defaultOptions[Ce]===void 0&&delete this.defaultOptions[Ce]),this.contextPath.endsWith("/api/v2")&&(h.warn(`Please remove '/api/v2' context path from InfluxDB base url, using ${o.protocol}//${o.hostname}:${o.port} !`),this.contextPath=""),o.protocol==="http:")this.requestApi=(p=(l=(f=this.defaultOptions["follow-redirects"])==null?void 0:f.http)==null?void 0:l.request)!=null?p:$e.request;else if(o.protocol==="https:")this.requestApi=(_=(d=(c=this.defaultOptions["follow-redirects"])==null?void 0:c.https)==null?void 0:d.request)!=null?_:Me.request;else throw new Error(`Unsupported protocol "${o.protocol} in URL: "${e.url}"`);this.headers={"User-Agent":`influxdb-client-js/${Be}`,...e.headers},n&&(this.headers.Host=(0,Re.parse)(t).host)}send(e,t,n,i){let s=new we;i&&i.useCancellable&&i.useCancellable(s),this.createRequestMessage(e,t,n,a=>{this._request(a,s,i)},a=>(i==null?void 0:i.error)&&i.error(a))}request(e,t,n,i){t?typeof t!="string"&&(t=JSON.stringify(t)):t="";let s=Rt,a,o;return new Promise((u,f)=>{this.send(e,t,n,{responseStarted(l,p){i&&i(l,p),a=String(l["content-type"]),o=p},next:l=>{s=H.Buffer.concat([s,l])},complete:()=>{var p,c;let l=(c=(p=n.headers)==null?void 0:p.accept)!=null?c:a;try{o===204&&u(void 0),l.includes("json")?s.length?u(JSON.parse(s.toString("utf8"))):u(void 0):l.includes("text")||l.startsWith("application/csv")?u(s.toString("utf8")):u(s)}catch(d){f(d)}},error:l=>{f(l)}})})}async*iterate(e,t,n){var l;let i,s;function a(p){i=p,s(p)}let o=await new Promise((p,c)=>{s=c,this.createRequestMessage(e,t,n,p,a)});(l=o.signal)!=null&&l.addEventListener&&o.signal.addEventListener("abort",()=>{a(new b)});let u=await new Promise((p,c)=>{s=c;let d=this.requestApi(o,p);d.on("timeout",()=>a(new x)),d.on("error",a),d.write(o.body),d.end()}),f=await new Promise((p,c)=>{s=c,this._prepareResponse(u,p,a)});for await(let p of f){if(i)throw i;yield p}}createRequestMessage(e,t,n,i,s){let a=H.Buffer.from(t,"utf-8"),o={"content-type":"application/json; charset=utf-8",...this.headers};this.token&&(o.authorization="Token "+this.token);let u={...this.defaultOptions,path:this.contextPath+e,method:n.method,headers:{...o,...n.headers}};if(n.signal&&(u.signal=n.signal),n.gzipThreshold!==void 0&&n.gzipThreshold<a.length){L.default.gzip(a,(f,l)=>{if(f)return s(f);u.headers["content-encoding"]="gzip",u.body=l,i(u)});return}u.body=a,u.headers["content-length"]=u.body.length,i(u)}_prepareResponse(e,t,n){var o;e.on("aborted",()=>{n(new b)}),e.on("error",n);let i=(o=e.statusCode)!=null?o:600,s=e.headers["content-encoding"],a;if(s==="gzip"?(a=L.default.createGunzip(xt),a=(0,ze.pipeline)(e,a,u=>u&&n(u))):a=e,i>=300){let u="",f=String(e.headers["content-type"]).startsWith("application/json");a.on("data",l=>{u+=l.toString(),!f&&u.length>1e3&&(u=u.slice(0,1e3),e.resume())}),a.on("end",()=>{u===""&&!!e.headers["x-influxdb-error"]&&(u=e.headers["x-influxdb-error"].toString()),n(new m(i,e.statusMessage,u,e.headers["retry-after"],e.headers["content-type"]))})}else t(a)}_request(e,t,n){var a;let i=xe(n);if(t.isCancelled()){i.complete();return}(a=e.signal)!=null&&a.addEventListener&&e.signal.addEventListener("abort",()=>{i.error(new b)});let s=this.requestApi(e,o=>{if(t.isCancelled()){o.resume(),i.complete();return}i.responseStarted(o.headers,o.statusCode),this._prepareResponse(o,u=>{u.on("data",f=>{if(t.isCancelled())o.resume();else if(i.next(f)===!1){if(!i.useResume){i.error(new Error("Unable to pause, useResume is not configured!")),o.resume();return}o.pause();let l=()=>{o.resume()};t.resume=l,i.useResume(l)}}),u.on("end",i.complete)},i.error)});typeof s.setTimeout=="function"&&e.timeout&&s.setTimeout(e.timeout),s.on("timeout",()=>{i.error(new x)}),s.on("error",o=>{i.error(o)}),e.body&&s.write(e.body),s.end()}},Ve=Te;var ke={header:!0,delimiter:",",quoteChar:'"',commentPrefix:"#",annotations:["datatype","group","default"]},I=class{constructor(e,t,n){this.transport=e;this.createCSVResponse=t;this.options=typeof n=="string"?{org:n}:n}with(e){return new I(this.transport,this.createCSVResponse,{...this.options,...e})}response(e){let{org:t,type:n,gzip:i,headers:s}=this.options,a=`/api/v2/query?org=${encodeURIComponent(t)}`,o=JSON.stringify(this.decorateRequest({query:e.toString(),dialect:ke,type:n})),u={method:"POST",headers:{"content-type":"application/json; encoding=utf-8","accept-encoding":i?"gzip":"identity",...s}};return this.createCSVResponse(f=>this.transport.send(a,o,u,f),()=>this.transport.iterate(a,o,u))}iterateLines(e){return this.response(e).iterateLines()}iterateRows(e){return this.response(e).iterateRows()}lines(e){return this.response(e).lines()}rows(e){return this.response(e).rows()}queryLines(e,t){return this.response(e).consumeLines(t)}queryRows(e,t){return this.response(e).consumeRows(t)}collectRows(e,t){return this.response(e).collectRows(t)}collectLines(e){return this.response(e).collectLines()}queryRaw(e){let{org:t,type:n,gzip:i,headers:s}=this.options;return this.transport.request(`/api/v2/query?org=${encodeURIComponent(t)}`,JSON.stringify(this.decorateRequest({query:e.toString(),dialect:ke,type:n})),{method:"POST",headers:{accept:"text/csv","accept-encoding":i?"gzip":"identity","content-type":"application/json; encoding=utf-8",...s}})}decorateRequest(e){var t;return typeof this.options.now=="function"&&(e.now=this.options.now()),e.type=(t=this.options.type)!=null?t:"flux",e}},We=I;function wt(r,e){return e.toObject(r)}var q=class{constructor(e,t,n){this.executor=e;this.iterableResultExecutor=t;this.chunkCombiner=n}iterateLines(){return $(this.iterableResultExecutor())}iterateRows(){return G($(this.iterableResultExecutor()))}lines(){return new S(this.executor,e=>T(e,this.chunkCombiner))}rows(){return new S(this.executor,e=>T(z({next(t,n){e.next({values:t,tableMeta:n})},error(t){e.error(t)},complete(){e.complete()}}),this.chunkCombiner))}consumeLines(e){this.executor(T(e,this.chunkCombiner))}consumeRows(e){this.executor(T(z(e),this.chunkCombiner))}collectRows(e=wt){let t=[];return new Promise((n,i)=>{this.consumeRows({next(s,a){let o=e.call(this,s,a);o!==void 0&&t.push(o)},error(s){i(s)},complete(){n(t)}})})}collectLines(){let e=[];return new Promise((t,n)=>{this.consumeLines({next(i){e.push(i)},error(i){n(i)},complete(){t(e)}})})}};var U=class{constructor(e){var n;if(typeof e=="string")this._options={url:e};else if(e!==null&&typeof e=="object")this._options=e;else throw new y("No url or configuration specified!");let t=this._options.url;if(typeof t!="string")throw new y("No url specified!");t.endsWith("/")&&(this._options.url=t.substring(0,t.length-1)),this.transport=(n=this._options.transport)!=null?n:new Ve(this._options),this.processCSVResponse=(i,s)=>new q(i,s,this.transport.chunkCombiner)}getWriteApi(e,t,n="ns",i){return new F(this.transport,e,t,n,i!=null?i:this._options.writeOptions)}getQueryApi(e){return new We(this.transport,this.processCSVResponse,e)}};0&&(0);
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
-/***/ 294:
+/***/ 4294:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-module.exports = __nccwpck_require__(219);
+module.exports = __nccwpck_require__(4219);
 
 
 /***/ }),
 
-/***/ 219:
+/***/ 4219:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var net = __nccwpck_require__(808);
-var tls = __nccwpck_require__(404);
-var http = __nccwpck_require__(685);
-var https = __nccwpck_require__(687);
-var events = __nccwpck_require__(361);
-var assert = __nccwpck_require__(491);
-var util = __nccwpck_require__(837);
+var net = __nccwpck_require__(1808);
+var tls = __nccwpck_require__(4404);
+var http = __nccwpck_require__(3685);
+var https = __nccwpck_require__(5687);
+var events = __nccwpck_require__(2361);
+var assert = __nccwpck_require__(9491);
+var util = __nccwpck_require__(3837);
 
 
 exports.httpOverHttp = httpOverHttp;
@@ -2089,7 +2089,7 @@ exports.debug = debug; // for test
 
 /***/ }),
 
-/***/ 840:
+/***/ 5840:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -2153,29 +2153,29 @@ Object.defineProperty(exports, "parse", ({
   }
 }));
 
-var _v = _interopRequireDefault(__nccwpck_require__(628));
+var _v = _interopRequireDefault(__nccwpck_require__(8628));
 
-var _v2 = _interopRequireDefault(__nccwpck_require__(409));
+var _v2 = _interopRequireDefault(__nccwpck_require__(6409));
 
-var _v3 = _interopRequireDefault(__nccwpck_require__(122));
+var _v3 = _interopRequireDefault(__nccwpck_require__(5122));
 
-var _v4 = _interopRequireDefault(__nccwpck_require__(120));
+var _v4 = _interopRequireDefault(__nccwpck_require__(9120));
 
-var _nil = _interopRequireDefault(__nccwpck_require__(332));
+var _nil = _interopRequireDefault(__nccwpck_require__(5332));
 
-var _version = _interopRequireDefault(__nccwpck_require__(595));
+var _version = _interopRequireDefault(__nccwpck_require__(1595));
 
-var _validate = _interopRequireDefault(__nccwpck_require__(900));
+var _validate = _interopRequireDefault(__nccwpck_require__(6900));
 
-var _stringify = _interopRequireDefault(__nccwpck_require__(950));
+var _stringify = _interopRequireDefault(__nccwpck_require__(8950));
 
-var _parse = _interopRequireDefault(__nccwpck_require__(746));
+var _parse = _interopRequireDefault(__nccwpck_require__(2746));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ }),
 
-/***/ 569:
+/***/ 4569:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -2186,7 +2186,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 
-var _crypto = _interopRequireDefault(__nccwpck_require__(113));
+var _crypto = _interopRequireDefault(__nccwpck_require__(6113));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2205,7 +2205,7 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ 332:
+/***/ 5332:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -2220,7 +2220,7 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ 746:
+/***/ 2746:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -2231,7 +2231,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 
-var _validate = _interopRequireDefault(__nccwpck_require__(900));
+var _validate = _interopRequireDefault(__nccwpck_require__(6900));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2298,7 +2298,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = rng;
 
-var _crypto = _interopRequireDefault(__nccwpck_require__(113));
+var _crypto = _interopRequireDefault(__nccwpck_require__(6113));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2318,7 +2318,7 @@ function rng() {
 
 /***/ }),
 
-/***/ 274:
+/***/ 5274:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -2329,7 +2329,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 
-var _crypto = _interopRequireDefault(__nccwpck_require__(113));
+var _crypto = _interopRequireDefault(__nccwpck_require__(6113));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2348,7 +2348,7 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ 950:
+/***/ 8950:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -2359,7 +2359,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 
-var _validate = _interopRequireDefault(__nccwpck_require__(900));
+var _validate = _interopRequireDefault(__nccwpck_require__(6900));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2394,7 +2394,7 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ 628:
+/***/ 8628:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -2407,7 +2407,7 @@ exports["default"] = void 0;
 
 var _rng = _interopRequireDefault(__nccwpck_require__(807));
 
-var _stringify = _interopRequireDefault(__nccwpck_require__(950));
+var _stringify = _interopRequireDefault(__nccwpck_require__(8950));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2508,7 +2508,7 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ 409:
+/***/ 6409:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -2519,9 +2519,9 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 
-var _v = _interopRequireDefault(__nccwpck_require__(998));
+var _v = _interopRequireDefault(__nccwpck_require__(5998));
 
-var _md = _interopRequireDefault(__nccwpck_require__(569));
+var _md = _interopRequireDefault(__nccwpck_require__(4569));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2531,7 +2531,7 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ 998:
+/***/ 5998:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -2543,9 +2543,9 @@ Object.defineProperty(exports, "__esModule", ({
 exports["default"] = _default;
 exports.URL = exports.DNS = void 0;
 
-var _stringify = _interopRequireDefault(__nccwpck_require__(950));
+var _stringify = _interopRequireDefault(__nccwpck_require__(8950));
 
-var _parse = _interopRequireDefault(__nccwpck_require__(746));
+var _parse = _interopRequireDefault(__nccwpck_require__(2746));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2616,7 +2616,7 @@ function _default(name, version, hashfunc) {
 
 /***/ }),
 
-/***/ 122:
+/***/ 5122:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -2629,7 +2629,7 @@ exports["default"] = void 0;
 
 var _rng = _interopRequireDefault(__nccwpck_require__(807));
 
-var _stringify = _interopRequireDefault(__nccwpck_require__(950));
+var _stringify = _interopRequireDefault(__nccwpck_require__(8950));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2660,7 +2660,7 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ 120:
+/***/ 9120:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -2671,9 +2671,9 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 
-var _v = _interopRequireDefault(__nccwpck_require__(998));
+var _v = _interopRequireDefault(__nccwpck_require__(5998));
 
-var _sha = _interopRequireDefault(__nccwpck_require__(274));
+var _sha = _interopRequireDefault(__nccwpck_require__(5274));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2683,7 +2683,7 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ 900:
+/***/ 6900:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -2707,7 +2707,7 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ 595:
+/***/ 1595:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -2718,7 +2718,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 
-var _validate = _interopRequireDefault(__nccwpck_require__(900));
+var _validate = _interopRequireDefault(__nccwpck_require__(6900));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2735,7 +2735,34 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ 857:
+/***/ 483:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__nccwpck_require__(4857), exports);
+__exportStar(__nccwpck_require__(2293), exports);
+__exportStar(__nccwpck_require__(7727), exports);
+
+
+/***/ }),
+
+/***/ 4857:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -2751,14 +2778,14 @@ exports.toInputData = toInputData;
 
 /***/ }),
 
-/***/ 293:
+/***/ 2293:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.toPoint = void 0;
-const influxdb_client_1 = __nccwpck_require__(659);
+const influxdb_client_1 = __nccwpck_require__(6659);
 function toPoint(measurementName, inputData) {
     const point = new influxdb_client_1.Point(measurementName);
     for (const [key, value] of Object.entries(inputData.tags)) {
@@ -2774,7 +2801,7 @@ exports.toPoint = toPoint;
 
 /***/ }),
 
-/***/ 727:
+/***/ 7727:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -2792,7 +2819,33 @@ exports.toWritePrecisionType = toWritePrecisionType;
 
 /***/ }),
 
-/***/ 694:
+/***/ 3202:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__nccwpck_require__(5995), exports);
+__exportStar(__nccwpck_require__(2086), exports);
+
+
+/***/ }),
+
+/***/ 5995:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -2822,17 +2875,16 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.loadInputs = void 0;
-const core = __importStar(__nccwpck_require__(186));
-const input_to_input_data_1 = __nccwpck_require__(857);
-const input_to_write_precision_type_1 = __nccwpck_require__(727);
+const core = __importStar(__nccwpck_require__(2186));
+const converters_1 = __nccwpck_require__(483);
 function loadInputs() {
     const influxdbUrl = core.getInput("influxdb-url");
     const influxdbToken = core.getInput("influxdb-token");
     const organization = core.getInput("organization");
     const bucket = core.getInput("bucket");
-    const inputData = (0, input_to_input_data_1.toInputData)(core.getInput("json"));
+    const inputData = (0, converters_1.toInputData)(core.getInput("json"));
     const measurementName = core.getInput("measurement-name");
-    const precision = (0, input_to_write_precision_type_1.toWritePrecisionType)(core.getInput("precision"));
+    const precision = (0, converters_1.toWritePrecisionType)(core.getInput("precision"));
     return {
         measurementName,
         inputData,
@@ -2848,7 +2900,7 @@ exports.loadInputs = loadInputs;
 
 /***/ }),
 
-/***/ 86:
+/***/ 2086:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -2877,15 +2929,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.write = void 0;
-const core = __importStar(__nccwpck_require__(186));
-function write(point) {
+exports.writeToSummary = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+function writeToSummary(point) {
     core.summary
         .addHeading("JSON Data", 3)
         .addCodeBlock(JSON.stringify(point, null, "\t"), "json")
         .write();
 }
-exports.write = write;
+exports.writeToSummary = writeToSummary;
 
 
 /***/ }),
@@ -2920,25 +2972,24 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
-const core = __importStar(__nccwpck_require__(186));
-const influxdb_client_1 = __nccwpck_require__(659);
-const input_to_point_1 = __nccwpck_require__(293);
-const load_inputs_1 = __nccwpck_require__(694);
-const summary = __importStar(__nccwpck_require__(86));
+const core = __importStar(__nccwpck_require__(2186));
+const influxdb_client_1 = __nccwpck_require__(6659);
+const helpers_1 = __nccwpck_require__(3202);
+const converters_1 = __nccwpck_require__(483);
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 async function run() {
     try {
-        const { measurementName, inputData, influxdbUrl, influxdbToken, organization, bucket, precision } = (0, load_inputs_1.loadInputs)();
-        const point = (0, input_to_point_1.toPoint)(measurementName, inputData);
+        const { measurementName, inputData, influxdbUrl, influxdbToken, organization, bucket, precision } = (0, helpers_1.loadInputs)();
+        const point = (0, converters_1.toPoint)(measurementName, inputData);
         const client = new influxdb_client_1.InfluxDB({
             url: influxdbUrl,
             token: influxdbToken
         }).getWriteApi(organization, bucket, precision);
         client.writePoint(point);
-        summary.write(point);
+        (0, helpers_1.writeToSummary)(point);
         // Flush pending writes and close client.
         await client.close();
         core.setOutput("success", "true");
@@ -2954,7 +3005,7 @@ exports.run = run;
 
 /***/ }),
 
-/***/ 491:
+/***/ 9491:
 /***/ ((module) => {
 
 "use strict";
@@ -2962,7 +3013,7 @@ module.exports = require("assert");
 
 /***/ }),
 
-/***/ 300:
+/***/ 4300:
 /***/ ((module) => {
 
 "use strict";
@@ -2970,7 +3021,7 @@ module.exports = require("buffer");
 
 /***/ }),
 
-/***/ 113:
+/***/ 6113:
 /***/ ((module) => {
 
 "use strict";
@@ -2978,7 +3029,7 @@ module.exports = require("crypto");
 
 /***/ }),
 
-/***/ 361:
+/***/ 2361:
 /***/ ((module) => {
 
 "use strict";
@@ -2986,7 +3037,7 @@ module.exports = require("events");
 
 /***/ }),
 
-/***/ 147:
+/***/ 7147:
 /***/ ((module) => {
 
 "use strict";
@@ -2994,7 +3045,7 @@ module.exports = require("fs");
 
 /***/ }),
 
-/***/ 685:
+/***/ 3685:
 /***/ ((module) => {
 
 "use strict";
@@ -3002,7 +3053,7 @@ module.exports = require("http");
 
 /***/ }),
 
-/***/ 687:
+/***/ 5687:
 /***/ ((module) => {
 
 "use strict";
@@ -3010,7 +3061,7 @@ module.exports = require("https");
 
 /***/ }),
 
-/***/ 808:
+/***/ 1808:
 /***/ ((module) => {
 
 "use strict";
@@ -3018,7 +3069,7 @@ module.exports = require("net");
 
 /***/ }),
 
-/***/ 37:
+/***/ 2037:
 /***/ ((module) => {
 
 "use strict";
@@ -3026,7 +3077,7 @@ module.exports = require("os");
 
 /***/ }),
 
-/***/ 17:
+/***/ 1017:
 /***/ ((module) => {
 
 "use strict";
@@ -3034,7 +3085,7 @@ module.exports = require("path");
 
 /***/ }),
 
-/***/ 781:
+/***/ 2781:
 /***/ ((module) => {
 
 "use strict";
@@ -3042,7 +3093,7 @@ module.exports = require("stream");
 
 /***/ }),
 
-/***/ 404:
+/***/ 4404:
 /***/ ((module) => {
 
 "use strict";
@@ -3050,7 +3101,7 @@ module.exports = require("tls");
 
 /***/ }),
 
-/***/ 310:
+/***/ 7310:
 /***/ ((module) => {
 
 "use strict";
@@ -3058,7 +3109,7 @@ module.exports = require("url");
 
 /***/ }),
 
-/***/ 837:
+/***/ 3837:
 /***/ ((module) => {
 
 "use strict";
@@ -3066,7 +3117,7 @@ module.exports = require("util");
 
 /***/ }),
 
-/***/ 796:
+/***/ 9796:
 /***/ ((module) => {
 
 "use strict";

@@ -1,9 +1,7 @@
 import * as core from "@actions/core";
 import { WritePrecisionType } from "@influxdata/influxdb-client";
-import { InputData } from "../interfaces/input-data";
-import { toInputData } from "../converters/input-to-input-data";
-import { toWritePrecisionType } from "../converters/input-to-write-precision-type";
-import { Inputs } from "../interfaces/inputs";
+import { toInputData, toWritePrecisionType } from "../converters";
+import { InputData, Inputs } from "../interfaces";
 
 export function loadInputs(): Inputs {
   const influxdbUrl: string = core.getInput("influxdb-url");

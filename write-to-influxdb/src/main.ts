@@ -1,9 +1,8 @@
 import * as core from "@actions/core";
 import { InfluxDB } from "@influxdata/influxdb-client";
-import { toPoint } from "./converters/input-to-point";
-import { loadInputs } from "./helpers/load-inputs";
-import * as summary from "./helpers/summary";
-import { Inputs } from "./interfaces/inputs";
+import { Inputs } from "./interfaces";
+import { loadInputs, writeToSummary } from "./helpers";
+import { toPoint } from "./converters";
 
 /**
  * The main function for the action.
@@ -30,7 +29,7 @@ export async function run(): Promise<void> {
 
     client.writePoint(point);
 
-    summary.write(point);
+    writeToSummary(point);
 
     // Flush pending writes and close client.
     await client.close();

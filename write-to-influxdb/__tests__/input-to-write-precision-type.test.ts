@@ -1,4 +1,5 @@
 import { toWritePrecisionType } from "../src/converters/input-to-write-precision-type";
+import { expect } from "@jest/globals";
 
 describe("toWritePrecisionType", () => {
   it("returns precision 'ns' for valid input", () => {

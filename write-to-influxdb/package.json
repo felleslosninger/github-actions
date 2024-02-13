@@ -63,6 +63,9 @@
     "collectCoverage": true,
     "collectCoverageFrom": [
       "./src/**"
+    ],
+    "coveragePathIgnorePatterns": [
+      "./src/interfaces/"
     ]
   },
   "dependencies": {

@@ -2,13 +2,14 @@ import * as core from "@actions/core";
 import { InfluxDB } from "@influxdata/influxdb-client";
 import { run } from "../src/main";
 import { toPoint } from "../src/converters/input-to-point";
-import { loadInputs } from "../src/helpers/load-inputs";
-import { write } from "../src/helpers/summary";
+import { loadInputs } from "../src/helpers/inputs";
+import { writeToSummary } from "../src/helpers/summary";
+import { expect } from "@jest/globals";
 
 jest.mock("@actions/core");
 jest.mock("@influxdata/influxdb-client");
 jest.mock("../src/converters/input-to-point");
-jest.mock("../src/helpers/load-inputs");
+jest.mock("../src/helpers/inputs");
 jest.mock("../src/helpers/summary");
 
 describe("run", () => {
@@ -75,7 +76,7 @@ describe("run", () => {
     expect(closeMock).toHaveBeenCalled();
 
     // Verify that writeSummary is called with sample point
-    expect(write).toHaveBeenCalledWith(samplePoint);
+    expect(writeToSummary).toHaveBeenCalledWith(samplePoint);
 
     // Verify that core.setFailed is not called
     expect(core.setFailed).not.toHaveBeenCalled();
