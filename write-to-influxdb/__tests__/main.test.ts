@@ -2,8 +2,7 @@ import * as core from "@actions/core";
 import { InfluxDB } from "@influxdata/influxdb-client";
 import { run } from "../src/main";
 import { toPoint } from "../src/converters";
-import { loadInputs } from "../src/helpers";
-import { writeToSummary } from "../src/helpers";
+import { loadInputs, writeToSummary } from "../src/helpers";
 
 jest.mock("@actions/core");
 jest.mock("@influxdata/influxdb-client");
