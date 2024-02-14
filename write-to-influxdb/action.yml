@@ -1,10 +1,9 @@
 name: "Write to InfluxDB"
-description: | 
+description: |
   "This GitHub Action allows you to write data to InfluxDB, a time-series database.
   It's useful for storing and analyzing time-stamped data, such as metrics and
   events."
 author: "Digdir Platform Team"
-
 # Define your inputs here.
 inputs:
   json:
@@ -31,7 +30,8 @@ inputs:
     type: string
     required: true
   precision:
-    description: "The precision of the timestamps in the data. Default is "ns" (nanoseconds)"
+    description: |
+      "The precision of the timestamps in the data. Default is ns (nanoseconds)"
     default: "ns"
 
 # Define your outputs here.
