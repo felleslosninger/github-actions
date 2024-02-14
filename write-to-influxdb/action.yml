@@ -1,5 +1,8 @@
 name: "Write to InfluxDB"
-description: "Provide a description here"
+description: | 
+  "This GitHub Action allows you to write data to InfluxDB, a time-series database.
+  It's useful for storing and analyzing time-stamped data, such as metrics and
+  events."
 author: "Digdir Platform Team"
 
 # Define your inputs here.
