@@ -1,7 +1,7 @@
 name: File Exists
-description:
+description: |
+  A GitHub Action that checks whether a specified file exists in the repository. It reports the result as an output, indicating whether the file exists or not, along with status messages. Useful for workflows that depend on the presence of certain files.
 author: Digdir Platform Team
-
 inputs:
   file-path:
     required: true
