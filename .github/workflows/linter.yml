@@ -1,0 +1,55 @@
+name: Lint Codebase
+
+on:
+  pull_request:
+    paths:
+      - "write-to-influxdb/**"
+      # Add more folders as needed
+  push:
+    branches:
+      - main
+    paths:
+      - "write-to-influxdb/**"
+      # Add more folders as needed
+
+permissions:
+  contents: read
+  packages: read
+  statuses: write
+
+jobs:
+  lint:
+    name: Lint Codebase
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        folder:
+          - "write-to-influxdb/"
+          # Add more folders as needed
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ${{ matrix.folder }}/.node-version
+          cache-dependency-path: ${{ matrix.folder }}/package-lock.json
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci
+        working-directory: ${{ matrix.folder }}
+
+      - name: Lint Codebase
+        uses: super-linter/super-linter/slim@v5
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TYPESCRIPT_DEFAULT_STYLE: prettier
+          VALIDATE_ALL_CODEBASE: true
+          VALIDATE_JAVASCRIPT_STANDARD: false
+          VALIDATE_JSCPD: false
+          FILTER_REGEX_INCLUDE: .*${{ matrix.folder }}.*

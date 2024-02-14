@@ -1,0 +1,44 @@
+name: "Write to InfluxDB"
+description: |
+  "This GitHub Action allows you to write data to InfluxDB, a time-series database.
+  It's useful for storing and analyzing time-stamped data, such as metrics and
+  events."
+author: "Digdir Platform Team"
+# Define your inputs here.
+inputs:
+  json:
+    description: "Tags and fields data to be written to InfluxDB"
+    required: true
+  influxdb-url:
+    description: "The URL of the InfluxDB instance where data will be"
+    type: string
+    required: true
+  influxdb-token:
+    description: "The InfluxDB authentication token"
+    type: string
+    required: true
+  organization:
+    description: "The organization name within InfluxDB"
+    type: string
+    required: true
+  bucket:
+    description: "The name of the bucket in InfluxDB where data will be stored"
+    type: string
+    required: true
+  measurement-name:
+    description: "The name of the measurement in InfluxDB"
+    type: string
+    required: true
+  precision:
+    description: |
+      "The precision of the timestamps in the data. Default is ns (nanoseconds)"
+    default: "ns"
+
+# Define your outputs here.
+outputs:
+  success:
+    description: "True if data was successfully written to InfluxDB"
+
+runs:
+  using: node20
+  main: dist/index.js
