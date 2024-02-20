@@ -10,6 +10,10 @@ inputs:
     description: "..."
     type: string
     required: true
+  installation-id:
+    description: "..."
+    type: string
+    required: true
   repository:
     description: |
       "Repository to create token for. Defaults to current repository."

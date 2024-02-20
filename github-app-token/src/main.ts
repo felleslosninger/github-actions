@@ -9,6 +9,7 @@ export async function run(): Promise<void> {
   try {
     const appId = core.getInput("app-id");
     const privateKey = core.getInput("private-key");
+    const installationId = core.getInput("installation-id");
     const owner = core.getInput("owner") || process.env.GITHUB_REPOSITORY_OWNER;
     const repository =
       core.getInput("repository") || process.env.GITHUB_REPOSITORY;
@@ -30,21 +31,9 @@ export async function run(): Promise<void> {
       privateKey
     });
 
-    const octokit = app.octokit;
-
-    const { data: installation } = await octokit.request(
-      "GET /repos/{owner}/{repository}/installation",
-      {
-        owner,
-        repository
-      }
-    );
-
-    const installationId = installation.id;
-
     const {
       data: { token }
-    } = await octokit.request(
+    } = await app.octokit.request(
       `POST /app/installations/${installationId}/access_tokens`,
       {
         repositories: [repository]

@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
-  "description": "GitHub Actions TypeScript template",
-  "version": "0.0.0",
-  "author": "",
+  "name": "write-to-influxdb",
+  "description": "GitHub Action to write data to InlfuxDB",
+  "version": "1.0.0",
+  "author": "Digdir Platform Team",
   "private": true,
   "homepage": "https://github.com/actions/typescript-action",
   "repository": {
