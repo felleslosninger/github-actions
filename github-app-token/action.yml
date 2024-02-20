@@ -1,0 +1,30 @@
+name: "Github App Token"
+description: |
+  "This GitHub Action allows ..."
+author: "Digdir Platform Team"
+inputs:
+  app-id:
+    description: "..."
+    required: true
+  private-key:
+    description: "..."
+    type: string
+    required: true
+  repository:
+    description: |
+      "Repository to create token for. Defaults to current repository."
+    type: string
+    required: false
+  owner:
+    description: |
+      "GitHub App owner. Defaults to current repository owner."
+    type: string
+    required: false
+
+outputs:
+  token:
+    description: "Github Token"
+
+runs:
+  using: node20
+  main: dist/index.js
