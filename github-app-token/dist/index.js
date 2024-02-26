@@ -39651,6 +39651,7 @@ async function run() {
         if (!repository) {
             throw new Error("Repository was not supplied as an input or environment variable");
         }
+        core.info(`Repository: ${repository}`);
         const app = new app_1.App({
             appId,
             privateKey

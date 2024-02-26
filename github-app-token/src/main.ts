@@ -19,6 +19,8 @@ export async function run(): Promise<void> {
       );
     }
 
+    core.info(`Repository: ${repository}`);
+
     const app = new App({
       appId,
       privateKey
