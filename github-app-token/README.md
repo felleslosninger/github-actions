@@ -1,5 +1,7 @@
 # GitHub Action: Github App Token
 
+[![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
+
 ## Description
 
 This GitHub Action installs the Octokit libraries and authenticates with GitHub
