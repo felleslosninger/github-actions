@@ -10,15 +10,8 @@ export async function run(): Promise<void> {
     const appId = core.getInput("app-id");
     const privateKey = core.getInput("private-key");
     const installationId = core.getInput("installation-id");
-    const owner = core.getInput("owner") || process.env.GITHUB_REPOSITORY_OWNER;
     const repository =
       core.getInput("repository") || process.env.GITHUB_REPOSITORY;
-
-    if (!owner) {
-      throw new Error(
-        "Owner was not supplied as an input or environment variable"
-      );
-    }
 
     if (!repository) {
       throw new Error(
