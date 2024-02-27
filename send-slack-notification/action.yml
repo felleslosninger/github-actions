@@ -77,7 +77,7 @@ runs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "GitHub Action - Workflow failed\n*${{ fromJson(steps.commit-message.outputs.result) }}*"
+                  "text": ":x: GitHub Action - Workflow failed\n*${{ fromJson(steps.commit-message.outputs.result) }}*"
                 }
               },
               {
@@ -133,7 +133,7 @@ runs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": ":large_green_circle: Application successfully deployed"
+                  "text": ":white_check_mark: Application successfully deployed"
                 }
               },
               {
