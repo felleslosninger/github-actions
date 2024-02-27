@@ -29,6 +29,10 @@ This GitHub Action notifies designated Slack channels about workflow events, ena
 
 This GitHub Action allows you to write data to InfluxDB, a time-series database. It's useful for storing and analyzing time-stamped data, such as metrics and events.
 
+### [Github App Token](./github-app-token/README.md)
+
+This GitHub Action authenticates with GitHub using an App ID, Private Key, Installation ID, and generates a token.
+
 ## License
 
 These GitHub Actions are open-source and distributed under the [MIT License](LICENSE). Feel free to use, modify, and distribute them according to your needs.
