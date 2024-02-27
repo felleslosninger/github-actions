@@ -34,7 +34,7 @@ jobs:
     secrets: inherit
 
   call-update-image-version:
-    uses: felleslosninger/github-workflows/.github/workflows/ci-call-update-image.yml@main
+    uses: felleslosninger/github-workflows/.github/workflows/ci-call-update-image.yml@pf-1067-github-app-token-action
     needs: [call-workflow-image-build-publish]
     with:
       application-name: ${{ inputs.application-name }}
@@ -47,7 +47,7 @@ jobs:
     secrets: inherit
 
   call-check-for-cve-changes:
-    uses: felleslosninger/github-workflows-internal/.github/workflows/check-for-cve-suppression-changes.yml@main
+    uses: felleslosninger/github-workflows-internal/.github/workflows/check-for-cve-suppression-changes.yml@pf-1067-github-app-token-action
     needs: call-workflow-image-build-publish
     secrets: inherit
 
