@@ -147,7 +147,7 @@ jobs:
     if: ${{ always() && contains(needs.*.result, 'failure') }}
     steps:
       - name: Send Slack notification
-        uses: felleslosninger/github-actions/send-slack-notification@v0.5.0
+        uses: felleslosninger/github-actions/send-slack-notification@v0.5.1
         with:
           slack-channel-id: ${{ inputs.slack-channel-id }}
           slack-bot-token: ${{ secrets.SLACK_CICD_NOTIFICATION_TOKEN }}
