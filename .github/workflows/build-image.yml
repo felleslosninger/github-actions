@@ -140,15 +140,3 @@ jobs:
 
       - id: output-image-digest
         run: echo "imagedigest=${{env.IMAGE_DIGEST}}" >> "$GITHUB_OUTPUT"
-
-  notify-on-errors:
-    runs-on: ubuntu-latest
-    needs: [build-publish-image]
-    if: ${{ always() && contains(needs.*.result, 'failure') }}
-    steps:
-      - name: Send Slack notification
-        uses: felleslosninger/github-actions/send-slack-notification@v0.5.2
-        with:
-          slack-channel-id: ${{ inputs.slack-channel-id }}
-          slack-bot-token: ${{ secrets.SLACK_CICD_NOTIFICATION_TOKEN }}
-          failed: "true"

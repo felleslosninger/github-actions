@@ -61,3 +61,4 @@ jobs:
         with:
           slack-channel-id: ${{ inputs.slack-channel-id }}
           slack-bot-token: ${{ secrets.SLACK_CICD_NOTIFICATION_TOKEN }}
+          failed: "true"
