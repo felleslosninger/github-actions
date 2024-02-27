@@ -116,73 +116,73 @@ runs:
           }
 
     - name: Notify on success
-        uses: slackapi/slack-github-action@v1.25.0
-        if: |
-          inputs.slack-channel-id != '' &&
-          inputs.failed == 'false'
-        with:
-          channel-id: ${{ inputs.slack-channel-id }}
-          payload: |
-            {
-              "text": "Successfully deployed",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": ":large_green_circle: Application successfully deployed"
-                  }
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Application name:*\n${{ inputs.application-name }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Environment:*\n${{ inputs.environment }}"
-                    }
-                  ]
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Product:*\n${{ inputs.product }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Jira id:*\n<https://digdir.atlassian.net/browse/${{ inputs.jira-id }}|${{ inputs.jira-id }}>"
-                    }
-                  ]
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Version:*\n${{ inputs.version }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Application PR:*\n<https://github.com/${{ inputs.repository }}/pull/${{ inputs.pr-number }}|#${{ inputs.pr-number }}>"
-                    }
-                  ]
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Initiated by:*\n${{ inputs.initiated-by }}"
-                    }
-                  ]
-                },
-                {
-                  "type": "divider"
+      uses: slackapi/slack-github-action@v1.25.0
+      if: |
+        inputs.slack-channel-id != '' &&
+        inputs.failed == 'false'
+      with:
+        channel-id: ${{ inputs.slack-channel-id }}
+        payload: |
+          {
+            "text": "Successfully deployed",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": ":large_green_circle: Application successfully deployed"
                 }
-              ]
-            }
+              },
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Application name:*\n${{ inputs.application-name }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Environment:*\n${{ inputs.environment }}"
+                  }
+                ]
+              },
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Product:*\n${{ inputs.product }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Jira id:*\n<https://digdir.atlassian.net/browse/${{ inputs.jira-id }}|${{ inputs.jira-id }}>"
+                  }
+                ]
+              },
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Version:*\n${{ inputs.version }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Application PR:*\n<https://github.com/${{ inputs.repository }}/pull/${{ inputs.pr-number }}|#${{ inputs.pr-number }}>"
+                  }
+                ]
+              },
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Initiated by:*\n${{ inputs.initiated-by }}"
+                  }
+                ]
+              },
+              {
+                "type": "divider"
+              }
+            ]
+          }
