@@ -116,10 +116,13 @@ runs:
           }
 
     - name: Notify on success
-      uses: slackapi/slack-github-action@v1.25.0
       if: |
         inputs.slack-channel-id != '' &&
         inputs.failed == 'false'
+      id: notify-on-success
+      uses: slackapi/slack-github-action@v1.25.0
+      env:
+        SLACK_BOT_TOKEN: ${{ inputs.slack-bot-token }}
       with:
         channel-id: ${{ inputs.slack-channel-id }}
         payload: |
