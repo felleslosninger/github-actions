@@ -4,12 +4,16 @@ on:
   pull_request:
     paths:
       - "write-to-influxdb/**"
+      - "github-app-token/**"
+      - "publish-release-notes/**"
       # Add more folders as needed
   push:
     branches:
       - main
     paths:
       - "write-to-influxdb/**"
+      - "github-app-token/**"
+      - "publish-release-notes/**"
       # Add more folders as needed
 
 permissions:
