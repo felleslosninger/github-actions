@@ -1,4 +1,6 @@
 # Digdir GitHub Actions Repository
+[![Bats Tests](https://github.com/felleslosninger/github-actions/actions/workflows/run-bats-tests.yml/badge.svg)](https://github.com/felleslosninger/github-actions/actions/workflows/run-bats-tests.yml)
+[![Lint Codebase](https://github.com/felleslosninger/github-actions/actions/workflows/linter.yml/badge.svg)](https://github.com/felleslosninger/github-actions/actions/workflows/linter.yml)
 
 Welcome to the GitHub Actions Repository for Digdir!
 This repository contains a collection of custom GitHub Actions developed by the Digdir Platform Team to automate various tasks in our workflows.
