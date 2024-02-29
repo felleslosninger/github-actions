@@ -26,6 +26,8 @@ jobs:
       matrix:
         folder:
           - "write-to-influxdb/"
+          - "github-app-token/"
+          - "publish-release-notes/"
           # Add more folders as needed
 
     steps:
