@@ -1,9 +1,13 @@
 name: Publish release
 run-name: Publishing release ${{github.ref_name}}
+
 on:
   push:
     tags:
       - "v*.*.*"
+
+permissions:
+  contents: write
 
 jobs:
   release:
