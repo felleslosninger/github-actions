@@ -71,7 +71,7 @@ runs:
         channel-id: ${{ inputs.slack-channel-id }}
         payload: |
           {
-            "text": "Github Action failed",
+            "text": "GitHub Action failed",
             "blocks": [
               {
                 "type": "section",

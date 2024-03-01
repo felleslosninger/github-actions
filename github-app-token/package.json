@@ -1,6 +1,6 @@
 {
   "name": "github-app-token",
-  "description": "GitHub Action to create Github App Token",
+  "description": "GitHub Action to create GitHub App Token",
   "version": "1.0.0",
   "author": "Digdir Platform Team",
   "private": true,

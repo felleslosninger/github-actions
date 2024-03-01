@@ -1,4 +1,4 @@
-name: "Github App Token"
+name: "GitHub App Token"
 description: |
   "This GitHub Action allows ..."
 author: "Digdir Platform Team"
@@ -27,7 +27,7 @@ inputs:
 
 outputs:
   token:
-    description: "Github Token"
+    description: "GitHub Token"
 
 runs:
   using: node20
