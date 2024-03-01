@@ -1,41 +1,57 @@
-name: "Publish Release Notes"
+name: Publish Release Notes
 description: |
   "..."
-author: "Digdir Platform Team"
-# Define your inputs here.
+author: Digdir Platform Team
 inputs:
-  json:
-    description: "Tags and fields data to be written to InfluxDB"
+  application-name:
+    description: Name of application
     required: true
-  influxdb-url:
-    description: "The URL of the InfluxDB instance where data will be"
     type: string
+  product:
+    description: Name of product
     required: true
-  influxdb-token:
-    description: "The InfluxDB authentication token"
     type: string
+  version:
+    description: Application version
     required: true
-  organization:
-    description: "The organization name within InfluxDB"
     type: string
+  release-notes:
+    description: Release notes array
     required: true
-  bucket:
-    description: "The name of the bucket in InfluxDB where data will be stored"
     type: string
+  timestamp:
+    description: Timestamp for deployment
     required: true
-  measurement-name:
-    description: "The name of the measurement in InfluxDB"
     type: string
-    required: true
-  precision:
+  sha:
+    description: Sha of application commit
+    required: false
+    type: string
+  public:
+    description: Publish release notes to release.digdir.no
+    required: false
+    default: false
+    type: boolean
+  public-ignore-products:
+    description: Product(s) to ignore when publishing release notes
+    required: false
+    default: ""
+    type: string
+  public-ignore-applications:
+    description: Application(s) to ignore when publishing release notes
+    required: false
+    default: ""
+    type: string
+  public-title:
     description: |
-      "The precision of the timestamps in the data. Default is ns (nanoseconds)"
-    default: "ns"
+      Title to use for public release notes entry (default is "product"
+      variable)
+    required: false
+    type: string
 
-# Define your outputs here.
 outputs:
-  success:
-    description: "True if data was successfully written to InfluxDB"
+  release-notes-created:
+    description: Indicates if release notes were created or not
 
 runs:
   using: node20
