@@ -4,7 +4,7 @@ setup() {
   load test_helper
   # Load support libs
   init
-  # Setup Github variables needed
+  # Setup GitHub variables needed
   emulate_github_env
   # Load the function script
   load ../file-exists/file-exists.bash
