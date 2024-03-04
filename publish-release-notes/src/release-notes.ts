@@ -1,22 +1,12 @@
 import * as github from "@actions/github";
 
-export async function publishReleaseNotes(
-  applicationName: string,
-  date: string,
-  githubToken: string,
-  product: string,
-  releaseNotes: string,
-  repositoryName: string,
-  repositoryOwner: string,
-  sha: string,
-  title: string,
-  version: string
-): Promise<boolean> {
-  const releaseNotesArray = releaseNotes.split("\n");
+export function filterReleaseNotes(releaseNotes: string): string {
   const ignorePatterns = ["(INTERNAL-COMMIT)"];
   const replacements = new Map([["Bump", "Library upgrades"]]);
   const searchesFound = new Set();
-  const filteredReleaseNotes = releaseNotesArray
+  const releaseNotesArray = releaseNotes.split("\n");
+
+  const filteredReleaseNotes: string = releaseNotesArray
     .map(item => {
       if (ignorePatterns.some(pattern => item.includes(pattern))) {
         return null;
@@ -36,7 +26,25 @@ export async function publishReleaseNotes(
       return issue;
     })
     .filter(issue => issue !== undefined)
-    .join("\n");
+    .join("\n")
+    .trim();
+
+  return filteredReleaseNotes;
+}
+
+export async function publishReleaseNotes(
+  applicationName: string,
+  date: string,
+  githubToken: string,
+  product: string,
+  releaseNotes: string,
+  repositoryName: string,
+  repositoryOwner: string,
+  sha: string,
+  title: string,
+  version: string
+): Promise<boolean> {
+  const filteredReleaseNotes: string = filterReleaseNotes(releaseNotes);
 
   if (filteredReleaseNotes === "") {
     return false;

@@ -29148,13 +29148,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.publishReleaseNotes = void 0;
+exports.publishReleaseNotes = exports.filterReleaseNotes = void 0;
 const github = __importStar(__nccwpck_require__(5438));
-async function publishReleaseNotes(applicationName, date, githubToken, product, releaseNotes, repositoryName, repositoryOwner, sha, title, version) {
-    const releaseNotesArray = releaseNotes.split("\n");
+function filterReleaseNotes(releaseNotes) {
     const ignorePatterns = ["(INTERNAL-COMMIT)"];
     const replacements = new Map([["Bump", "Library upgrades"]]);
     const searchesFound = new Set();
+    const releaseNotesArray = releaseNotes.split("\n");
     const filteredReleaseNotes = releaseNotesArray
         .map(item => {
         if (ignorePatterns.some(pattern => item.includes(pattern))) {
@@ -29176,7 +29176,13 @@ async function publishReleaseNotes(applicationName, date, githubToken, product, 
         return issue;
     })
         .filter(issue => issue !== undefined)
-        .join("\n");
+        .join("\n")
+        .trim();
+    return filteredReleaseNotes;
+}
+exports.filterReleaseNotes = filterReleaseNotes;
+async function publishReleaseNotes(applicationName, date, githubToken, product, releaseNotes, repositoryName, repositoryOwner, sha, title, version) {
+    const filteredReleaseNotes = filterReleaseNotes(releaseNotes);
     if (filteredReleaseNotes === "") {
         return false;
     }
