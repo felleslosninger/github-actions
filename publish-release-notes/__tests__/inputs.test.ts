@@ -1,4 +1,4 @@
-import { loadInputs } from "../src/helpers";
+import { InputsHelpers } from "../src/helpers";
 
 jest.mock("@actions/core");
 
@@ -18,7 +18,7 @@ describe("loadInputs", () => {
       publicIgnoreProducts,
       publicIgnoreApplications,
       publicTitle
-    } = loadInputs();
+    } = InputsHelpers.loadInputs();
 
     expect(applicationName).toBe("mocked-application-name");
     expect(product).toBe("mocked-product");

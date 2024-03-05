@@ -1,7 +1,8 @@
 import * as core from "@actions/core";
-import * as github from "@actions/github";
-import { loadInputs } from "./helpers/inputs-helper";
-import { publishReleaseNotes } from "./release-notes";
+import { InputsHelpers } from "./helpers/inputs-helper";
+import { ReleaseNotes } from "./release-notes";
+import { DistpatchEvent } from "./dispatch-event";
+import { Inputs } from "./interfaces";
 
 export async function run(): Promise<void> {
   try {
@@ -19,46 +20,51 @@ export async function run(): Promise<void> {
       publicIgnoreProducts,
       publicIgnoreApplications,
       publicTitle
-    } = loadInputs();
-
-    const releaseNotesArray: string[] = releaseNotes.split("\n");
-    const client = github.getOctokit(githubToken);
+    }: Inputs = InputsHelpers.loadInputs();
 
     let releaseNotesCreated = false;
 
-    if (
-      isPublic &&
-      !publicIgnoreProducts.includes(product) &&
-      !publicIgnoreApplications.includes(applicationName)
-    ) {
-      releaseNotesCreated = await publishReleaseNotes(
-        applicationName,
-        timestamp,
-        githubToken,
-        product,
-        releaseNotes,
-        repositoryName,
-        repositoryOwner,
-        sha,
-        publicTitle,
-        version
-      );
-    }
+    if (releaseNotes && releaseNotes.trim().length !== 0) {
+      const releaseNotesArray: string[] = releaseNotes.split("\n");
 
-    // Dispatch event to update changelog repository
-    await client.rest.repos.createDispatchEvent({
-      owner: repositoryOwner,
-      repo: repositoryName,
-      event_type: "update-changelog",
-      client_payload: {
+      if (
+        isPublic &&
+        !publicIgnoreProducts.includes(product) &&
+        !publicIgnoreApplications.includes(applicationName)
+      ) {
+        releaseNotesCreated = await ReleaseNotes.publishReleaseNotes(
+          applicationName,
+          timestamp,
+          githubToken,
+          product,
+          releaseNotes,
+          repositoryName,
+          repositoryOwner,
+          sha,
+          publicTitle,
+          version
+        );
+      }
+
+      const eventType = "update-changelog";
+
+      const clientPayload = {
         "changelog-array": releaseNotesArray,
         "application-name": applicationName,
         product,
         version,
         timestamp,
         sha
-      }
-    });
+      };
+
+      await DistpatchEvent.send(
+        githubToken,
+        repositoryOwner,
+        repositoryName,
+        eventType,
+        clientPayload
+      );
+    }
 
     // Set the output indicating if release notes were created or not
     core.setOutput("release-notes-created", releaseNotesCreated.toString());
