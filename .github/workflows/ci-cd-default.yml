@@ -29,7 +29,7 @@ permissions: read-all
 
 jobs:
   call-workflow-image-build-publish:
-    uses: felleslosninger/github-actions/.github/workflows/build-image.yml@v0.5.2
+    uses: felleslosninger/github-actions/.github/workflows/build-image.yml@main
     with:
       java-version: ${{ inputs.java-version }}
     secrets: inherit
@@ -58,7 +58,7 @@ jobs:
     if: ${{ always() && contains(needs.*.result, 'failure') }}
     steps:
       - name: Send Slack notification
-        uses: felleslosninger/github-actions/send-slack-notification@v0.5.2
+        uses: felleslosninger/github-actions/send-slack-notification@main
         with:
           slack-channel-id: ${{ inputs.slack-channel-id }}
           slack-bot-token: ${{ secrets.SLACK_CICD_NOTIFICATION_TOKEN }}
