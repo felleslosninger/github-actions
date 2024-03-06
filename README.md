@@ -1,5 +1,7 @@
 # Digdir GitHub Actions Repository
+
 [![Bats Tests](https://github.com/felleslosninger/github-actions/actions/workflows/run-bats-tests.yml/badge.svg)](https://github.com/felleslosninger/github-actions/actions/workflows/run-bats-tests.yml)
+[![Run Jest Tests](https://github.com/felleslosninger/github-actions/actions/workflows/run-jest-tests.yml/badge.svg)](https://github.com/felleslosninger/github-actions/actions/workflows/run-jest-tests.yml)
 [![Lint Codebase](https://github.com/felleslosninger/github-actions/actions/workflows/linter.yml/badge.svg)](https://github.com/felleslosninger/github-actions/actions/workflows/linter.yml)
 
 Welcome to the GitHub Actions Repository for Digdir!
@@ -31,7 +33,11 @@ This GitHub Action notifies designated Slack channels about workflow events, ena
 
 This GitHub Action allows you to write data to InfluxDB, a time-series database. It's useful for storing and analyzing time-stamped data, such as metrics and events.
 
-### [Github App Token](./github-app-token/README.md)
+### [Publish Release Notes](./publish-release-notes/README.md)
+
+This GitHub Action automates the process of publishing release notes to a repository based on specified inputs. It extracts release notes from the provided input and, if conditions are met, publishes them to the designated repository. Additionally, it dispatches events for updating the changelog.
+
+### [GitHub App Token](./github-app-token/README.md)
 
 This GitHub Action authenticates with GitHub using an App ID, Private Key, Installation ID, and generates a token.
 

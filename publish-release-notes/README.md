@@ -1,12 +1,11 @@
-# GitHub Action: Write To InfluxDB
-
-[![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
+# GitHub Action: Publish Release Notes
 
 ## Description
 
-This GitHub Action allows you to write data to InfluxDB, a time-series database.
-It's useful for storing and analyzing time-stamped data, such as metrics and
-events.
+This GitHub Action automates the process of publishing release notes to a
+repository based on specified inputs. It extracts release notes from the
+provided input and, if conditions are met, publishes them to the designated
+repository. Additionally, it dispatches events for updating the changelog.
 
 ## Author
 
@@ -20,12 +19,6 @@ events.
    npm install
    ```
 
-1. Package the TypeScript for distribution
-
-   ```bash
-   npm run bundle
-   ```
-
 1. Run tests
 
    ```bash
@@ -34,56 +27,91 @@ events.
 
 ## Inputs
 
-- `json`:
+- `application-name`:
 
-  - **Description**: Tags and fields data to be written to InfluxDB.
+  - **Description**: The name of the application for which release notes are
+    generated.
   - **Required**: true
   - **Type**: string
 
-- `influxdb-url`:
+- `product`:
 
-  - **Description**: The URL of the InfluxDB instance where data will be
-    written.
+  - **Description**: The product associated with the release.
   - **Required**: true
   - **Type**: string
 
-- `influxdb-token`:
+- `version`:
 
-  - **Description**: The InfluxDB authentication token.
+  - **Description**: The version number of the release.
   - **Required**: true
   - **Type**: string
 
-- `organization`:
+- `release-notes`:
 
-  - **Description**: The organization name within InfluxDB.
+  - **Description**: The release notes content.
   - **Required**: true
   - **Type**: string
 
-- `bucket`:
+- `timestamp`:
 
-  - **Description**: The name of the bucket in InfluxDB where data will be
-    stored.
+  - **Description**: The timestamp of the release.
   - **Required**: true
   - **Type**: string
 
-- `measurement-name`:
+- `github-token`:
 
-  - **Description**: The name of the measurement in InfluxDB.
+  - **Description**: The GitHub token for authentication.
   - **Required**: true
   - **Type**: string
 
-- `precision`:
+- `repository-owner`:
 
-  - **Description**: The precision of the timestamps in the data. Default is
-    "ns" (nanoseconds).
+  - **Description**: The owner of the repository to which release notes will be
+    published.
+  - **Required**: true
+  - **Type**: string
+
+- `repository-name`:
+
+  - **Description**: The name of the repository to which release notes will be
+    published.
+  - **Required**: true
+  - **Type**: string
+
+- `sha`:
+
+  - **Description**: The commit SHA associated with the release.
+  - **Required**: true
+  - **Type**: string
+
+- `isPublic`:
+
+  - **Description**: Flag indicating whether the release is public.
+  - **Required**: true
+  - **Type**: boolean
+
+- `public-ignore-products`:
+
+  - **Description**: List of products to ignore for public releases.
   - **Required**: false
   - **Type**: string
-  - **Default**: "ns"
+
+- `public-ignore-applications`:
+
+  - **Description**: List of applications to ignore for public releases.
+  - **Required**: false
+  - **Type**: string
+
+- `public-title`:
+  - **Description**: The title of the public release (defaults to `product` if
+    not supplied)
+  - **Required**: false
+  - **Type**: string
 
 ## Example Usage
 
 ```yaml
-name: Write Data to InfluxDB
+name: Publish Release Notes
 
 on:
   push:
@@ -91,28 +119,33 @@ on:
       - main
 
 jobs:
-  write-to-influxdb:
+  publish-release-notes:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Write Data to InfluxDB
-        uses: felleslosninger/github-actions/write-to-influxdb@v1.0.0
+      - name: Publish Release Notes
+        uses: felleslosninger/github-actions/publish-release-notes@v1.0.0
         with:
-          json: '{"tags":{"repository":"felleslosninger/test-app","application":"test-app"},"stringFields":{"version":"a9dea392","deployment_started":"1990-01-01T09:55:09Z","deployment_finished":"1990-01-01T09:55:10Z"}}'
-          influxdb-url: "https://your-influxdb-instance.com"
-          influxdb-token: ${{ secrets.INFLUXDB_TOKEN }}
-          organization: "your-organization"
-          bucket: "your-bucket"
-          measurement-name: "your-measurement-name"
-          precision: "s"
+          application-name: "YourApp"
+          product: "YourProduct"
+          version: "1.0.0"
+          release-notes: "Your release notes here"
+          timestamp: "2024-02-29T12:00:00Z"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository-owner: "your-username"
+          repository-name: "your-repository"
+          sha: "your-commit-sha"
+          isPublic: true
+          public-ignore-products: ""
+          public-ignore-applications: ""
+          public-title: "Your Public Title"
 ```
 
 ## How it Works
 
-This action is written in TypeScript and utilizes the InfluxDB JavaScript client
-library to connect to an InfluxDB instance. It converts the provided JSON data
-into a data point and writes it to the specified InfluxDB measurement within the
-specified organization and bucket. The action also provides an option to
-customize the precision of timestamps in the data.
+This action reads inputs provided in the workflow file and processes them to
+determine whether release notes should be published. If the conditions for
+publishing are met, it proceeds to publish the release notes to the designated
+repository. Additionally, it dispatches events for updating the changelog.
