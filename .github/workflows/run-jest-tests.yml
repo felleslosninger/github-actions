@@ -1,0 +1,48 @@
+name: Run Jest Tests
+
+on:
+  pull_request:
+    paths:
+      - "write-to-influxdb/**"
+      - "github-app-token/**"
+      - "publish-release-notes/**"
+      # Add more folders as needed
+  push:
+    branches:
+      - main
+    paths:
+      - "write-to-influxdb/**"
+      - "github-app-token/**"
+      - "publish-release-notes/**"
+      # Add more folders as needed
+
+permissions: read-all
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        folder:
+          - "write-to-influxdb/"
+          - "github-app-token/"
+          - "publish-release-notes/"
+          # Add more folders as needed
+
+    steps:
+      - name: Checkout code
+        id: checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: "true"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ${{ matrix.folder }}/.node-version
+          cache-dependency-path: ${{ matrix.folder }}/package-lock.json
+          cache: npm
+
+      - run: npm run test
+        working-directory: ${{ matrix.folder }}
