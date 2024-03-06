@@ -28976,6 +28976,53 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 666:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.sendDispatchEvent = void 0;
+const github = __importStar(__nccwpck_require__(5438));
+/* eslint-disable @typescript-eslint/no-explicit-any */
+async function sendDispatchEvent(githubToken, repositoryOwner, repositoryName, eventType, clientPayload) {
+    const client = github.getOctokit(githubToken);
+    await client.rest.repos.createDispatchEvent({
+        owner: repositoryOwner,
+        repo: repositoryName,
+        event_type: eventType,
+        client_payload: clientPayload
+    });
+}
+exports.sendDispatchEvent = sendDispatchEvent;
+/* eslint-enable @typescript-eslint/no-explicit-any */
+
+
+/***/ }),
+
 /***/ 4871:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -29077,34 +29124,31 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-const github = __importStar(__nccwpck_require__(5438));
-const inputs_helper_1 = __nccwpck_require__(4871);
-const release_notes_1 = __nccwpck_require__(9260);
+const InputsHelpers = __importStar(__nccwpck_require__(4871));
+const ReleaseNotes = __importStar(__nccwpck_require__(9260));
+const DispatchEvent = __importStar(__nccwpck_require__(666));
 async function run() {
     try {
-        const { applicationName, product, version, releaseNotes, timestamp, githubToken, repositoryOwner, repositoryName, sha, isPublic, publicIgnoreProducts, publicIgnoreApplications, publicTitle } = (0, inputs_helper_1.loadInputs)();
-        const releaseNotesArray = releaseNotes.split("\n");
-        const client = github.getOctokit(githubToken);
+        const { applicationName, product, version, releaseNotes, timestamp, githubToken, repositoryOwner, repositoryName, sha, isPublic, publicIgnoreProducts, publicIgnoreApplications, publicTitle } = InputsHelpers.loadInputs();
         let releaseNotesCreated = false;
-        if (isPublic &&
-            !publicIgnoreProducts.includes(product) &&
-            !publicIgnoreApplications.includes(applicationName)) {
-            releaseNotesCreated = await (0, release_notes_1.publishReleaseNotes)(applicationName, timestamp, githubToken, product, releaseNotes, repositoryName, repositoryOwner, sha, publicTitle, version);
-        }
-        // Dispatch event to update changelog repository
-        await client.rest.repos.createDispatchEvent({
-            owner: repositoryOwner,
-            repo: repositoryName,
-            event_type: "update-changelog",
-            client_payload: {
+        if (releaseNotes && releaseNotes.trim().length !== 0) {
+            const releaseNotesArray = releaseNotes.split("\n");
+            if (isPublic &&
+                !publicIgnoreProducts.includes(product) &&
+                !publicIgnoreApplications.includes(applicationName)) {
+                releaseNotesCreated = await ReleaseNotes.publishReleaseNotes(applicationName, timestamp, githubToken, product, releaseNotes, repositoryName, repositoryOwner, sha, publicTitle, version);
+            }
+            const eventType = "update-changelog";
+            const clientPayload = {
                 "changelog-array": releaseNotesArray,
                 "application-name": applicationName,
                 product,
                 version,
                 timestamp,
                 sha
-            }
-        });
+            };
+            await DispatchEvent.sendDispatchEvent(githubToken, repositoryOwner, repositoryName, eventType, clientPayload);
+        }
         // Set the output indicating if release notes were created or not
         core.setOutput("release-notes-created", releaseNotesCreated.toString());
     }
@@ -29151,6 +29195,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.publishReleaseNotes = exports.filterReleaseNotes = void 0;
 const github = __importStar(__nccwpck_require__(5438));
 function filterReleaseNotes(releaseNotes) {
+    if (!releaseNotes || releaseNotes.trim().length === 0) {
+        return "";
+    }
     const ignorePatterns = ["(INTERNAL-COMMIT)"];
     const replacements = new Map([["Bump", "Library upgrades"]]);
     const searchesFound = new Set();
@@ -29183,7 +29230,7 @@ function filterReleaseNotes(releaseNotes) {
 exports.filterReleaseNotes = filterReleaseNotes;
 async function publishReleaseNotes(applicationName, date, githubToken, product, releaseNotes, repositoryName, repositoryOwner, sha, title, version) {
     const filteredReleaseNotes = filterReleaseNotes(releaseNotes);
-    if (filteredReleaseNotes === "") {
+    if (!filteredReleaseNotes || filteredReleaseNotes.trim().length === 0) {
         return false;
     }
     const client = github.getOctokit(githubToken);

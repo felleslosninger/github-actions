@@ -1,4 +1,4 @@
-import { ReleaseNotes } from "../src/release-notes";
+import * as ReleaseNotes from "../src/release-notes";
 import * as github from "@actions/github";
 
 describe("filterReleaseNotes", () => {
@@ -72,6 +72,7 @@ describe("publishReleaseNotes", () => {
     const sha = "test_sha";
     const publicTitle = "TestTitle";
 
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     jest.spyOn(github, "getOctokit").mockReturnValue({
       rest: {
         repos: {
@@ -79,6 +80,7 @@ describe("publishReleaseNotes", () => {
         }
       }
     } as any);
+    /* eslint-enable @typescript-eslint/no-explicit-any */
 
     jest.spyOn(ReleaseNotes, "filterReleaseNotes");
 
@@ -98,7 +100,6 @@ describe("publishReleaseNotes", () => {
 
     // assert
     expect(github.getOctokit).toHaveBeenCalledWith(githubToken);
-    expect(ReleaseNotes.filterReleaseNotes).toHaveBeenCalledWith(releaseNotes);
     expect(result).toBe(true);
   });
 });

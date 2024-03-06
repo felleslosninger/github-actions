@@ -1,6 +1,6 @@
 import * as core from "@actions/core";
 
-import { InputsHelpers } from "../src/helpers";
+import * as InputsHelpers from "../src/helpers";
 import { Inputs } from "../src/interfaces";
 
 jest.mock("@actions/core");

@@ -1,4 +1,4 @@
-import { DispatchEvent } from "../src/dispatch-event";
+import * as DispatchEvent from "../src/dispatch-event";
 import * as github from "@actions/github";
 
 describe("DispatchEvent", () => {
@@ -14,6 +14,7 @@ describe("DispatchEvent", () => {
     const eventType = "update-release-notes";
     const clientPayload = {};
 
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     jest.spyOn(github, "getOctokit").mockReturnValue({
       rest: {
         repos: {
@@ -21,9 +22,10 @@ describe("DispatchEvent", () => {
         }
       }
     } as any);
+    /* eslint-enable @typescript-eslint/no-explicit-any */
 
     // act
-    await DispatchEvent.send(
+    await DispatchEvent.sendDispatchEvent(
       githubToken,
       repositoryOwner,
       repositoryName,
@@ -52,6 +54,8 @@ describe("DispatchEvent", () => {
     const clientPayload = {};
 
     const errorMessage = "Error sending dispatch event";
+
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     jest.spyOn(github, "getOctokit").mockReturnValue({
       rest: {
         repos: {
@@ -61,10 +65,11 @@ describe("DispatchEvent", () => {
         }
       }
     } as any);
+    /* eslint-enable @typescript-eslint/no-explicit-any */
 
     // act & assert
     await expect(
-      DispatchEvent.send(
+      DispatchEvent.sendDispatchEvent(
         githubToken,
         repositoryOwner,
         repositoryName,

@@ -1,7 +1,7 @@
 import * as core from "@actions/core";
-import { InputsHelpers } from "./helpers/inputs-helper";
-import { ReleaseNotes } from "./release-notes";
-import { DispatchEvent } from "./dispatch-event";
+import * as InputsHelpers from "./helpers/inputs-helper";
+import * as ReleaseNotes from "./release-notes";
+import * as DispatchEvent from "./dispatch-event";
 import { Inputs } from "./interfaces";
 
 export async function run(): Promise<void> {
@@ -57,7 +57,7 @@ export async function run(): Promise<void> {
         sha
       };
 
-      await DispatchEvent.send(
+      await DispatchEvent.sendDispatchEvent(
         githubToken,
         repositoryOwner,
         repositoryName,
