@@ -1,5 +1,5 @@
 import { ReleaseNotes } from "../src/release-notes";
-import * as core from "@actions/core";
+import * as github from "@actions/github";
 
 describe("filterReleaseNotes", () => {
   it('should filter out items containing "(INTERNAL-COMMIT)"', () => {
@@ -72,7 +72,15 @@ describe("publishReleaseNotes", () => {
     const sha = "test_sha";
     const publicTitle = "TestTitle";
 
-    jest.spyOn(core, "rest.repos.createDispatchEvent");
+    jest.spyOn(github, "getOctokit").mockReturnValue({
+      rest: {
+        repos: {
+          createDispatchEvent: jest.fn().mockResolvedValue(true)
+        }
+      }
+    } as any);
+
+    jest.spyOn(ReleaseNotes, "filterReleaseNotes");
 
     // act
     const result = await ReleaseNotes.publishReleaseNotes(
@@ -89,6 +97,8 @@ describe("publishReleaseNotes", () => {
     );
 
     // assert
+    expect(github.getOctokit).toHaveBeenCalledWith(githubToken);
+    expect(ReleaseNotes.filterReleaseNotes).toHaveBeenCalledWith(releaseNotes);
     expect(result).toBe(true);
   });
 });
