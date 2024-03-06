@@ -28976,53 +28976,6 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 666:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.sendDispatchEvent = void 0;
-const github = __importStar(__nccwpck_require__(5438));
-/* eslint-disable @typescript-eslint/no-explicit-any */
-async function sendDispatchEvent(githubToken, repositoryOwner, repositoryName, eventType, clientPayload) {
-    const client = github.getOctokit(githubToken);
-    await client.rest.repos.createDispatchEvent({
-        owner: repositoryOwner,
-        repo: repositoryName,
-        event_type: eventType,
-        client_payload: clientPayload
-    });
-}
-exports.sendDispatchEvent = sendDispatchEvent;
-/* eslint-enable @typescript-eslint/no-explicit-any */
-
-
-/***/ }),
-
 /***/ 4871:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -29067,11 +29020,13 @@ function loadInputs() {
         required: true
     });
     const repositoryName = core.getInput("repository-name", { required: true });
+    const eventType = core.getInput("event-type", { required: true });
     const sha = core.getInput("sha") || "";
-    const isPublic = core.getInput("public") === "true";
-    const publicIgnoreProducts = core.getInput("public-ignore-products") || "";
-    const publicIgnoreApplications = core.getInput("public-ignore-applications") || "";
-    const publicTitle = core.getInput("public-title") || product;
+    const ignoreProducts = core.getInput("ignore-products") || "";
+    const ignoreApplications = core.getInput("ignore-applications") || "";
+    const dependabotReplacement = core.getInput("dependabot-replacement") || "";
+    const ignoreCommits = core.getInput("ignore-commits") || "";
+    const title = core.getInput("title") || product;
     return {
         applicationName,
         product,
@@ -29081,11 +29036,13 @@ function loadInputs() {
         githubToken,
         repositoryOwner,
         repositoryName,
+        eventType,
         sha,
-        isPublic,
-        publicIgnoreProducts,
-        publicIgnoreApplications,
-        publicTitle
+        ignoreProducts,
+        ignoreApplications,
+        dependabotReplacement,
+        ignoreCommits,
+        title
     };
 }
 exports.loadInputs = loadInputs;
@@ -29126,31 +29083,32 @@ exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const InputsHelpers = __importStar(__nccwpck_require__(4871));
 const ReleaseNotes = __importStar(__nccwpck_require__(9260));
-const DispatchEvent = __importStar(__nccwpck_require__(666));
 async function run() {
     try {
-        const { applicationName, product, version, releaseNotes, timestamp, githubToken, repositoryOwner, repositoryName, sha, isPublic, publicIgnoreProducts, publicIgnoreApplications, publicTitle } = InputsHelpers.loadInputs();
-        let releaseNotesCreated = false;
-        if (releaseNotes && releaseNotes.trim().length !== 0) {
-            const releaseNotesArray = releaseNotes.split("\n");
-            if (isPublic &&
-                !publicIgnoreProducts.includes(product) &&
-                !publicIgnoreApplications.includes(applicationName)) {
-                releaseNotesCreated = await ReleaseNotes.publishReleaseNotes(applicationName, timestamp, githubToken, product, releaseNotes, repositoryName, repositoryOwner, sha, publicTitle, version);
-            }
-            const eventType = "update-changelog";
-            const clientPayload = {
-                "changelog-array": releaseNotesArray,
-                "application-name": applicationName,
-                product,
-                version,
-                timestamp,
-                sha
-            };
-            await DispatchEvent.sendDispatchEvent(githubToken, repositoryOwner, repositoryName, eventType, clientPayload);
+        const { applicationName, dependabotReplacement, eventType, githubToken, ignoreApplications, ignoreCommits, ignoreProducts, product, releaseNotes, repositoryName, repositoryOwner, sha, timestamp, title, version } = InputsHelpers.loadInputs();
+        if (!releaseNotes || releaseNotes.trim().length === 0) {
+            core.info("release-notes input was empty");
+            core.setOutput("release-notes-created", "false");
+            return;
         }
+        if (ignoreProducts &&
+            ignoreProducts.trim().length !== 0 &&
+            ignoreProducts.includes(product)) {
+            core.info(`ignore-products includes the given product (${product})`);
+            core.setOutput("release-notes-created", "false");
+            return;
+        }
+        if (ignoreApplications &&
+            ignoreApplications.trim().length !== 0 &&
+            ignoreApplications.includes(applicationName)) {
+            core.info(`ignore-applications includes the given application (${applicationName})`);
+            core.setOutput("release-notes-created", "false");
+            return;
+        }
+        let success = false;
+        success = await ReleaseNotes.publishReleaseNotes(applicationName, timestamp, githubToken, product, releaseNotes, repositoryName, repositoryOwner, sha, title, version, ignoreCommits, eventType, dependabotReplacement);
         // Set the output indicating if release notes were created or not
-        core.setOutput("release-notes-created", releaseNotesCreated.toString());
+        core.setOutput("release-notes-created", success.toString());
     }
     catch (error) {
         // Fail the workflow run if an error occurs
@@ -29194,42 +29152,45 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.publishReleaseNotes = exports.filterReleaseNotes = void 0;
 const github = __importStar(__nccwpck_require__(5438));
-function filterReleaseNotes(releaseNotes) {
+function filterReleaseNotes(releaseNotes, ignoreCommits, dependabotReplacement) {
     if (!releaseNotes || releaseNotes.trim().length === 0) {
         return "";
     }
-    const ignorePatterns = ["(INTERNAL-COMMIT)"];
-    const replacements = new Map([["Bump", "Library upgrades"]]);
-    const searchesFound = new Set();
-    const releaseNotesArray = releaseNotes.split("\n");
-    const filteredReleaseNotes = releaseNotesArray
-        .map(item => {
-        if (ignorePatterns.some(pattern => item.includes(pattern))) {
-            return null;
-        }
-        let issue = `- ${item}`;
-        for (const [search, replacement] of replacements) {
-            if (item.startsWith(search)) {
-                if (!searchesFound.has(search)) {
-                    issue = `- ${replacement}`;
-                    searchesFound.add(search);
+    const ignorePatterns = ignoreCommits.split(",");
+    let releaseNotesArray = releaseNotes.split("\n");
+    let bumpReplaced = false; // Flag to track if "Bump" has been replaced
+    if (ignoreCommits && ignoreCommits.length !== 0) {
+        releaseNotesArray = releaseNotesArray.filter(item => {
+            // Removes all commits that match the provided `ignoreCommits` list
+            return !ignorePatterns?.some(pattern => item.includes(pattern));
+        });
+    }
+    if (dependabotReplacement && dependabotReplacement.length !== 0) {
+        releaseNotesArray = releaseNotesArray
+            .map(item => {
+            // Check if the item starts with "Bump" and if it's not already replaced
+            if (item.trim().startsWith("Bump")) {
+                if (bumpReplaced) {
+                    return undefined;
                 }
-                else {
-                    issue = undefined;
-                }
-                break;
+                bumpReplaced = true; // Set flag to true since we've replaced "Bump"
+                return `${dependabotReplacement}`;
             }
-        }
-        return issue;
+            return `${item.trim()}`;
+        })
+            .filter(issue => issue !== undefined);
+    }
+    const result = releaseNotesArray
+        .map(item => {
+        return `- ${item}`;
     })
-        .filter(issue => issue !== undefined)
         .join("\n")
         .trim();
-    return filteredReleaseNotes;
+    return result;
 }
 exports.filterReleaseNotes = filterReleaseNotes;
-async function publishReleaseNotes(applicationName, date, githubToken, product, releaseNotes, repositoryName, repositoryOwner, sha, title, version) {
-    const filteredReleaseNotes = filterReleaseNotes(releaseNotes);
+async function publishReleaseNotes(applicationName, date, githubToken, product, releaseNotes, repositoryName, repositoryOwner, sha, title, version, ignoreCommits, eventType, dependabotReplacement) {
+    const filteredReleaseNotes = filterReleaseNotes(releaseNotes, ignoreCommits, dependabotReplacement);
     if (!filteredReleaseNotes || filteredReleaseNotes.trim().length === 0) {
         return false;
     }
@@ -29247,7 +29208,7 @@ async function publishReleaseNotes(applicationName, date, githubToken, product, 
     await client.rest.repos.createDispatchEvent({
         owner: repositoryOwner,
         repo: repositoryName,
-        event_type: "update-release-notes",
+        event_type: eventType,
         client_payload: dispatchPayload
     });
     return true;

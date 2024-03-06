@@ -10,34 +10,39 @@ describe("loadInputs", () => {
     // act
     const {
       applicationName,
-      product,
-      version,
-      releaseNotes,
-      timestamp,
+      dependabotReplacement,
+      eventType,
       githubToken,
-      repositoryOwner,
+      ignoreApplications,
+      ignoreCommits,
+      ignoreProducts,
+      product,
+      releaseNotes,
       repositoryName,
+      repositoryOwner,
       sha,
-      isPublic,
-      publicIgnoreProducts,
-      publicIgnoreApplications,
-      publicTitle
+      timestamp,
+      title,
+      version
     }: Inputs = InputsHelpers.loadInputs();
 
     // assert
     expect(applicationName).toBe("mocked-application-name");
+    expect(dependabotReplacement).toBe("mocked-dependabot-replacement");
+    expect(eventType).toBe("mocked-event-type");
+    expect(githubToken).toBe("mocked-github-token");
+    expect(ignoreApplications).toBe("mocked-ignore-applications");
+    expect(ignoreCommits).toBe("mocked-ignore-commits");
     expect(product).toBe("mocked-product");
     expect(version).toBe("mocked-version");
     expect(releaseNotes).toBe("mocked-release-notes");
     expect(timestamp).toBe("mocked-timestamp");
-    expect(githubToken).toBe("mocked-github-token");
     expect(repositoryOwner).toBe("mocked-repository-owner");
     expect(repositoryName).toBe("mocked-repository-name");
     expect(sha).toBe("mocked-sha");
-    expect(isPublic).toBe(true);
-    expect(publicIgnoreProducts).toBe("mocked-public-ignore-products");
-    expect(publicIgnoreApplications).toBe("mocked-public-ignore-applications");
-    expect(publicTitle).toBe("mocked-public-title");
+    expect(ignoreProducts).toBe("mocked-ignore-products");
+    expect(ignoreApplications).toBe("mocked-ignore-applications");
+    expect(title).toBe("mocked-title");
   });
 
   it("loads default values", () => {
@@ -53,33 +58,38 @@ describe("loadInputs", () => {
     // act
     const {
       applicationName,
-      product,
-      version,
-      releaseNotes,
-      timestamp,
+      dependabotReplacement,
+      eventType,
       githubToken,
-      repositoryOwner,
+      ignoreApplications,
+      ignoreCommits,
+      ignoreProducts,
+      product,
+      releaseNotes,
       repositoryName,
+      repositoryOwner,
       sha,
-      isPublic,
-      publicIgnoreProducts,
-      publicIgnoreApplications,
-      publicTitle
+      timestamp,
+      title,
+      version
     }: Inputs = InputsHelpers.loadInputs();
 
     // assert
     expect(applicationName).toBe("");
+    expect(dependabotReplacement).toBe("");
+    expect(eventType).toBe("");
+    expect(githubToken).toBe("");
+    expect(ignoreApplications).toBe("");
+    expect(ignoreCommits).toBe("");
     expect(product).toBe("mocked-product");
     expect(version).toBe("");
     expect(releaseNotes).toBe("");
     expect(timestamp).toBe("");
-    expect(githubToken).toBe("");
     expect(repositoryOwner).toBe("");
     expect(repositoryName).toBe("");
     expect(sha).toBe("");
-    expect(isPublic).toBe(false);
-    expect(publicIgnoreProducts).toBe("");
-    expect(publicIgnoreApplications).toBe("");
-    expect(publicTitle).toBe("mocked-product");
+    expect(ignoreProducts).toBe("");
+    expect(ignoreApplications).toBe("");
+    expect(title).toBe("mocked-product");
   });
 });

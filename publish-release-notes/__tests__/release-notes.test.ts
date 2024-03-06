@@ -3,27 +3,74 @@ import * as github from "@actions/github";
 
 describe("filterReleaseNotes", () => {
   it('should filter out items containing "(INTERNAL-COMMIT)"', () => {
+    // arrange
     const releaseNotes = "Bump version\nAdd feature\n(INTERNAL-COMMIT)";
-    const expected = "- Library upgrades\n- Add feature";
-    expect(ReleaseNotes.filterReleaseNotes(releaseNotes)).toEqual(expected);
+    const ignoreCommits = "(INTERNAL-COMMIT)";
+    const dependabotReplacement = "";
+    const expected = "- Bump version\n- Add feature";
+
+    // act
+    const result = ReleaseNotes.filterReleaseNotes(
+      releaseNotes,
+      ignoreCommits,
+      dependabotReplacement
+    );
+
+    // assert
+    expect(result).toEqual(expected);
   });
 
   it('should replace "Bump" with "Library upgrades"', () => {
+    // arrange
     const releaseNotes = "Bump version to 1.2.3\nAdd feature";
+    const ignoreCommits = "";
+    const dependabotReplacement = "Library upgrades";
     const expected = "- Library upgrades\n- Add feature";
-    expect(ReleaseNotes.filterReleaseNotes(releaseNotes)).toEqual(expected);
+
+    // act
+    const result = ReleaseNotes.filterReleaseNotes(
+      releaseNotes,
+      ignoreCommits,
+      dependabotReplacement
+    );
+
+    // assert
+    expect(result).toEqual(expected);
   });
 
-  it('should replace all instances of "Bump"', () => {
+  it('should replace all instances of "Bump" with single "Library upgrades"', () => {
+    // arrange
     const releaseNotes = "Bump version to 1.2.3\nBump version to 2.0.0";
+    const ignoreCommits = "";
+    const dependabotReplacement = "Library upgrades";
     const expected = "- Library upgrades";
-    expect(ReleaseNotes.filterReleaseNotes(releaseNotes)).toEqual(expected);
+
+    // act
+    const result = ReleaseNotes.filterReleaseNotes(
+      releaseNotes,
+      ignoreCommits,
+      dependabotReplacement
+    );
+
+    // assert
+    expect(result).toEqual(expected);
   });
 
   it("should not modify release notes if no match found", () => {
     const releaseNotes = "Add feature\nFix bug";
+    const ignoreCommits = "(INTERNAL-COMMIT)";
+    const dependabotReplacement = "Library upgrades";
     const expected = "- Add feature\n- Fix bug";
-    expect(ReleaseNotes.filterReleaseNotes(releaseNotes)).toEqual(expected);
+
+    // act
+    const result = ReleaseNotes.filterReleaseNotes(
+      releaseNotes,
+      ignoreCommits,
+      dependabotReplacement
+    );
+
+    // assert
+    expect(result).toEqual(expected);
   });
 });
 
@@ -40,6 +87,9 @@ describe("publishReleaseNotes", () => {
     const repositoryName = "test_repo";
     const sha = "test_sha";
     const publicTitle = "TestTitle";
+    const ignoreCommits = "";
+    const eventType = "";
+    const dependabotReplacement = "";
 
     // act
     const result = await ReleaseNotes.publishReleaseNotes(
@@ -52,7 +102,10 @@ describe("publishReleaseNotes", () => {
       repositoryOwner,
       sha,
       publicTitle,
-      version
+      version,
+      ignoreCommits,
+      eventType,
+      dependabotReplacement
     );
 
     // assert
@@ -71,6 +124,9 @@ describe("publishReleaseNotes", () => {
     const repositoryName = "test_repo";
     const sha = "test_sha";
     const publicTitle = "TestTitle";
+    const ignoreCommits = "";
+    const eventType = "";
+    const dependabotReplacement = "";
 
     /* eslint-disable @typescript-eslint/no-explicit-any */
     jest.spyOn(github, "getOctokit").mockReturnValue({
@@ -95,7 +151,10 @@ describe("publishReleaseNotes", () => {
       repositoryOwner,
       sha,
       publicTitle,
-      version
+      version,
+      ignoreCommits,
+      eventType,
+      dependabotReplacement
     );
 
     // assert

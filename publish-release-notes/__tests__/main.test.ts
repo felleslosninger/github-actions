@@ -2,7 +2,6 @@ import { run } from "../src/main";
 import * as core from "@actions/core";
 import * as InputsHelpers from "../src/helpers/inputs-helper";
 import * as ReleaseNotes from "../src/release-notes";
-import * as DispatchEvent from "../src/dispatch-event";
 
 describe("run", () => {
   beforeEach(() => {
@@ -28,7 +27,7 @@ describe("run", () => {
     expect(mockSetFailed).toHaveBeenCalledWith(errorMessage);
   });
 
-  it("should call publishReleaseNotes if isPublic is true", async () => {
+  it("should call publishReleaseNotes if releaseNotes is not empty", async () => {
     // arrange
     jest.spyOn(InputsHelpers, "loadInputs").mockImplementation(() => ({
       applicationName: "TestApp",
@@ -40,15 +39,15 @@ describe("run", () => {
       repositoryOwner: "test_owner",
       repositoryName: "test_repo",
       sha: "test_sha",
-      isPublic: true,
-      publicIgnoreProducts: "",
-      publicIgnoreApplications: "",
-      publicTitle: "TestTitle"
+      ignoreProducts: "",
+      ignoreApplications: "",
+      title: "TestTitle",
+      eventType: "TestEvent",
+      dependabotReplacement: "",
+      ignoreCommits: ""
     }));
 
     jest.spyOn(ReleaseNotes, "publishReleaseNotes").mockResolvedValue(true);
-
-    jest.spyOn(DispatchEvent, "sendDispatchEvent").mockResolvedValue();
 
     jest.spyOn(core, "setOutput");
 
@@ -66,10 +65,11 @@ describe("run", () => {
       "test_owner",
       "test_sha",
       "TestTitle",
-      "1.0.0"
+      "1.0.0",
+      "",
+      "TestEvent",
+      ""
     );
-
-    expect(DispatchEvent.sendDispatchEvent).toHaveBeenCalled();
 
     expect(core.setOutput).toHaveBeenCalledWith(
       "release-notes-created",
@@ -77,45 +77,44 @@ describe("run", () => {
     );
   });
 
-  it("should not call publishReleaseNotes if isPublic is false", async () => {
+  it("should not call publishReleaseNotes if releaseNotes is empty", async () => {
     // arrange
     jest.spyOn(InputsHelpers, "loadInputs").mockImplementation(() => ({
       applicationName: "TestApp",
       product: "TestProduct",
       version: "1.0.0",
-      releaseNotes: "Test release notes",
+      releaseNotes: "",
       timestamp: "2024-02-29T12:00:00Z",
       githubToken: "test_token",
       repositoryOwner: "test_owner",
       repositoryName: "test_repo",
       sha: "test_sha",
-      isPublic: false,
-      publicIgnoreProducts: "",
-      publicIgnoreApplications: "",
-      publicTitle: "TestTitle"
+      ignoreProducts: "",
+      ignoreApplications: "",
+      title: "TestTitle",
+      eventType: "TestEvent",
+      dependabotReplacement: "",
+      ignoreCommits: ""
     }));
 
     jest.spyOn(ReleaseNotes, "publishReleaseNotes").mockResolvedValue(true);
 
-    jest.spyOn(DispatchEvent, "sendDispatchEvent").mockResolvedValue();
-
     jest.spyOn(core, "setOutput");
+    jest.spyOn(core, "info");
 
     // act
     await run();
 
     // assert
     expect(ReleaseNotes.publishReleaseNotes).not.toHaveBeenCalled();
-
-    expect(DispatchEvent.sendDispatchEvent).toHaveBeenCalled();
-
+    expect(core.info).toHaveBeenCalled();
     expect(core.setOutput).toHaveBeenCalledWith(
       "release-notes-created",
       "false"
     );
   });
 
-  it("should not call publishReleaseNotes if product or application is ignored", async () => {
+  it("should not call publishReleaseNotes if product is ignored", async () => {
     // arrange
     jest.spyOn(InputsHelpers, "loadInputs").mockImplementation(() => ({
       applicationName: "TestApp",
@@ -127,15 +126,15 @@ describe("run", () => {
       repositoryOwner: "test_owner",
       repositoryName: "test_repo",
       sha: "test_sha",
-      isPublic: true,
-      publicIgnoreProducts: "IgnoredProduct", // Ignoring this product
-      publicIgnoreApplications: "",
-      publicTitle: "TestTitle"
+      ignoreProducts: "IgnoredProduct", // Ignoring this product
+      ignoreApplications: "",
+      title: "TestTitle",
+      eventType: "TestEvent",
+      dependabotReplacement: "",
+      ignoreCommits: ""
     }));
 
     jest.spyOn(ReleaseNotes, "publishReleaseNotes").mockResolvedValue(true);
-
-    jest.spyOn(DispatchEvent, "sendDispatchEvent").mockResolvedValue();
 
     jest.spyOn(core, "setOutput");
 
@@ -145,42 +144,41 @@ describe("run", () => {
     // assert
     expect(ReleaseNotes.publishReleaseNotes).not.toHaveBeenCalled();
 
-    expect(DispatchEvent.sendDispatchEvent).toHaveBeenCalled();
-
     expect(core.setOutput).toHaveBeenCalledWith(
       "release-notes-created",
       "false"
     );
   });
 
-  it("should handle empty release notes", async () => {
+  it("should not call publishReleaseNotes if application is ignored", async () => {
     // arrange
-    jest.spyOn(core, "setOutput"); // Since we're not expecting release-notes-created to be set
-
-    // Mock loadInputs to return empty release notes
-    jest.spyOn(InputsHelpers, "loadInputs").mockReturnValue({
-      applicationName: "TestApp",
+    jest.spyOn(InputsHelpers, "loadInputs").mockImplementation(() => ({
+      applicationName: "IgnoredApp",
       product: "TestProduct",
       version: "1.0.0",
-      releaseNotes: "", // Empty release notes
+      releaseNotes: "Test release notes",
       timestamp: "2024-02-29T12:00:00Z",
       githubToken: "test_token",
       repositoryOwner: "test_owner",
       repositoryName: "test_repo",
       sha: "test_sha",
-      isPublic: true,
-      publicIgnoreProducts: "",
-      publicIgnoreApplications: "",
-      publicTitle: "TestTitle"
-    });
+      ignoreProducts: "",
+      ignoreApplications: "IgnoredApp",
+      title: "TestTitle",
+      eventType: "TestEvent",
+      dependabotReplacement: "",
+      ignoreCommits: ""
+    }));
+
+    jest.spyOn(ReleaseNotes, "publishReleaseNotes").mockResolvedValue(true);
+
+    jest.spyOn(core, "setOutput");
 
     // act
     await run();
 
     // assert
     expect(ReleaseNotes.publishReleaseNotes).not.toHaveBeenCalled();
-
-    expect(DispatchEvent.sendDispatchEvent).not.toHaveBeenCalled();
 
     expect(core.setOutput).toHaveBeenCalledWith(
       "release-notes-created",

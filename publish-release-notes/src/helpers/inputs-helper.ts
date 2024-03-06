@@ -14,12 +14,13 @@ export function loadInputs(): Inputs {
     required: true
   });
   const repositoryName = core.getInput("repository-name", { required: true });
+  const eventType = core.getInput("event-type", { required: true });
   const sha = core.getInput("sha") || "";
-  const isPublic = core.getInput("public") === "true";
-  const publicIgnoreProducts = core.getInput("public-ignore-products") || "";
-  const publicIgnoreApplications =
-    core.getInput("public-ignore-applications") || "";
-  const publicTitle = core.getInput("public-title") || product;
+  const ignoreProducts = core.getInput("ignore-products") || "";
+  const ignoreApplications = core.getInput("ignore-applications") || "";
+  const dependabotReplacement = core.getInput("dependabot-replacement") || "";
+  const ignoreCommits = core.getInput("ignore-commits") || "";
+  const title = core.getInput("title") || product;
 
   return {
     applicationName,
@@ -30,10 +31,12 @@ export function loadInputs(): Inputs {
     githubToken,
     repositoryOwner,
     repositoryName,
+    eventType,
     sha,
-    isPublic,
-    publicIgnoreProducts,
-    publicIgnoreApplications,
-    publicTitle
-  };
+    ignoreProducts,
+    ignoreApplications,
+    dependabotReplacement,
+    ignoreCommits,
+    title
+  } as Inputs;
 }

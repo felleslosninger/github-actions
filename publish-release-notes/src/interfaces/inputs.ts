@@ -7,9 +7,11 @@ export interface Inputs {
   githubToken: string;
   repositoryOwner: string;
   repositoryName: string;
+  eventType: string;
   sha: string;
-  isPublic: boolean;
-  publicIgnoreProducts: string;
-  publicIgnoreApplications: string;
-  publicTitle: string;
+  ignoreProducts: string;
+  ignoreApplications: string;
+  dependabotReplacement: string;
+  ignoreCommits: string;
+  title: string;
 }

@@ -1,39 +1,49 @@
 import * as github from "@actions/github";
 
-export function filterReleaseNotes(releaseNotes: string): string {
+export function filterReleaseNotes(
+  releaseNotes: string,
+  ignoreCommits: string,
+  dependabotReplacement: string
+): string {
   if (!releaseNotes || releaseNotes.trim().length === 0) {
     return "";
   }
 
-  const ignorePatterns = ["(INTERNAL-COMMIT)"];
-  const replacements = new Map([["Bump", "Library upgrades"]]);
-  const searchesFound = new Set();
-  const releaseNotesArray = releaseNotes.split("\n");
+  const ignorePatterns: string[] = ignoreCommits.split(",");
+  let releaseNotesArray = releaseNotes.split("\n");
+  let bumpReplaced = false; // Flag to track if "Bump" has been replaced
 
-  const filteredReleaseNotes: string = releaseNotesArray
-    .map(item => {
-      if (ignorePatterns.some(pattern => item.includes(pattern))) {
-        return null;
-      }
-      let issue: string | undefined = `- ${item}`;
-      for (const [search, replacement] of replacements) {
-        if (item.startsWith(search)) {
-          if (!searchesFound.has(search)) {
-            issue = `- ${replacement}`;
-            searchesFound.add(search);
-          } else {
-            issue = undefined;
+  if (ignoreCommits && ignoreCommits.length !== 0) {
+    releaseNotesArray = releaseNotesArray.filter(item => {
+      // Removes all commits that match the provided `ignoreCommits` list
+      return !ignorePatterns?.some(pattern => item.includes(pattern));
+    });
+  }
+
+  if (dependabotReplacement && dependabotReplacement.length !== 0) {
+    releaseNotesArray = releaseNotesArray
+      .map(item => {
+        // Check if the item starts with "Bump" and if it's not already replaced
+        if (item.trim().startsWith("Bump")) {
+          if (bumpReplaced) {
+            return undefined;
           }
-          break;
+          bumpReplaced = true; // Set flag to true since we've replaced "Bump"
+          return `${dependabotReplacement}`;
         }
-      }
-      return issue;
+        return `${item.trim()}`;
+      })
+      .filter(issue => issue !== undefined) as string[];
+  }
+
+  const result = releaseNotesArray
+    .map(item => {
+      return `- ${item}`;
     })
-    .filter(issue => issue !== undefined)
     .join("\n")
     .trim();
 
-  return filteredReleaseNotes;
+  return result;
 }
 
 export async function publishReleaseNotes(
@@ -46,9 +56,16 @@ export async function publishReleaseNotes(
   repositoryOwner: string,
   sha: string,
   title: string,
-  version: string
+  version: string,
+  ignoreCommits: string,
+  eventType: string,
+  dependabotReplacement: string
 ): Promise<boolean> {
-  const filteredReleaseNotes: string = filterReleaseNotes(releaseNotes);
+  const filteredReleaseNotes: string = filterReleaseNotes(
+    releaseNotes,
+    ignoreCommits,
+    dependabotReplacement
+  );
 
   if (!filteredReleaseNotes || filteredReleaseNotes.trim().length === 0) {
     return false;
@@ -70,7 +87,7 @@ export async function publishReleaseNotes(
   await client.rest.repos.createDispatchEvent({
     owner: repositoryOwner,
     repo: repositoryName,
-    event_type: "update-release-notes",
+    event_type: eventType,
     client_payload: dispatchPayload
   });
 

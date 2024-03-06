@@ -32,26 +32,30 @@ inputs:
   repository-name:
     required: true
     type: string
+  event-type:
+    required: true
+    type: string
   sha:
     description: Sha of application commit
     required: false
     type: string
-  public:
-    description: Publish release notes to release.digdir.no
-    required: false
-    default: false
-    type: boolean
-  public-ignore-products:
+  ignore-products:
     description: Product(s) to ignore when publishing release notes
     required: false
     default: ""
     type: string
-  public-ignore-applications:
+  ignore-applications:
     description: Application(s) to ignore when publishing release notes
     required: false
     default: ""
     type: string
-  public-title:
+  dependabot-replacement:
+    required: false
+    type: string
+  ignore-commits:
+    required: false
+    type: string
+  title:
     description: |
       Title to use for public release notes entry (default is "product"
       variable)

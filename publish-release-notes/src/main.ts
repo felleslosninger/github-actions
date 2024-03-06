@@ -1,73 +1,76 @@
 import * as core from "@actions/core";
 import * as InputsHelpers from "./helpers/inputs-helper";
 import * as ReleaseNotes from "./release-notes";
-import * as DispatchEvent from "./dispatch-event";
 import { Inputs } from "./interfaces";
 
 export async function run(): Promise<void> {
   try {
     const {
       applicationName,
-      product,
-      version,
-      releaseNotes,
-      timestamp,
+      dependabotReplacement,
+      eventType,
       githubToken,
-      repositoryOwner,
+      ignoreApplications,
+      ignoreCommits,
+      ignoreProducts,
+      product,
+      releaseNotes,
       repositoryName,
+      repositoryOwner,
       sha,
-      isPublic,
-      publicIgnoreProducts,
-      publicIgnoreApplications,
-      publicTitle
+      timestamp,
+      title,
+      version
     }: Inputs = InputsHelpers.loadInputs();
 
-    let releaseNotesCreated = false;
-
-    if (releaseNotes && releaseNotes.trim().length !== 0) {
-      const releaseNotesArray: string[] = releaseNotes.split("\n");
-
-      if (
-        isPublic &&
-        !publicIgnoreProducts.includes(product) &&
-        !publicIgnoreApplications.includes(applicationName)
-      ) {
-        releaseNotesCreated = await ReleaseNotes.publishReleaseNotes(
-          applicationName,
-          timestamp,
-          githubToken,
-          product,
-          releaseNotes,
-          repositoryName,
-          repositoryOwner,
-          sha,
-          publicTitle,
-          version
-        );
-      }
-
-      const eventType = "update-changelog";
-
-      const clientPayload = {
-        "changelog-array": releaseNotesArray,
-        "application-name": applicationName,
-        product,
-        version,
-        timestamp,
-        sha
-      };
-
-      await DispatchEvent.sendDispatchEvent(
-        githubToken,
-        repositoryOwner,
-        repositoryName,
-        eventType,
-        clientPayload
-      );
+    if (!releaseNotes || releaseNotes.trim().length === 0) {
+      core.info("release-notes input was empty");
+      core.setOutput("release-notes-created", "false");
+      return;
     }
 
+    if (
+      ignoreProducts &&
+      ignoreProducts.trim().length !== 0 &&
+      ignoreProducts.includes(product)
+    ) {
+      core.info(`ignore-products includes the given product (${product})`);
+      core.setOutput("release-notes-created", "false");
+      return;
+    }
+
+    if (
+      ignoreApplications &&
+      ignoreApplications.trim().length !== 0 &&
+      ignoreApplications.includes(applicationName)
+    ) {
+      core.info(
+        `ignore-applications includes the given application (${applicationName})`
+      );
+      core.setOutput("release-notes-created", "false");
+      return;
+    }
+
+    let success = false;
+
+    success = await ReleaseNotes.publishReleaseNotes(
+      applicationName,
+      timestamp,
+      githubToken,
+      product,
+      releaseNotes,
+      repositoryName,
+      repositoryOwner,
+      sha,
+      title,
+      version,
+      ignoreCommits,
+      eventType,
+      dependabotReplacement
+    );
+
     // Set the output indicating if release notes were created or not
-    core.setOutput("release-notes-created", releaseNotesCreated.toString());
+    core.setOutput("release-notes-created", success.toString());
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message);

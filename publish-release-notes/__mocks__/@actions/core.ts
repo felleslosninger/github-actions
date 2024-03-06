@@ -2,6 +2,18 @@ export function getInput(name: string): string {
   switch (name) {
     case "application-name":
       return "mocked-application-name";
+    case "dependabot-replacement":
+      return "mocked-dependabot-replacement";
+    case "event-type":
+      return "mocked-event-type";
+    case "github-token":
+      return "mocked-github-token";
+    case "ignore-applications":
+      return "mocked-ignore-applications";
+    case "ignore-commits":
+      return "mocked-ignore-commits";
+    case "ignore-products":
+      return "mocked-ignore-products";
     case "product":
       return "mocked-product";
     case "version":
@@ -10,22 +22,14 @@ export function getInput(name: string): string {
       return "mocked-release-notes";
     case "timestamp":
       return "mocked-timestamp";
-    case "github-token":
-      return "mocked-github-token";
     case "repository-owner":
       return "mocked-repository-owner";
     case "repository-name":
       return "mocked-repository-name";
     case "sha":
       return "mocked-sha";
-    case "public":
-      return "true";
-    case "public-ignore-products":
-      return "mocked-public-ignore-products";
-    case "public-ignore-applications":
-      return "mocked-public-ignore-applications";
-    case "public-title":
-      return "mocked-public-title";
+    case "title":
+      return "mocked-title";
     default:
       return "";
   }
@@ -34,3 +38,5 @@ export function getInput(name: string): string {
 export const setFailed = jest.fn();
 
 export const setOutput = jest.fn();
+
+export const info = jest.fn();
