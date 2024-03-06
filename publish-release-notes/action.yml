@@ -23,6 +23,15 @@ inputs:
     description: Timestamp for deployment
     required: true
     type: string
+  github-token:
+    required: true
+    type: string
+  repository-owner:
+    required: true
+    type: string
+  repository-name:
+    required: true
+    type: string
   sha:
     description: Sha of application commit
     required: false
