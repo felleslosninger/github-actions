@@ -2,7 +2,7 @@ import { run } from "../src/main";
 import * as core from "@actions/core";
 import { InputsHelpers } from "../src/helpers/inputs-helper";
 import { ReleaseNotes } from "../src/release-notes";
-import { DistpatchEvent } from "../src/dispatch-event";
+import { DispatchEvent } from "../src/dispatch-event";
 
 describe("run", () => {
   beforeEach(() => {
@@ -48,7 +48,7 @@ describe("run", () => {
 
     jest.spyOn(ReleaseNotes, "publishReleaseNotes").mockResolvedValue(true);
 
-    jest.spyOn(DistpatchEvent, "send").mockResolvedValue();
+    jest.spyOn(DispatchEvent, "send").mockResolvedValue();
 
     jest.spyOn(core, "setOutput");
 
@@ -69,7 +69,7 @@ describe("run", () => {
       "1.0.0"
     );
 
-    expect(DistpatchEvent.send).toHaveBeenCalled();
+    expect(DispatchEvent.send).toHaveBeenCalled();
 
     expect(core.setOutput).toHaveBeenCalledWith(
       "release-notes-created",
@@ -97,7 +97,7 @@ describe("run", () => {
 
     jest.spyOn(ReleaseNotes, "publishReleaseNotes").mockResolvedValue(true);
 
-    jest.spyOn(DistpatchEvent, "send").mockResolvedValue();
+    jest.spyOn(DispatchEvent, "send").mockResolvedValue();
 
     jest.spyOn(core, "setOutput");
 
@@ -107,7 +107,7 @@ describe("run", () => {
     // assert
     expect(ReleaseNotes.publishReleaseNotes).not.toHaveBeenCalled();
 
-    expect(DistpatchEvent.send).toHaveBeenCalled();
+    expect(DispatchEvent.send).toHaveBeenCalled();
 
     expect(core.setOutput).toHaveBeenCalledWith(
       "release-notes-created",
@@ -135,7 +135,7 @@ describe("run", () => {
 
     jest.spyOn(ReleaseNotes, "publishReleaseNotes").mockResolvedValue(true);
 
-    jest.spyOn(DistpatchEvent, "send").mockResolvedValue();
+    jest.spyOn(DispatchEvent, "send").mockResolvedValue();
 
     jest.spyOn(core, "setOutput");
 
@@ -145,7 +145,7 @@ describe("run", () => {
     // assert
     expect(ReleaseNotes.publishReleaseNotes).not.toHaveBeenCalled();
 
-    expect(DistpatchEvent.send).toHaveBeenCalled();
+    expect(DispatchEvent.send).toHaveBeenCalled();
 
     expect(core.setOutput).toHaveBeenCalledWith(
       "release-notes-created",
@@ -180,7 +180,7 @@ describe("run", () => {
     // assert
     expect(ReleaseNotes.publishReleaseNotes).not.toHaveBeenCalled();
 
-    expect(DistpatchEvent.send).not.toHaveBeenCalled();
+    expect(DispatchEvent.send).not.toHaveBeenCalled();
 
     expect(core.setOutput).toHaveBeenCalledWith(
       "release-notes-created",

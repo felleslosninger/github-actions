@@ -1,6 +1,6 @@
 import * as github from "@actions/github";
 
-export class DistpatchEvent {
+export class DispatchEvent {
   static async send(
     githubToken: string,
     repositoryOwner: string,
