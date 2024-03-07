@@ -1,4 +1,4 @@
-name: Lint Codebase
+name: Run Jest Tests
 
 on:
   pull_request:
@@ -16,17 +16,10 @@ on:
       - "publish-release-notes/**"
       # Add more folders as needed
 
-permissions:
-  contents: read
-  packages: read
-  statuses: write
-
-env:
-  FILTER_REGEX_EXCLUDE: .*dist/.*
+permissions: read-all
 
 jobs:
-  lint:
-    name: Lint Codebase
+  test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -38,12 +31,11 @@ jobs:
           # Add more folders as needed
 
     steps:
-      - name: Checkout
+      - name: Checkout code
+        id: checkout
         uses: actions/checkout@v4
         with:
-          # super-linter needs the full git history to get the
-          # list of files that changed across commits
-          fetch-depth: 0
+          submodules: "true"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -56,13 +48,5 @@ jobs:
         run: npm ci
         working-directory: ${{ matrix.folder }}
 
-      - name: Lint Codebase
-        uses: super-linter/super-linter/slim@v6
-        env:
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TYPESCRIPT_DEFAULT_STYLE: prettier
-          VALIDATE_ALL_CODEBASE: true
-          VALIDATE_JAVASCRIPT_STANDARD: false
-          VALIDATE_JSCPD: false
-          FILTER_REGEX_INCLUDE: .*${{ matrix.folder }}.*
+      - run: npm run test
+        working-directory: ${{ matrix.folder }}

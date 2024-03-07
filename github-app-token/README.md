@@ -1,4 +1,4 @@
-# GitHub Action: Github App Token
+# GitHub Action: GitHub App Token
 
 [![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
 

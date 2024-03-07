@@ -1,6 +1,6 @@
 {
-  "name": "github-app-token",
-  "description": "GitHub Action to create GitHub App Token",
+  "name": "publish-release-notes",
+  "description": "GitHub Action to publish release notes",
   "version": "1.0.0",
   "author": "Digdir Platform Team",
   "private": true,
@@ -70,11 +70,11 @@
   },
   "dependencies": {
     "@actions/core": "^1.10.1",
-    "@actions/github": "^6.0.0",
-    "@octokit/app": "^14.0.2"
+    "@actions/github": "^6.0.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
+    "@types/mocha": "^10.0.6",
     "@types/node": "^20.11.16",
     "@typescript-eslint/eslint-plugin": "^6.20.0",
     "@typescript-eslint/parser": "^6.20.0",

@@ -1,0 +1,71 @@
+name: Publish Release Notes
+description: |
+  "..."
+author: Digdir Platform Team
+inputs:
+  application-name:
+    description: Name of application
+    required: true
+    type: string
+  product:
+    description: Name of product
+    required: true
+    type: string
+  version:
+    description: Application version
+    required: true
+    type: string
+  release-notes:
+    description: Release notes array
+    required: true
+    type: string
+  timestamp:
+    description: Timestamp for deployment
+    required: true
+    type: string
+  github-token:
+    required: true
+    type: string
+  repository-owner:
+    required: true
+    type: string
+  repository-name:
+    required: true
+    type: string
+  event-type:
+    required: true
+    type: string
+  sha:
+    description: Sha of application commit
+    required: false
+    type: string
+  ignore-products:
+    description: Product(s) to ignore when publishing release notes
+    required: false
+    default: ""
+    type: string
+  ignore-applications:
+    description: Application(s) to ignore when publishing release notes
+    required: false
+    default: ""
+    type: string
+  dependabot-replacement:
+    required: false
+    type: string
+  ignore-commits:
+    required: false
+    type: string
+  title:
+    description: |
+      Title to use for public release notes entry (default is "product"
+      variable)
+    required: false
+    type: string
+
+outputs:
+  release-notes-created:
+    description: Indicates if release notes were created or not
+
+runs:
+  using: node20
+  main: dist/index.js
