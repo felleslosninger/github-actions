@@ -7,7 +7,7 @@ describe("filterReleaseNotes", () => {
     const releaseNotes = "Bump version\nAdd feature\n(INTERNAL-COMMIT)";
     const ignoreCommits = "(INTERNAL-COMMIT)";
     const dependabotReplacement = "";
-    const expected = "- Bump version\n- Add feature";
+    const expected = ["Bump version", "Add feature"];
 
     // act
     const result = ReleaseNotes.filterReleaseNotes(
@@ -25,7 +25,7 @@ describe("filterReleaseNotes", () => {
     const releaseNotes = "Bump version to 1.2.3\nAdd feature";
     const ignoreCommits = "";
     const dependabotReplacement = "Library upgrades";
-    const expected = "- Library upgrades\n- Add feature";
+    const expected = ["Library upgrades", "Add feature"];
 
     // act
     const result = ReleaseNotes.filterReleaseNotes(
@@ -43,7 +43,7 @@ describe("filterReleaseNotes", () => {
     const releaseNotes = "Bump version to 1.2.3\nBump version to 2.0.0";
     const ignoreCommits = "";
     const dependabotReplacement = "Library upgrades";
-    const expected = "- Library upgrades";
+    const expected = ["Library upgrades"];
 
     // act
     const result = ReleaseNotes.filterReleaseNotes(
@@ -60,7 +60,7 @@ describe("filterReleaseNotes", () => {
     const releaseNotes = "Add feature\nFix bug";
     const ignoreCommits = "(INTERNAL-COMMIT)";
     const dependabotReplacement = "Library upgrades";
-    const expected = "- Add feature\n- Fix bug";
+    const expected = ["Add feature", "Fix bug"];
 
     // act
     const result = ReleaseNotes.filterReleaseNotes(

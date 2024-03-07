@@ -4,9 +4,9 @@ export function filterReleaseNotes(
   releaseNotes: string,
   ignoreCommits: string,
   dependabotReplacement: string
-): string {
+): string[] {
   if (!releaseNotes || releaseNotes.trim().length === 0) {
-    return "";
+    return [];
   }
 
   const ignorePatterns: string[] = ignoreCommits.split(",");
@@ -36,14 +36,7 @@ export function filterReleaseNotes(
       .filter(issue => issue !== undefined) as string[];
   }
 
-  const result = releaseNotesArray
-    .map(item => {
-      return `- ${item}`;
-    })
-    .join("\n")
-    .trim();
-
-  return result;
+  return releaseNotesArray;
 }
 
 export async function publishReleaseNotes(
@@ -61,13 +54,13 @@ export async function publishReleaseNotes(
   eventType: string,
   dependabotReplacement: string
 ): Promise<boolean> {
-  const filteredReleaseNotes: string = filterReleaseNotes(
+  const filteredReleaseNotes: string[] = filterReleaseNotes(
     releaseNotes,
     ignoreCommits,
     dependabotReplacement
   );
 
-  if (!filteredReleaseNotes || filteredReleaseNotes.trim().length === 0) {
+  if (!filteredReleaseNotes || filteredReleaseNotes.length === 0) {
     return false;
   }
 

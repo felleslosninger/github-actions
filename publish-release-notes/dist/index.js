@@ -29154,7 +29154,7 @@ exports.publishReleaseNotes = exports.filterReleaseNotes = void 0;
 const github = __importStar(__nccwpck_require__(5438));
 function filterReleaseNotes(releaseNotes, ignoreCommits, dependabotReplacement) {
     if (!releaseNotes || releaseNotes.trim().length === 0) {
-        return "";
+        return [];
     }
     const ignorePatterns = ignoreCommits.split(",");
     let releaseNotesArray = releaseNotes.split("\n");
@@ -29180,18 +29180,12 @@ function filterReleaseNotes(releaseNotes, ignoreCommits, dependabotReplacement) 
         })
             .filter(issue => issue !== undefined);
     }
-    const result = releaseNotesArray
-        .map(item => {
-        return `- ${item}`;
-    })
-        .join("\n")
-        .trim();
-    return result;
+    return releaseNotesArray;
 }
 exports.filterReleaseNotes = filterReleaseNotes;
 async function publishReleaseNotes(applicationName, date, githubToken, product, releaseNotes, repositoryName, repositoryOwner, sha, title, version, ignoreCommits, eventType, dependabotReplacement) {
     const filteredReleaseNotes = filterReleaseNotes(releaseNotes, ignoreCommits, dependabotReplacement);
-    if (!filteredReleaseNotes || filteredReleaseNotes.trim().length === 0) {
+    if (!filteredReleaseNotes || filteredReleaseNotes.length === 0) {
         return false;
     }
     const client = github.getOctokit(githubToken);
