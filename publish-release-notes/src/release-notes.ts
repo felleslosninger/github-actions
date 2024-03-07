@@ -1,4 +1,5 @@
 import * as github from "@actions/github";
+import * as core from "@actions/core";
 
 export function filterReleaseNotes(
   releaseNotes: string,
@@ -66,7 +67,7 @@ export async function publishReleaseNotes(
 
   const client = github.getOctokit(githubToken);
 
-  const dispatchPayload = {
+  const clientPayload = {
     "release-notes": JSON.stringify(filteredReleaseNotes),
     "application-name": applicationName,
     product,
@@ -76,12 +77,14 @@ export async function publishReleaseNotes(
     title
   };
 
+  core.info(`client_payload: ${JSON.stringify(clientPayload)}`);
+
   // Dispatch event to update release notes repository
   await client.rest.repos.createDispatchEvent({
     owner: repositoryOwner,
     repo: repositoryName,
     event_type: eventType,
-    client_payload: dispatchPayload
+    client_payload: clientPayload
   });
 
   return true;

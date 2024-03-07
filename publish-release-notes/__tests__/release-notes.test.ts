@@ -159,6 +159,22 @@ describe("publishReleaseNotes", () => {
 
     // assert
     expect(github.getOctokit).toHaveBeenCalledWith(githubToken);
+    expect(
+      github.getOctokit(githubToken).rest.repos.createDispatchEvent
+    ).toHaveBeenCalledWith({
+      owner: repositoryOwner,
+      repo: repositoryName,
+      event_type: eventType,
+      client_payload: {
+        "release-notes": '["Test release notes"]',
+        "application-name": applicationName,
+        product,
+        version,
+        date: timestamp,
+        sha,
+        title: publicTitle
+      }
+    });
     expect(result).toBe(true);
   });
 });

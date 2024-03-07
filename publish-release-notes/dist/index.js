@@ -29152,6 +29152,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.publishReleaseNotes = exports.filterReleaseNotes = void 0;
 const github = __importStar(__nccwpck_require__(5438));
+const core = __importStar(__nccwpck_require__(2186));
 function filterReleaseNotes(releaseNotes, ignoreCommits, dependabotReplacement) {
     if (!releaseNotes || releaseNotes.trim().length === 0) {
         return [];
@@ -29189,8 +29190,8 @@ async function publishReleaseNotes(applicationName, date, githubToken, product, 
         return false;
     }
     const client = github.getOctokit(githubToken);
-    const dispatchPayload = {
-        "release-notes": filteredReleaseNotes,
+    const clientPayload = {
+        "release-notes": JSON.stringify(filteredReleaseNotes),
         "application-name": applicationName,
         product,
         version,
@@ -29198,12 +29199,13 @@ async function publishReleaseNotes(applicationName, date, githubToken, product, 
         sha,
         title
     };
+    core.info(`client_payload: ${JSON.stringify(clientPayload)}`);
     // Dispatch event to update release notes repository
     await client.rest.repos.createDispatchEvent({
         owner: repositoryOwner,
         repo: repositoryName,
         event_type: eventType,
-        client_payload: dispatchPayload
+        client_payload: clientPayload
     });
     return true;
 }
