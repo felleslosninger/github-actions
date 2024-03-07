@@ -35,7 +35,7 @@ This GitHub Action allows you to write data to InfluxDB, a time-series database.
 
 ### [Publish Release Notes](./publish-release-notes/README.md)
 
-This GitHub Action automates the process of publishing release notes to a repository based on specified inputs. It extracts release notes from the provided input and, if conditions are met, publishes them to the designated repository. Additionally, it dispatches events for updating the changelog.
+This GitHub Action automates the process of publishing release notes to a repository based on specified inputs. It extracts release notes from the provided input and, if conditions are met, dispatches an event for updating the releas notes.
 
 ### [GitHub App Token](./github-app-token/README.md)
 

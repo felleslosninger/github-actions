@@ -4,8 +4,8 @@
 
 This GitHub Action automates the process of publishing release notes to a
 repository based on specified inputs. It extracts release notes from the
-provided input and, if conditions are met, publishes them to the designated
-repository. Additionally, it dispatches events for updating the changelog.
+provided input and, if conditions are met, it dispatches events for updating the
+release notes.
 
 ## Author
 
@@ -84,27 +84,39 @@ repository. Additionally, it dispatches events for updating the changelog.
   - **Required**: true
   - **Type**: string
 
-- `isPublic`:
+- `ignore-products`:
 
-  - **Description**: Flag indicating whether the release is public.
-  - **Required**: true
-  - **Type**: boolean
+  - **Description**: Comma seperated list of product(s) to ignore when
+    publishing release notes.
+  - **Required**: false
+  - **Default**: ""
+  - **Type**: string
 
-- `public-ignore-products`:
+- `ignore-applications`:
 
-  - **Description**: List of products to ignore for public releases.
+  - **Description**: Comma seperated list of application(s) to ignore when
+    publishing release notes.
+  - **Required**: false
+  - **Default**: ""
+  - **Type**: string
+
+- `dependabot-replacement`:
+
+  - **Description**: Replacement string for "Bump" commits. If multiple are
+    present, they will all be replaced with a single line.
   - **Required**: false
   - **Type**: string
 
-- `public-ignore-applications`:
+- `ignore-commits`:
 
-  - **Description**: List of applications to ignore for public releases.
+  - **Description**: Commits to ignore when publishing release notes.
   - **Required**: false
   - **Type**: string
 
-- `public-title`:
-  - **Description**: The title of the public release (defaults to `product` if
-    not supplied)
+- `title`:
+
+  - **Description**: Title to use for public release notes entry (default is
+    "product" variable).
   - **Required**: false
   - **Type**: string
 
@@ -147,5 +159,5 @@ jobs:
 
 This action reads inputs provided in the workflow file and processes them to
 determine whether release notes should be published. If the conditions for
-publishing are met, it proceeds to publish the release notes to the designated
-repository. Additionally, it dispatches events for updating the changelog.
+publishing are met, it proceeds to dispatch an event for updating the release
+notes.
