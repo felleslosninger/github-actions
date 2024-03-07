@@ -143,16 +143,18 @@ jobs:
           application-name: "YourApp"
           product: "YourProduct"
           version: "1.0.0"
-          release-notes: "Your release notes here"
+          release-notes: '["Your release notes here", "Bump v1 to v2"]'
           timestamp: "2024-02-29T12:00:00Z"
           github-token: ${{ secrets.GITHUB_TOKEN }}
           repository-owner: "your-username"
           repository-name: "your-repository"
+          event-type: "dispatch event name"
           sha: "your-commit-sha"
-          isPublic: true
-          public-ignore-products: ""
-          public-ignore-applications: ""
-          public-title: "Your Public Title"
+          ignore-products: "Ignored Product Name"
+          ignore-applications: "Ignored Application Name"
+          dependabot-replacement: "Dependencies update"
+          ignore-commits: "(INTERNAL)"
+          title: "Your Release Notes Title"
 ```
 
 ## How it Works
