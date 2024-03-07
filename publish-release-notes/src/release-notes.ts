@@ -2,27 +2,27 @@ import * as github from "@actions/github";
 import * as core from "@actions/core";
 
 export function filterReleaseNotes(
-  releaseNotes: string,
+  releaseNotes: string[],
   ignoreCommits: string,
   dependabotReplacement: string
 ): string[] {
-  if (!releaseNotes || releaseNotes.trim().length === 0) {
+  if (!releaseNotes || releaseNotes.length === 0) {
     return [];
   }
 
   const ignorePatterns: string[] = ignoreCommits.split(",");
-  let releaseNotesArray = releaseNotes.split("\n");
+
   let bumpReplaced = false; // Flag to track if "Bump" has been replaced
 
   if (ignoreCommits && ignoreCommits.length !== 0) {
-    releaseNotesArray = releaseNotesArray.filter(item => {
+    releaseNotes = releaseNotes.filter(item => {
       // Removes all commits that match the provided `ignoreCommits` list
       return !ignorePatterns?.some(pattern => item.includes(pattern));
     });
   }
 
   if (dependabotReplacement && dependabotReplacement.length !== 0) {
-    releaseNotesArray = releaseNotesArray
+    releaseNotes = releaseNotes
       .map(item => {
         // Check if the item starts with "Bump" and if it's not already replaced
         if (item.trim().startsWith("Bump")) {
@@ -37,7 +37,7 @@ export function filterReleaseNotes(
       .filter(issue => issue !== undefined) as string[];
   }
 
-  return releaseNotesArray;
+  return releaseNotes;
 }
 
 export async function publishReleaseNotes(
@@ -45,7 +45,7 @@ export async function publishReleaseNotes(
   date: string,
   githubToken: string,
   product: string,
-  releaseNotes: string,
+  releaseNotes: string[],
   repositoryName: string,
   repositoryOwner: string,
   sha: string,
@@ -61,7 +61,12 @@ export async function publishReleaseNotes(
     dependabotReplacement
   );
 
-  if (!filteredReleaseNotes || filteredReleaseNotes.length === 0) {
+  if (
+    !filteredReleaseNotes ||
+    !Array.isArray(filteredReleaseNotes) ||
+    filteredReleaseNotes.length === 0 ||
+    filteredReleaseNotes.every(item => item === "")
+  ) {
     return false;
   }
 

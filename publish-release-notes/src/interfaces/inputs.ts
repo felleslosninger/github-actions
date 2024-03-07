@@ -2,7 +2,7 @@ export interface Inputs {
   applicationName: string;
   product: string;
   version: string;
-  releaseNotes: string;
+  releaseNotes: string[];
   timestamp: string;
   githubToken: string;
   repositoryOwner: string;

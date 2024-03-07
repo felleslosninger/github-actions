@@ -7,7 +7,11 @@ export function loadInputs(): Inputs {
   });
   const product = core.getInput("product", { required: true });
   const version = core.getInput("version", { required: true });
-  const releaseNotes = core.getInput("release-notes", { required: true });
+  const releaseNotes: string[] = JSON.parse(
+    core.getInput("release-notes", {
+      required: true
+    })
+  );
   const timestamp = core.getInput("timestamp", { required: true });
   const githubToken = core.getInput("github-token", { required: true });
   const repositoryOwner = core.getInput("repository-owner", {

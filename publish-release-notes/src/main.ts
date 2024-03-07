@@ -23,7 +23,12 @@ export async function run(): Promise<void> {
       version
     }: Inputs = InputsHelpers.loadInputs();
 
-    if (!releaseNotes || releaseNotes.trim().length === 0) {
+    if (
+      !releaseNotes ||
+      !Array.isArray(releaseNotes) ||
+      releaseNotes.length === 0 ||
+      releaseNotes.every(item => item === "")
+    ) {
       core.info("release-notes input was empty");
       core.setOutput("release-notes-created", "false");
       return;

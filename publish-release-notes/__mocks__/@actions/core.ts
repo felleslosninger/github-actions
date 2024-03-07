@@ -19,7 +19,7 @@ export function getInput(name: string): string {
     case "version":
       return "mocked-version";
     case "release-notes":
-      return "mocked-release-notes";
+      return '["mocked-release-notes-1", "mocked-release-notes-2"]';
     case "timestamp":
       return "mocked-timestamp";
     case "repository-owner":

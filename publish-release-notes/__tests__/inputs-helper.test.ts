@@ -35,7 +35,12 @@ describe("loadInputs", () => {
     expect(ignoreCommits).toBe("mocked-ignore-commits");
     expect(product).toBe("mocked-product");
     expect(version).toBe("mocked-version");
-    expect(releaseNotes).toBe("mocked-release-notes");
+    expect(releaseNotes).toEqual(
+      expect.arrayContaining([
+        "mocked-release-notes-1",
+        "mocked-release-notes-2"
+      ])
+    );
     expect(timestamp).toBe("mocked-timestamp");
     expect(repositoryOwner).toBe("mocked-repository-owner");
     expect(repositoryName).toBe("mocked-repository-name");
@@ -50,6 +55,8 @@ describe("loadInputs", () => {
     jest.spyOn(core, "getInput").mockImplementation((name: string) => {
       if (name === "product") {
         return "mocked-product";
+      } else if (name === "release-notes") {
+        return '[""]';
       } else {
         return "";
       }
@@ -83,7 +90,7 @@ describe("loadInputs", () => {
     expect(ignoreCommits).toBe("");
     expect(product).toBe("mocked-product");
     expect(version).toBe("");
-    expect(releaseNotes).toBe("");
+    expect(releaseNotes).toEqual(expect.arrayContaining([""]));
     expect(timestamp).toBe("");
     expect(repositoryOwner).toBe("");
     expect(repositoryName).toBe("");

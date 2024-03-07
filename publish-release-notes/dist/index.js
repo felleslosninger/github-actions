@@ -29013,7 +29013,9 @@ function loadInputs() {
     });
     const product = core.getInput("product", { required: true });
     const version = core.getInput("version", { required: true });
-    const releaseNotes = core.getInput("release-notes", { required: true });
+    const releaseNotes = JSON.parse(core.getInput("release-notes", {
+        required: true
+    }));
     const timestamp = core.getInput("timestamp", { required: true });
     const githubToken = core.getInput("github-token", { required: true });
     const repositoryOwner = core.getInput("repository-owner", {
@@ -29086,7 +29088,10 @@ const ReleaseNotes = __importStar(__nccwpck_require__(9260));
 async function run() {
     try {
         const { applicationName, dependabotReplacement, eventType, githubToken, ignoreApplications, ignoreCommits, ignoreProducts, product, releaseNotes, repositoryName, repositoryOwner, sha, timestamp, title, version } = InputsHelpers.loadInputs();
-        if (!releaseNotes || releaseNotes.trim().length === 0) {
+        if (!releaseNotes ||
+            !Array.isArray(releaseNotes) ||
+            releaseNotes.length === 0 ||
+            releaseNotes.every(item => item === "")) {
             core.info("release-notes input was empty");
             core.setOutput("release-notes-created", "false");
             return;
@@ -29154,20 +29159,19 @@ exports.publishReleaseNotes = exports.filterReleaseNotes = void 0;
 const github = __importStar(__nccwpck_require__(5438));
 const core = __importStar(__nccwpck_require__(2186));
 function filterReleaseNotes(releaseNotes, ignoreCommits, dependabotReplacement) {
-    if (!releaseNotes || releaseNotes.trim().length === 0) {
+    if (!releaseNotes || releaseNotes.length === 0) {
         return [];
     }
     const ignorePatterns = ignoreCommits.split(",");
-    let releaseNotesArray = releaseNotes.split("\n");
     let bumpReplaced = false; // Flag to track if "Bump" has been replaced
     if (ignoreCommits && ignoreCommits.length !== 0) {
-        releaseNotesArray = releaseNotesArray.filter(item => {
+        releaseNotes = releaseNotes.filter(item => {
             // Removes all commits that match the provided `ignoreCommits` list
             return !ignorePatterns?.some(pattern => item.includes(pattern));
         });
     }
     if (dependabotReplacement && dependabotReplacement.length !== 0) {
-        releaseNotesArray = releaseNotesArray
+        releaseNotes = releaseNotes
             .map(item => {
             // Check if the item starts with "Bump" and if it's not already replaced
             if (item.trim().startsWith("Bump")) {
@@ -29181,12 +29185,15 @@ function filterReleaseNotes(releaseNotes, ignoreCommits, dependabotReplacement) 
         })
             .filter(issue => issue !== undefined);
     }
-    return releaseNotesArray;
+    return releaseNotes;
 }
 exports.filterReleaseNotes = filterReleaseNotes;
 async function publishReleaseNotes(applicationName, date, githubToken, product, releaseNotes, repositoryName, repositoryOwner, sha, title, version, ignoreCommits, eventType, dependabotReplacement) {
     const filteredReleaseNotes = filterReleaseNotes(releaseNotes, ignoreCommits, dependabotReplacement);
-    if (!filteredReleaseNotes || filteredReleaseNotes.length === 0) {
+    if (!filteredReleaseNotes ||
+        !Array.isArray(filteredReleaseNotes) ||
+        filteredReleaseNotes.length === 0 ||
+        filteredReleaseNotes.every(item => item === "")) {
         return false;
     }
     const client = github.getOctokit(githubToken);
