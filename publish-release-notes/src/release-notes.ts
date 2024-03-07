@@ -67,7 +67,7 @@ export async function publishReleaseNotes(
   const client = github.getOctokit(githubToken);
 
   const dispatchPayload = {
-    "release-notes": filteredReleaseNotes,
+    "release-notes": JSON.stringify(filteredReleaseNotes),
     "application-name": applicationName,
     product,
     version,
