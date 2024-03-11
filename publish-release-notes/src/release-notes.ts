@@ -48,7 +48,6 @@ export async function publishReleaseNotes(
   releaseNotes: string[],
   repositoryName: string,
   repositoryOwner: string,
-  sha: string,
   title: string,
   version: string,
   ignoreCommits: string,
@@ -78,7 +77,6 @@ export async function publishReleaseNotes(
     product,
     version,
     date,
-    sha,
     title
   };
 
