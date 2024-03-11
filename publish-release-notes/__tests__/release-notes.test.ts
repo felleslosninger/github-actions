@@ -102,7 +102,6 @@ describe("publishReleaseNotes", () => {
     const githubToken = "test_token";
     const repositoryOwner = "test_owner";
     const repositoryName = "test_repo";
-    const sha = "test_sha";
     const publicTitle = "TestTitle";
     const ignoreCommits = "";
     const eventType = "";
@@ -117,7 +116,6 @@ describe("publishReleaseNotes", () => {
       releaseNotes,
       repositoryName,
       repositoryOwner,
-      sha,
       publicTitle,
       version,
       ignoreCommits,
@@ -139,7 +137,6 @@ describe("publishReleaseNotes", () => {
     const githubToken = "test_token";
     const repositoryOwner = "test_owner";
     const repositoryName = "test_repo";
-    const sha = "test_sha";
     const publicTitle = "TestTitle";
     const ignoreCommits = "";
     const eventType = "";
@@ -166,7 +163,6 @@ describe("publishReleaseNotes", () => {
       releaseNotes,
       repositoryName,
       repositoryOwner,
-      sha,
       publicTitle,
       version,
       ignoreCommits,
@@ -188,7 +184,6 @@ describe("publishReleaseNotes", () => {
         product,
         version,
         date: timestamp,
-        sha,
         title: publicTitle
       }
     });
