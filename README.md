@@ -1,8 +1,8 @@
 # Digdir GitHub Actions Repository
 
-[![Bats Tests](https://github.com/felleslosninger/github-actions/actions/workflows/run-bats-tests.yml/badge.svg)](https://github.com/felleslosninger/github-actions/actions/workflows/run-bats-tests.yml)
-[![Run Jest Tests](https://github.com/felleslosninger/github-actions/actions/workflows/run-jest-tests.yml/badge.svg)](https://github.com/felleslosninger/github-actions/actions/workflows/run-jest-tests.yml)
-[![Lint Codebase](https://github.com/felleslosninger/github-actions/actions/workflows/linter.yml/badge.svg)](https://github.com/felleslosninger/github-actions/actions/workflows/linter.yml)
+[![Bats Tests](https://github.com/felleslosninger/github-actions/actions/workflows/internal-run-bats-tests.yml/badge.svg)](https://github.com/felleslosninger/github-actions/actions/workflows/internal-run-bats-tests.yml)
+[![Run Jest Tests](https://github.com/felleslosninger/github-actions/actions/workflows/internal-run-jest-tests.yml/badge.svg)](https://github.com/felleslosninger/github-actions/actions/workflows/internal-run-jest-tests.yml)
+[![Lint Codebase](https://github.com/felleslosninger/github-actions/actions/workflows/internal-linter.yml/badge.svg)](https://github.com/felleslosninger/github-actions/actions/workflows/internal-linter.yml)
 
 Welcome to the GitHub Actions Repository for Digdir!
 This repository contains a collection of custom GitHub Actions developed by the Digdir Platform Team to automate various tasks in our workflows.
