@@ -19,6 +19,7 @@ export function loadInputs(): Inputs {
   });
   const repositoryName = core.getInput("repository-name", { required: true });
   const eventType = core.getInput("event-type", { required: true });
+  const sha = core.getInput("sha") || "";
   const ignoreProducts = core.getInput("ignore-products") || "";
   const ignoreApplications = core.getInput("ignore-applications") || "";
   const dependabotReplacement = core.getInput("dependabot-replacement") || "";
@@ -35,6 +36,7 @@ export function loadInputs(): Inputs {
     repositoryOwner,
     repositoryName,
     eventType,
+    sha,
     ignoreProducts,
     ignoreApplications,
     dependabotReplacement,

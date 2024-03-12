@@ -78,6 +78,12 @@ release notes.
   - **Required**: true
   - **Type**: string
 
+- `sha`:
+
+  - **Description**: The commit SHA associated with the release.
+  - **Required**: true
+  - **Type**: string
+
 - `ignore-products`:
 
   - **Description**: Comma seperated list of product(s) to ignore when
@@ -143,6 +149,7 @@ jobs:
           repository-owner: "your-username"
           repository-name: "your-repository"
           event-type: "dispatch event name"
+          sha: "your-commit-sha"
           ignore-products: "Ignored Product Name"
           ignore-applications: "Ignored Application Name"
           dependabot-replacement: "Dependencies update"

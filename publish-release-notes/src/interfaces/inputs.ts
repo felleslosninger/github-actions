@@ -8,6 +8,7 @@ export interface Inputs {
   repositoryOwner: string;
   repositoryName: string;
   eventType: string;
+  sha: string;
   ignoreProducts: string;
   ignoreApplications: string;
   dependabotReplacement: string;
