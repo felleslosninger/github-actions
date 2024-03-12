@@ -29023,6 +29023,7 @@ function loadInputs() {
     });
     const repositoryName = core.getInput("repository-name", { required: true });
     const eventType = core.getInput("event-type", { required: true });
+    const sha = core.getInput("sha") || "";
     const ignoreProducts = core.getInput("ignore-products") || "";
     const ignoreApplications = core.getInput("ignore-applications") || "";
     const dependabotReplacement = core.getInput("dependabot-replacement") || "";
@@ -29038,6 +29039,7 @@ function loadInputs() {
         repositoryOwner,
         repositoryName,
         eventType,
+        sha,
         ignoreProducts,
         ignoreApplications,
         dependabotReplacement,
@@ -29085,7 +29087,7 @@ const InputsHelpers = __importStar(__nccwpck_require__(4871));
 const ReleaseNotes = __importStar(__nccwpck_require__(9260));
 async function run() {
     try {
-        const { applicationName, dependabotReplacement, eventType, githubToken, ignoreApplications, ignoreCommits, ignoreProducts, product, releaseNotes, repositoryName, repositoryOwner, timestamp, title, version } = InputsHelpers.loadInputs();
+        const { applicationName, dependabotReplacement, eventType, githubToken, ignoreApplications, ignoreCommits, ignoreProducts, product, releaseNotes, repositoryName, repositoryOwner, sha, timestamp, title, version } = InputsHelpers.loadInputs();
         if (!releaseNotes ||
             !Array.isArray(releaseNotes) ||
             releaseNotes.length === 0 ||
@@ -29109,7 +29111,7 @@ async function run() {
             return;
         }
         let success = false;
-        success = await ReleaseNotes.publishReleaseNotes(applicationName, timestamp, githubToken, product, releaseNotes, repositoryName, repositoryOwner, title, version, ignoreCommits, eventType, dependabotReplacement);
+        success = await ReleaseNotes.publishReleaseNotes(applicationName, timestamp, githubToken, product, releaseNotes, repositoryName, repositoryOwner, sha, title, version, ignoreCommits, eventType, dependabotReplacement);
         // Set the output indicating if release notes were created or not
         core.setOutput("release-notes-created", success.toString());
     }
@@ -29186,7 +29188,7 @@ function filterReleaseNotes(releaseNotes, ignoreCommits, dependabotReplacement) 
     return releaseNotes;
 }
 exports.filterReleaseNotes = filterReleaseNotes;
-async function publishReleaseNotes(applicationName, date, githubToken, product, releaseNotes, repositoryName, repositoryOwner, title, version, ignoreCommits, eventType, dependabotReplacement) {
+async function publishReleaseNotes(applicationName, date, githubToken, product, releaseNotes, repositoryName, repositoryOwner, sha, title, version, ignoreCommits, eventType, dependabotReplacement) {
     const filteredReleaseNotes = filterReleaseNotes(releaseNotes, ignoreCommits, dependabotReplacement);
     if (!filteredReleaseNotes ||
         !Array.isArray(filteredReleaseNotes) ||
@@ -29201,6 +29203,7 @@ async function publishReleaseNotes(applicationName, date, githubToken, product, 
         product,
         version,
         date,
+        sha,
         title
     };
     core.info(`client_payload: ${JSON.stringify(clientPayload)}`);

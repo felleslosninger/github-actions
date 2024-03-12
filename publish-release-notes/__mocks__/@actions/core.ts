@@ -26,6 +26,8 @@ export function getInput(name: string): string {
       return "mocked-repository-owner";
     case "repository-name":
       return "mocked-repository-name";
+    case "sha":
+      return "mocked-sha";
     case "title":
       return "mocked-title";
     default:

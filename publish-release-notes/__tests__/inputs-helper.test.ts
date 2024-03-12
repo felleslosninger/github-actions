@@ -20,6 +20,7 @@ describe("loadInputs", () => {
       releaseNotes,
       repositoryName,
       repositoryOwner,
+      sha,
       timestamp,
       title,
       version
@@ -43,6 +44,7 @@ describe("loadInputs", () => {
     expect(timestamp).toBe("mocked-timestamp");
     expect(repositoryOwner).toBe("mocked-repository-owner");
     expect(repositoryName).toBe("mocked-repository-name");
+    expect(sha).toBe("mocked-sha");
     expect(ignoreProducts).toBe("mocked-ignore-products");
     expect(ignoreApplications).toBe("mocked-ignore-applications");
     expect(title).toBe("mocked-title");
@@ -73,6 +75,7 @@ describe("loadInputs", () => {
       releaseNotes,
       repositoryName,
       repositoryOwner,
+      sha,
       timestamp,
       title,
       version
@@ -91,6 +94,7 @@ describe("loadInputs", () => {
     expect(timestamp).toBe("");
     expect(repositoryOwner).toBe("");
     expect(repositoryName).toBe("");
+    expect(sha).toBe("");
     expect(ignoreProducts).toBe("");
     expect(ignoreApplications).toBe("");
     expect(title).toBe("mocked-product");

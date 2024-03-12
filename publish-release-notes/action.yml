@@ -35,6 +35,10 @@ inputs:
   event-type:
     required: true
     type: string
+  sha:
+    description: Sha of application commit
+    required: false
+    type: string
   ignore-products:
     description: Product(s) to ignore when publishing release notes
     required: false

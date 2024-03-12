@@ -17,6 +17,7 @@ export async function run(): Promise<void> {
       releaseNotes,
       repositoryName,
       repositoryOwner,
+      sha,
       timestamp,
       title,
       version
@@ -65,6 +66,7 @@ export async function run(): Promise<void> {
       releaseNotes,
       repositoryName,
       repositoryOwner,
+      sha,
       title,
       version,
       ignoreCommits,
