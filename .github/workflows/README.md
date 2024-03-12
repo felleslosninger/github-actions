@@ -1,6 +1,6 @@
 ## Shared workflows
 
-### build-image.yml
+### shared-build-image.yml
 
 This workflow builds and publishes a Docker image.
 
@@ -12,7 +12,7 @@ This workflow builds and publishes a Docker image.
 - `container-scan-offline-mode`: Enable offline mode for container scanning (default: false).
 - `slack-channel-id`: Team channel ID.
 
-### ci-cd-default.yml
+### shared-ci-cd-default.yml
 
 This workflow builds and publishes a Docker image and then triggers subsequent workflows for additional actions.
 
@@ -28,10 +28,18 @@ This workflow builds and publishes a Docker image and then triggers subsequent w
 
 ## Internal workflows
 
-### publish-release.yml
+### internal-linter.yml
+
+This workflow runs super-linter for the specified folders
+
+### internal-publish-release.yml
 
 This workflow publishes a release when a new tag is pushed in the format `v*.*.*`.
 
-### run-bats-tests.yml
+### internal-run-bats-tests.yml
 
 This workflow runs Bats tests on pushes to the `main` branch.
+
+### internal-run-jest-tests.yml
+
+This workflow runs Jest tests on pushes to the `main` branch.
