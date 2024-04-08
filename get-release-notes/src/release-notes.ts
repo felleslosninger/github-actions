@@ -35,7 +35,7 @@ export class ReleaseNotesClient {
         basehead: `${this.base}...${this.head}`
       });
 
-    core.debug(`Response: ${response}`);
+    core.debug(`Response: ${JSON.stringify(response)}`);
 
     const commits = response.data.commits;
 

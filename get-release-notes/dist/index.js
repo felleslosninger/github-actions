@@ -29131,7 +29131,7 @@ class ReleaseNotesClient {
             repo: this.repo,
             basehead: `${this.base}...${this.head}`
         });
-        core.debug(`Response: ${response}`);
+        core.debug(`Response: ${JSON.stringify(response)}`);
         const commits = response.data.commits;
         core.info(`Commmits: ${commits}`);
         const releaseNotes = await this.createReleaseLog(commits);
