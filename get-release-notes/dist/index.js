@@ -29008,43 +29008,15 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.loadInputs = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 function loadInputs() {
-    const applicationName = core.getInput("application-name", {
-        required: true
-    });
-    const product = core.getInput("product", { required: true });
-    const version = core.getInput("version", { required: true });
-    const releaseNotes = JSON.parse(core.getInput("release-notes", {
-        required: true
-    }));
-    const timestamp = core.getInput("timestamp", { required: true });
+    const repository = core.getInput("repository", { required: true });
+    const head = core.getInput("head", { required: true });
+    const base = core.getInput("base", { required: true });
     const githubToken = core.getInput("github-token", { required: true });
-    const repositoryOwner = core.getInput("repository-owner", {
-        required: true
-    });
-    const repositoryName = core.getInput("repository-name", { required: true });
-    const eventType = core.getInput("event-type", { required: true });
-    const sha = core.getInput("sha") || "";
-    const ignoreProducts = core.getInput("ignore-products") || "";
-    const ignoreApplications = core.getInput("ignore-applications") || "";
-    const dependabotReplacement = core.getInput("dependabot-replacement") || "";
-    const ignoreCommits = core.getInput("ignore-commits") || "";
-    const title = core.getInput("title") || product;
     return {
-        applicationName,
-        product,
-        version,
-        releaseNotes,
-        timestamp,
-        githubToken,
-        repositoryOwner,
-        repositoryName,
-        eventType,
-        sha,
-        ignoreProducts,
-        ignoreApplications,
-        dependabotReplacement,
-        ignoreCommits,
-        title
+        repository,
+        head: head,
+        base: base,
+        githubToken
     };
 }
 exports.loadInputs = loadInputs;
@@ -29084,36 +29056,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const InputsHelpers = __importStar(__nccwpck_require__(4871));
-const ReleaseNotes = __importStar(__nccwpck_require__(9260));
+const release_notes_1 = __nccwpck_require__(9260);
 async function run() {
     try {
-        const { applicationName, dependabotReplacement, eventType, githubToken, ignoreApplications, ignoreCommits, ignoreProducts, product, releaseNotes, repositoryName, repositoryOwner, sha, timestamp, title, version } = InputsHelpers.loadInputs();
-        if (!releaseNotes ||
-            !Array.isArray(releaseNotes) ||
-            releaseNotes.length === 0 ||
-            releaseNotes.every(item => item === "")) {
-            core.info("release-notes input was empty");
-            core.setOutput("release-notes-created", "false");
-            return;
-        }
-        if (ignoreProducts &&
-            ignoreProducts.trim().length !== 0 &&
-            ignoreProducts.includes(product)) {
-            core.info(`ignore-products includes the given product (${product})`);
-            core.setOutput("release-notes-created", "false");
-            return;
-        }
-        if (ignoreApplications &&
-            ignoreApplications.trim().length !== 0 &&
-            ignoreApplications.includes(applicationName)) {
-            core.info(`ignore-applications includes the given application (${applicationName})`);
-            core.setOutput("release-notes-created", "false");
-            return;
-        }
-        let success = false;
-        success = await ReleaseNotes.publishReleaseNotes(applicationName, timestamp, githubToken, product, releaseNotes, repositoryName, repositoryOwner, sha, title, version, ignoreCommits, eventType, dependabotReplacement);
+        const { repository, head, base, githubToken } = InputsHelpers.loadInputs();
+        const client = new release_notes_1.ReleaseNotesClient(repository, base, head, githubToken);
+        const releaseNotes = await client.getReleaseNotes();
         // Set the output indicating if release notes were created or not
-        core.setOutput("release-notes-created", success.toString());
+        core.setOutput("release-notes", releaseNotes);
     }
     catch (error) {
         // Fail the workflow run if an error occurs
@@ -29155,68 +29105,88 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.publishReleaseNotes = exports.filterReleaseNotes = void 0;
+exports.ReleaseNotesClient = void 0;
 const github = __importStar(__nccwpck_require__(5438));
 const core = __importStar(__nccwpck_require__(2186));
-function filterReleaseNotes(releaseNotes, ignoreCommits, dependabotReplacement) {
-    if (!releaseNotes || releaseNotes.length === 0) {
-        return [];
+class ReleaseNotesClient {
+    api;
+    githubToken;
+    owner;
+    repo;
+    head;
+    base;
+    constructor(repository, base, head, githubToken) {
+        [this.owner, this.repo] = repository.split("/");
+        this.githubToken = githubToken;
+        this.base = base;
+        this.head = head;
+        this.api = github.getOctokit(this.githubToken).rest;
     }
-    const ignorePatterns = ignoreCommits.split(",");
-    let bumpReplaced = false; // Flag to track if "Bump" has been replaced
-    if (ignoreCommits && ignoreCommits.length !== 0) {
-        releaseNotes = releaseNotes.filter(item => {
-            // Removes all commits that match the provided `ignoreCommits` list
-            return !ignorePatterns?.some(pattern => item.includes(pattern));
+    async getReleaseNotes() {
+        const response = await this.api.repos.compareCommits({
+            owner: this.owner,
+            repo: this.repo,
+            base: this.base,
+            head: this.head
         });
+        const commits = response.data.commits;
+        core.info(`Commmits: ${commits}`);
+        const releaseNotes = await this.createReleaseLog(commits);
+        core.info(`Original Release Notes: ${JSON.stringify(releaseNotes)}`);
+        const sanitizedReleaseNotes = this.removeSpecialCharacters(releaseNotes);
+        core.info(`Sanitized Release Notes: ${JSON.stringify(sanitizedReleaseNotes)}`);
+        return sanitizedReleaseNotes;
     }
-    if (dependabotReplacement && dependabotReplacement.length !== 0) {
-        releaseNotes = releaseNotes
-            .map(item => {
-            // Check if the item starts with "Bump" and if it's not already replaced
-            if (item.trim().startsWith("Bump")) {
-                if (bumpReplaced) {
-                    return undefined;
-                }
-                bumpReplaced = true; // Set flag to true since we've replaced "Bump"
-                return `${dependabotReplacement}`;
-            }
-            return `${item.trim()}`;
-        })
-            .filter(issue => issue !== undefined);
+    removeSpecialCharacters(input) {
+        // Regular expression to match all special characters except:
+        // space, hyphen, comma, period, forward slash, Æ, Ø, Å, æ, ø, å, #, :, (, and )
+        const regex = /[^\w\s\-,.\/ÆØÅæøå#:()]/g;
+        // Loop through the array and remove special characters from each string
+        const processedArray = input.map(inputString => inputString.replace(regex, ""));
+        return processedArray;
     }
-    return releaseNotes;
+    async getCommitMessage(ref) {
+        const response = await this.api.repos.getCommit({
+            owner: this.owner,
+            repo: this.repo,
+            ref
+        });
+        return response.data.commit.message.split("\n")[0];
+    }
+    getReleaseLogEntries(commits) {
+        const releaseLogEntries = [];
+        // commits.map(commit => {
+        //   const releaseLogEntry = this.getFirstCommitLine(commit.commit.message);
+        //   releaseLogEntries.push(releaseLogEntry);
+        // });
+        // core.info(`Release log entries: ${releaseLogEntries}`);
+        return releaseLogEntries;
+    }
+    async getReleaseLogEntry(ref) {
+        const commitMessage = await this.getCommitMessage(ref);
+        const releaseLogEntry = this.getFirstCommitLine(commitMessage);
+        core.info(`Release log entry: ${releaseLogEntry}`);
+        return releaseLogEntry;
+    }
+    getFirstCommitLine(message) {
+        return message.split("\n")[0];
+    }
+    async createReleaseLog(commits) {
+        const releaseLog = [];
+        if (commits !== 0) {
+            let releaseLogEntries = [];
+            releaseLogEntries = this.getReleaseLogEntries(commits);
+            releaseLog.push(...releaseLogEntries);
+        }
+        else {
+            const headReleaseLogEntry = this.getReleaseLogEntry(this.head);
+            releaseLog.push(headReleaseLogEntry);
+        }
+        core.info(`Release log: ${releaseLog}`);
+        return releaseLog.reverse();
+    }
 }
-exports.filterReleaseNotes = filterReleaseNotes;
-async function publishReleaseNotes(applicationName, date, githubToken, product, releaseNotes, repositoryName, repositoryOwner, sha, title, version, ignoreCommits, eventType, dependabotReplacement) {
-    const filteredReleaseNotes = filterReleaseNotes(releaseNotes, ignoreCommits, dependabotReplacement);
-    if (!filteredReleaseNotes ||
-        !Array.isArray(filteredReleaseNotes) ||
-        filteredReleaseNotes.length === 0 ||
-        filteredReleaseNotes.every(item => item === "")) {
-        return false;
-    }
-    const client = github.getOctokit(githubToken);
-    const clientPayload = {
-        "release-notes": JSON.stringify(filteredReleaseNotes),
-        "application-name": applicationName,
-        product,
-        version,
-        date,
-        sha,
-        title
-    };
-    core.info(`client_payload: ${JSON.stringify(clientPayload)}`);
-    // Dispatch event to update release notes repository
-    await client.rest.repos.createDispatchEvent({
-        owner: repositoryOwner,
-        repo: repositoryName,
-        event_type: eventType,
-        client_payload: clientPayload
-    });
-    return true;
-}
-exports.publishReleaseNotes = publishReleaseNotes;
+exports.ReleaseNotesClient = ReleaseNotesClient;
 
 
 /***/ }),

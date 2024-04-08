@@ -76,13 +76,13 @@ export class ReleaseNotesClient {
   getReleaseLogEntries(commits: any) {
     const releaseLogEntries: any[] = [];
 
-    commits.map(commit => {
-      const releaseLogEntry = this.getFirstCommitLine(commit.commit.message);
+    // commits.map(commit => {
+    //   const releaseLogEntry = this.getFirstCommitLine(commit.commit.message);
 
-      releaseLogEntries.push(releaseLogEntry);
-    });
+    //   releaseLogEntries.push(releaseLogEntry);
+    // });
 
-    core.info(`Release log entries: ${releaseLogEntries}`);
+    // core.info(`Release log entries: ${releaseLogEntries}`);
 
     return releaseLogEntries;
   }
