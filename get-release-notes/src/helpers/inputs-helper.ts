@@ -3,14 +3,14 @@ import { Inputs } from "../interfaces";
 
 export function loadInputs(): Inputs {
   const repository: string = core.getInput("repository", { required: true });
-  const headSha: string = core.getInput("head-sha", { required: true });
-  const baseSha: string = core.getInput("base-sha", { required: true });
+  const head: string = core.getInput("head", { required: true });
+  const base: string = core.getInput("base", { required: true });
   const githubToken: string = core.getInput("github-token", { required: true });
 
   return {
     repository,
-    head: headSha,
-    base: baseSha,
+    head: head,
+    base: base,
     githubToken
   };
 }
