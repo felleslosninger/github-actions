@@ -29126,11 +29126,10 @@ class ReleaseNotesClient {
         core.debug(`repo: ${this.repo}`);
     }
     async getReleaseNotes() {
-        const response = await this.api.repos.compareCommits({
+        const response = await this.api.repos.compareCommitsWithBasehead({
             owner: this.owner,
             repo: this.repo,
-            base: this.base,
-            head: this.head
+            basehead: `${this.base}...${this.head}`
         });
         core.debug(`Response: ${response}`);
         const commits = response.data.commits;

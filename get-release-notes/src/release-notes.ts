@@ -29,11 +29,10 @@ export class ReleaseNotesClient {
 
   async getReleaseNotes(): Promise<string[]> {
     const response: RestEndpointMethodTypes["repos"]["compareCommits"]["response"] =
-      await this.api.repos.compareCommits({
+      await this.api.repos.compareCommitsWithBasehead({
         owner: this.owner,
         repo: this.repo,
-        base: this.base,
-        head: this.head
+        basehead: `${this.base}...${this.head}`
       });
 
     core.debug(`Response: ${response}`);
