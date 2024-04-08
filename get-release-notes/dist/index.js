@@ -29186,6 +29186,9 @@ class ReleaseNotesClient {
         }
     }
     getFirstCommitLine(message) {
+        if (!message) {
+            return "";
+        }
         return message.split("\n")[0];
     }
     async createReleaseLog(commits) {

@@ -107,7 +107,10 @@ export class ReleaseNotesClient {
     }
   }
 
-  getFirstCommitLine(message: string): string {
+  getFirstCommitLine(message: string | null | undefined): string {
+    if (!message) {
+      return "";
+    }
     return message.split("\n")[0];
   }
 
