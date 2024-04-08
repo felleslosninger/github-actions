@@ -1,7 +1,9 @@
 import * as github from "@actions/github";
 import * as core from "@actions/core";
+import { Commit } from "./interfaces";
 import { RestEndpointMethodTypes } from "@octokit/action";
 import type { RestEndpointMethods } from "@octokit/plugin-rest-endpoint-methods/dist-types/generated/method-types";
+import { runInThisContext } from "vm";
 
 export class ReleaseNotesClient {
   api: RestEndpointMethods;
@@ -27,7 +29,7 @@ export class ReleaseNotesClient {
     core.debug(`repo: ${this.repo}`);
   }
 
-  async getReleaseNotes(): Promise<string[]> {
+  async getReleaseNotes(): Promise<Commit[]> {
     const response: RestEndpointMethodTypes["repos"]["compareCommits"]["response"] =
       await this.api.repos.compareCommitsWithBasehead({
         owner: this.owner,
@@ -37,9 +39,11 @@ export class ReleaseNotesClient {
 
     core.debug(`Response: ${JSON.stringify(response)}`);
 
-    const commits = response.data.commits;
+    const commits: Commit[] = response.data.commits.map(
+      c => <Commit>{ message: c.commit.message }
+    );
 
-    core.info(`Commmits: ${commits}`);
+    core.debug(`Commmits: ${commits}`);
 
     const releaseNotes = await this.createReleaseLog(commits);
 
@@ -54,14 +58,17 @@ export class ReleaseNotesClient {
     return sanitizedReleaseNotes;
   }
 
-  removeSpecialCharacters(input: string[]): string[] {
+  removeSpecialCharacters(commits: Commit[]): Commit[] {
     // Regular expression to match all special characters except:
     // space, hyphen, comma, period, forward slash, Æ, Ø, Å, æ, ø, å, #, :, (, and )
     const regex = /[^\w\s\-,.\/ÆØÅæøå#:()]/g;
 
     // Loop through the array and remove special characters from each string
-    const processedArray = input.map(inputString =>
-      inputString.replace(regex, "")
+    const processedArray = commits.map(
+      commit =>
+        <Commit>{
+          message: commit.message.replace(regex, "")
+        }
     );
 
     return processedArray;
@@ -77,46 +84,43 @@ export class ReleaseNotesClient {
     return response.data.commit.message.split("\n")[0];
   }
 
-  getReleaseLogEntries(commits: any) {
-    const releaseLogEntries: any[] = [];
+  trimCommitMessages(commits: Commit[]): Commit[] {
+    const releaseLogEntries: Commit[] = commits.map(
+      commit =>
+        <Commit>{
+          message: this.getFirstCommitLine(commit.message)
+        }
+    );
 
-    // commits.map(commit => {
-    //   const releaseLogEntry = this.getFirstCommitLine(commit.commit.message);
-
-    //   releaseLogEntries.push(releaseLogEntry);
-    // });
-
-    // core.info(`Release log entries: ${releaseLogEntries}`);
+    core.debug(`Release log entries: ${releaseLogEntries}`);
 
     return releaseLogEntries;
   }
 
-  async getReleaseLogEntry(ref: string) {
+  async getReleaseLogEntry(ref: string): Promise<Commit> {
     const commitMessage = await this.getCommitMessage(ref);
     const releaseLogEntry = this.getFirstCommitLine(commitMessage);
 
     core.info(`Release log entry: ${releaseLogEntry}`);
 
-    return releaseLogEntry;
+    return { message: releaseLogEntry };
   }
 
   getFirstCommitLine(message: string): string {
     return message.split("\n")[0];
   }
 
-  async createReleaseLog(commits: any): Promise<any> {
-    const releaseLog = [];
+  async createReleaseLog(commits: Commit[]): Promise<Commit[]> {
+    const releaseLog: Commit[] = [];
 
-    if (commits !== 0) {
-      let releaseLogEntries = [];
-      releaseLogEntries = this.getReleaseLogEntries(commits);
-      releaseLog.push(...releaseLogEntries);
+    if (commits && commits.length !== 0) {
+      releaseLog.push(...this.trimCommitMessages(commits));
     } else {
-      const headReleaseLogEntry = this.getReleaseLogEntry(this.head);
+      const headReleaseLogEntry = await this.getReleaseLogEntry(this.head);
       releaseLog.push(headReleaseLogEntry);
     }
 
-    core.info(`Release log: ${releaseLog}`);
+    core.debug(`Release log: ${releaseLog}`);
 
     return releaseLog.reverse();
   }

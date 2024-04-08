@@ -10,7 +10,9 @@ export async function run(): Promise<void> {
 
     const client = new ReleaseNotesClient(repository, base, head, githubToken);
 
-    const releaseNotes: string[] = await client.getReleaseNotes();
+    const releaseNotes: string[] = (await client.getReleaseNotes()).map(
+      c => c.message
+    );
 
     // Set the output indicating if release notes were created or not
     core.setOutput("release-notes", releaseNotes);
