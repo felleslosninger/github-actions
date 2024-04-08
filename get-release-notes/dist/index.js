@@ -29107,7 +29107,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ReleaseNotesClient = void 0;
 const github = __importStar(__nccwpck_require__(5438));
-const core = __importStar(__nccwpck_require__(2186));
 class ReleaseNotesClient {
     api;
     githubToken;
@@ -29121,45 +29120,70 @@ class ReleaseNotesClient {
         this.base = base;
         this.head = head;
         this.api = github.getOctokit(this.githubToken).rest;
-        core.debug("ctor()");
-        core.debug(`owner: ${this.owner}`);
-        core.debug(`repo: ${this.repo}`);
     }
     async getReleaseNotes() {
-        const response = await this.api.repos.compareCommitsWithBasehead({
-            owner: this.owner,
-            repo: this.repo,
-            basehead: `${this.base}...${this.head}`
-        });
-        const commits = response.data.commits.map(c => ({ message: c.commit.message }));
-        const releaseNotes = await this.createReleaseLog(commits);
-        const sanitizedReleaseNotes = this.removeSpecialCharacters(releaseNotes);
-        return sanitizedReleaseNotes;
+        try {
+            const response = await this.api.repos.compareCommitsWithBasehead({
+                owner: this.owner,
+                repo: this.repo,
+                basehead: `${this.base}...${this.head}`
+            });
+            const commits = response.data.commits.map(c => ({ message: c.commit.message }));
+            const releaseNotes = await this.createReleaseLog(commits);
+            return this.removeSpecialCharacters(releaseNotes);
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                throw new Error(`Failed to retrieve release notes: ${error?.message}`);
+            }
+            else {
+                throw new Error(`Failed to retrieve release notes: Unknown error`);
+            }
+        }
     }
     removeSpecialCharacters(commits) {
-        // Regular expression to match all special characters except:
-        // space, hyphen, comma, period, forward slash, Æ, Ø, Å, æ, ø, å, #, :, (, and )
-        const regex = /[^\w\s\-,.ÆØÅæøå#:()]/g;
-        // Loop through the array and remove special characters from each string
-        const processedArray = commits.map(commit => ({ message: commit.message.replace(regex, "") }));
+        const regex = new RegExp(/[^\w\s\-,.ÆØÅæøå#:()]/, "g");
+        const processedArray = commits.map(commit => ({
+            message: commit.message.replace(regex, "")
+        }));
         return processedArray;
     }
     async getCommitMessage(ref) {
-        const response = await this.api.repos.getCommit({
-            owner: this.owner,
-            repo: this.repo,
-            ref
-        });
-        return response.data.commit.message.split("\n")[0];
+        try {
+            const response = await this.api.repos.getCommit({
+                owner: this.owner,
+                repo: this.repo,
+                ref
+            });
+            return response.data.commit.message.split("\n")[0];
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                throw new Error(`Failed to retrieve commit message for ref ${ref}: ${error.message}`);
+            }
+            else {
+                throw new Error(`Failed to retrieve commit message for ref ${ref}: Unknown error`);
+            }
+        }
     }
     trimCommitMessages(commits) {
         const releaseLogEntries = commits.map(commit => ({ message: this.getFirstCommitLine(commit.message) }));
         return releaseLogEntries;
     }
     async getReleaseLogEntry(ref) {
-        const commitMessage = await this.getCommitMessage(ref);
-        const releaseLogEntry = this.getFirstCommitLine(commitMessage);
-        return { message: releaseLogEntry };
+        try {
+            const commitMessage = await this.getCommitMessage(ref);
+            const releaseLogEntry = this.getFirstCommitLine(commitMessage);
+            return { message: releaseLogEntry };
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                throw new Error(`Failed to retrieve release log entry for ref ${ref}: ${error.message}`);
+            }
+            else {
+                throw new Error(`Failed to retrieve release log entry for ref ${ref}: Unknown error`);
+            }
+        }
     }
     getFirstCommitLine(message) {
         return message.split("\n")[0];
@@ -29170,8 +29194,18 @@ class ReleaseNotesClient {
             releaseLog.push(...this.trimCommitMessages(commits));
         }
         else {
-            const headReleaseLogEntry = await this.getReleaseLogEntry(this.head);
-            releaseLog.push(headReleaseLogEntry);
+            try {
+                const headReleaseLogEntry = await this.getReleaseLogEntry(this.head);
+                releaseLog.push(headReleaseLogEntry);
+            }
+            catch (error) {
+                if (error instanceof Error) {
+                    throw new Error(`Failed to create release log: ${error.message}`);
+                }
+                else {
+                    throw new Error("Failed to create release log: Unknown error");
+                }
+            }
         }
         return releaseLog.reverse();
     }
