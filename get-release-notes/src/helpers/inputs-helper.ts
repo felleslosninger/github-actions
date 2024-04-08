@@ -9,8 +9,8 @@ export function loadInputs(): Inputs {
 
   return {
     repository,
-    head: head,
-    base: base,
+    head,
+    base,
     githubToken
   };
 }

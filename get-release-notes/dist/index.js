@@ -29014,8 +29014,8 @@ function loadInputs() {
     const githubToken = core.getInput("github-token", { required: true });
     return {
         repository,
-        head: head,
-        base: base,
+        head,
+        base,
         githubToken
     };
 }
@@ -29131,23 +29131,17 @@ class ReleaseNotesClient {
             repo: this.repo,
             basehead: `${this.base}...${this.head}`
         });
-        core.debug(`Response: ${JSON.stringify(response)}`);
         const commits = response.data.commits.map(c => ({ message: c.commit.message }));
-        core.debug(`Commmits: ${commits}`);
         const releaseNotes = await this.createReleaseLog(commits);
-        core.info(`Original Release Notes: ${JSON.stringify(releaseNotes)}`);
         const sanitizedReleaseNotes = this.removeSpecialCharacters(releaseNotes);
-        core.info(`Sanitized Release Notes: ${JSON.stringify(sanitizedReleaseNotes)}`);
         return sanitizedReleaseNotes;
     }
     removeSpecialCharacters(commits) {
         // Regular expression to match all special characters except:
         // space, hyphen, comma, period, forward slash, Æ, Ø, Å, æ, ø, å, #, :, (, and )
-        const regex = /[^\w\s\-,.\/ÆØÅæøå#:()]/g;
+        const regex = /[^\w\s\-,.ÆØÅæøå#:()]/g;
         // Loop through the array and remove special characters from each string
-        const processedArray = commits.map(commit => ({
-            message: commit.message.replace(regex, "")
-        }));
+        const processedArray = commits.map(commit => ({ message: commit.message.replace(regex, "") }));
         return processedArray;
     }
     async getCommitMessage(ref) {
@@ -29159,16 +29153,12 @@ class ReleaseNotesClient {
         return response.data.commit.message.split("\n")[0];
     }
     trimCommitMessages(commits) {
-        const releaseLogEntries = commits.map(commit => ({
-            message: this.getFirstCommitLine(commit.message)
-        }));
-        core.debug(`Release log entries: ${releaseLogEntries}`);
+        const releaseLogEntries = commits.map(commit => ({ message: this.getFirstCommitLine(commit.message) }));
         return releaseLogEntries;
     }
     async getReleaseLogEntry(ref) {
         const commitMessage = await this.getCommitMessage(ref);
         const releaseLogEntry = this.getFirstCommitLine(commitMessage);
-        core.info(`Release log entry: ${releaseLogEntry}`);
         return { message: releaseLogEntry };
     }
     getFirstCommitLine(message) {
@@ -29183,7 +29173,6 @@ class ReleaseNotesClient {
             const headReleaseLogEntry = await this.getReleaseLogEntry(this.head);
             releaseLog.push(headReleaseLogEntry);
         }
-        core.debug(`Release log: ${releaseLog}`);
         return releaseLog.reverse();
     }
 }
