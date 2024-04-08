@@ -1,129 +1,119 @@
 import * as github from "@actions/github";
 import * as core from "@actions/core";
 import { RestEndpointMethodTypes } from "@octokit/action";
+import type { RestEndpointMethods } from "@octokit/plugin-rest-endpoint-methods/dist-types/generated/method-types";
 
-export async function getReleaseNotes(
-  repository: string,
-  headSha: string,
-  baseSha: string,
-  githubToken: string
-): Promise<string[]> {
-  const [owner, repo] = repository.split("/");
+export class ReleaseNotesClient {
+  api: RestEndpointMethods;
+  githubToken: string;
+  owner: string;
+  repo: string;
+  head: string;
+  base: string;
 
-  const client = github.getOctokit(githubToken);
+  constructor(
+    repository: string,
+    base: string,
+    head: string,
+    githubToken: string
+  ) {
+    [this.owner, this.repo] = repository.split("/");
+    this.githubToken = githubToken;
+    this.base = base;
+    this.head = head;
+    this.api = github.getOctokit(this.githubToken).rest;
+  }
 
-  const response: RestEndpointMethodTypes["repos"]["compareCommits"]["response"] =
-    await client.rest.repos.compareCommits({
-      owner,
-      repo,
-      base: baseSha,
-      head: headSha
-    });
+  async getReleaseNotes(): Promise<string[]> {
+    const response: RestEndpointMethodTypes["repos"]["compareCommits"]["response"] =
+      await this.api.repos.compareCommits({
+        owner: this.owner,
+        repo: this.repo,
+        base: this.base,
+        head: this.head
+      });
 
-  const commits = response.data.commits;
+    const commits = response.data.commits;
 
-  core.info(`Commmits: ${commits}`);
+    core.info(`Commmits: ${commits}`);
 
-  const releaseNotes = await createReleaseLog(commits);
+    const releaseNotes = await this.createReleaseLog(commits);
 
-  core.info(`Original Release Notes: ${JSON.stringify(releaseNotes)}`);
+    core.info(`Original Release Notes: ${JSON.stringify(releaseNotes)}`);
 
-  const sanitizedReleaseNotes = removeSpecialCharacters(releaseNotes);
+    const sanitizedReleaseNotes = this.removeSpecialCharacters(releaseNotes);
 
-  core.info(
-    `Sanitized Release Notes: ${JSON.stringify(sanitizedReleaseNotes)}`
-  );
+    core.info(
+      `Sanitized Release Notes: ${JSON.stringify(sanitizedReleaseNotes)}`
+    );
 
-  return sanitizedReleaseNotes;
-}
+    return sanitizedReleaseNotes;
+  }
 
-export function removeSpecialCharacters(input: string[]): string[] {
-  // Regular expression to match all special characters except:
-  // space, hyphen, comma, period, forward slash, Æ, Ø, Å, æ, ø, å, #, :, (, and )
-  var regex = /[^\w\s\-,.\/ÆØÅæøå#:()]/g;
+  removeSpecialCharacters(input: string[]): string[] {
+    // Regular expression to match all special characters except:
+    // space, hyphen, comma, period, forward slash, Æ, Ø, Å, æ, ø, å, #, :, (, and )
+    const regex = /[^\w\s\-,.\/ÆØÅæøå#:()]/g;
 
-  // Loop through the array and remove special characters from each string
-  const processedArray = input.map(inputString =>
-    inputString.replace(regex, "")
-  );
+    // Loop through the array and remove special characters from each string
+    const processedArray = input.map(inputString =>
+      inputString.replace(regex, "")
+    );
 
-  return processedArray;
-}
+    return processedArray;
+  }
 
-export async function getCommitMessage(ref) {
-  return await github.rest.repos
-    .getCommit({
-      owner,
-      repo,
+  async getCommitMessage(ref: string): Promise<string> {
+    const response = await this.api.repos.getCommit({
+      owner: this.owner,
+      repo: this.repo,
       ref
-    })
-    .then(response => {
-      return response.data.commit.message.split("\n")[0];
     });
-}
 
-function containsWordsToIgnore(releaseLogEntry) {
-  for (let i = 0; i < ignoreList.length; i++) {
-    if (releaseLogEntry.includes(ignoreList[i])) {
-      return true;
-    }
+    return response.data.commit.message.split("\n")[0];
   }
-  return false;
-}
 
-export function getReleaseLogEntries(commits) {
-  let releaseLogEntries = [];
+  getReleaseLogEntries(commits: any) {
+    const releaseLogEntries: any[] = [];
 
-  commits.map(commit => {
-    const releaseLogEntry = getFirstCommitLine(commit.commit.message);
-    if (isValidReleaseLogEntry(releaseLogEntry)) {
+    commits.map(commit => {
+      const releaseLogEntry = this.getFirstCommitLine(commit.commit.message);
+
       releaseLogEntries.push(releaseLogEntry);
-    }
-  });
+    });
 
-  core.info(`Release log entries: ${releaseLogEntries}`);
+    core.info(`Release log entries: ${releaseLogEntries}`);
 
-  return releaseLogEntries;
-}
-
-async function getReleaseLogEntry(ref) {
-  const commitMessage = await getCommitMessage(ref);
-  const releaseLogEntry = getFirstCommitLine(commitMessage);
-
-  core.info(`Release log entry: ${releaseLogEntry}`);
-
-  return releaseLogEntry;
-}
-
-function isValidReleaseLogEntry(releaseLogEntry) {
-  if (ignoreList.length !== 0) {
-    if (containsWordsToIgnore(releaseLogEntry)) {
-      return false;
-    }
+    return releaseLogEntries;
   }
-  return true;
-}
 
-function getFirstCommitLine(message) {
-  return message.split("\n")[0];
-}
+  async getReleaseLogEntry(ref: string) {
+    const commitMessage = await this.getCommitMessage(ref);
+    const releaseLogEntry = this.getFirstCommitLine(commitMessage);
 
-export async function createReleaseLog(commits) {
-  let releaseLog = [];
+    core.info(`Release log entry: ${releaseLogEntry}`);
 
-  if (commits !== 0) {
-    let releaseLogEntries = [];
-    releaseLogEntries = getReleaseLogEntries(commits);
-    releaseLog.push(...releaseLogEntries);
-  } else {
-    const headReleaseLogEntry = getReleaseLogEntry(head);
+    return releaseLogEntry;
+  }
 
-    if (isValidReleaseLogEntry(headReleaseLogEntry)) {
+  getFirstCommitLine(message: string): string {
+    return message.split("\n")[0];
+  }
+
+  async createReleaseLog(commits: any): Promise<any> {
+    const releaseLog = [];
+
+    if (commits !== 0) {
+      let releaseLogEntries = [];
+      releaseLogEntries = this.getReleaseLogEntries(commits);
+      releaseLog.push(...releaseLogEntries);
+    } else {
+      const headReleaseLogEntry = this.getReleaseLogEntry(this.head);
       releaseLog.push(headReleaseLogEntry);
     }
+
+    core.info(`Release log: ${releaseLog}`);
+
+    return releaseLog.reverse();
   }
-
-  core.info(`Release log: ${releaseLog}`);
-
-  return releaseLog.reverse();
 }

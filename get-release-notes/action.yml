@@ -7,11 +7,11 @@ inputs:
     description: Name of application repository
     required: true
     type: string
-  head-sha:
+  head:
     description: Head commit SHA
     required: true
     type: string
-  base-sha:
+  base:
     description: Base commit SHA
     required: true
     type: string

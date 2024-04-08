@@ -9,8 +9,8 @@ export function loadInputs(): Inputs {
 
   return {
     repository,
-    headSha,
-    baseSha,
+    head: headSha,
+    base: baseSha,
     githubToken
   };
 }

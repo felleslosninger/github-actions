@@ -1,6 +1,6 @@
 export interface Inputs {
   repository: string;
-  headSha: string;
-  baseSha: string;
+  head: string;
+  base: string;
   githubToken: string;
 }

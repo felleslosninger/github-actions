@@ -1,19 +1,16 @@
 import * as core from "@actions/core";
 import * as InputsHelpers from "./helpers/inputs-helper";
-import * as ReleaseNotes from "./release-notes";
 import { Inputs } from "./interfaces";
+import { ReleaseNotesClient } from "./release-notes";
 
 export async function run(): Promise<void> {
   try {
-    const { repository, headSha, baseSha, githubToken }: Inputs =
+    const { repository, head, base, githubToken }: Inputs =
       InputsHelpers.loadInputs();
 
-    const releaseNotes: string[] = ReleaseNotes.getReleaseNotes(
-      repository,
-      headSha,
-      baseSha,
-      githubToken
-    );
+    const client = new ReleaseNotesClient(repository, base, head, githubToken);
+
+    const releaseNotes: string[] = await client.getReleaseNotes();
 
     // Set the output indicating if release notes were created or not
     core.setOutput("release-notes", releaseNotes);
