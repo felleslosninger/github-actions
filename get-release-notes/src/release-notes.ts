@@ -22,6 +22,9 @@ export class ReleaseNotesClient {
     this.base = base;
     this.head = head;
     this.api = github.getOctokit(this.githubToken).rest;
+    core.debug("ctor()");
+    core.debug(`owner: ${this.owner}`);
+    core.debug(`repo: ${this.repo}`);
   }
 
   async getReleaseNotes(): Promise<string[]> {
@@ -32,6 +35,8 @@ export class ReleaseNotesClient {
         base: this.base,
         head: this.head
       });
+
+    core.debug(`Response: ${response}`);
 
     const commits = response.data.commits;
 
