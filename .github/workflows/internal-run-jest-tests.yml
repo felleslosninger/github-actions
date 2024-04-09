@@ -30,7 +30,7 @@ jobs:
           - "write-to-influxdb/"
           - "github-app-token/"
           - "publish-release-notes/"
-          - "get-release-notes/**"
+          - "get-release-notes/"
           # Add more folders as needed
 
     steps:
