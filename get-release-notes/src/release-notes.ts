@@ -2,7 +2,7 @@ import * as github from "@actions/github";
 import { Commit, ComparisonResponse } from "./interfaces";
 import type { RestEndpointMethods } from "@octokit/plugin-rest-endpoint-methods/dist-types/generated/method-types";
 
-export class ReleaseNotesClient {
+export default class ReleaseNotesClient {
   private api: RestEndpointMethods;
   private githubToken: string;
   private owner: string;
@@ -89,22 +89,10 @@ export class ReleaseNotesClient {
   }
 
   async getReleaseLogEntry(ref: string): Promise<Commit> {
-    try {
-      const commitMessage = await this.getCommitMessage(ref);
-      const releaseLogEntry = this.getFirstCommitLine(commitMessage);
+    const commitMessage = await this.getCommitMessage(ref);
+    const releaseLogEntry = this.getFirstCommitLine(commitMessage);
 
-      return { message: releaseLogEntry };
-    } catch (error: Error | unknown) {
-      if (error instanceof Error) {
-        throw new Error(
-          `Failed to retrieve release log entry for ref ${ref}: ${error.message}`
-        );
-      } else {
-        throw new Error(
-          `Failed to retrieve release log entry for ref ${ref}: Unknown error`
-        );
-      }
-    }
+    return { message: releaseLogEntry };
   }
 
   getFirstCommitLine(message: string | null | undefined): string {

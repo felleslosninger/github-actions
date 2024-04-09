@@ -3,9 +3,12 @@
  */
 
 import * as main from "../src/main";
+import { describe, it, jest, expect } from "@jest/globals";
 
 // Mock the action's entrypoint
-const runMock = jest.spyOn(main, "run").mockImplementation();
+const runMock = jest
+  .spyOn(main, "run")
+  .mockImplementation(async () => Promise.resolve());
 
 describe("index", () => {
   it("calls run when imported", async () => {

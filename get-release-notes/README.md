@@ -1,4 +1,6 @@
-# GitHub Action: Publish Release Notes
+# GitHub Action: Get Release Notes
+
+[![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
 
 ## Description
 

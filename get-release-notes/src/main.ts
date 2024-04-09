@@ -1,7 +1,7 @@
 import * as core from "@actions/core";
 import * as InputsHelpers from "./helpers/inputs-helper";
-import { Inputs } from "./interfaces";
-import { ReleaseNotesClient } from "./release-notes";
+import { Commit, Inputs } from "./interfaces";
+import ReleaseNotesClient from "./release-notes";
 
 export async function run(): Promise<void> {
   try {
@@ -10,11 +10,10 @@ export async function run(): Promise<void> {
 
     const client = new ReleaseNotesClient(repository, base, head, githubToken);
 
-    const releaseNotes: string[] = (await client.getReleaseNotes()).map(
-      c => c.message
-    );
+    const commits: Commit[] = await client.getReleaseNotes();
 
-    // Set the output indicating if release notes were created or not
+    const releaseNotes = commits.map(c => c.message);
+
     core.setOutput("release-notes", releaseNotes);
   } catch (error) {
     // Fail the workflow run if an error occurs

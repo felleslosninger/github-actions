@@ -29052,17 +29052,20 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const InputsHelpers = __importStar(__nccwpck_require__(4871));
-const release_notes_1 = __nccwpck_require__(9260);
+const release_notes_1 = __importDefault(__nccwpck_require__(9260));
 async function run() {
     try {
         const { repository, head, base, githubToken } = InputsHelpers.loadInputs();
-        const client = new release_notes_1.ReleaseNotesClient(repository, base, head, githubToken);
-        const releaseNotes = (await client.getReleaseNotes()).map(c => c.message);
-        // Set the output indicating if release notes were created or not
+        const client = new release_notes_1.default(repository, base, head, githubToken);
+        const commits = await client.getReleaseNotes();
+        const releaseNotes = commits.map(c => c.message);
         core.setOutput("release-notes", releaseNotes);
     }
     catch (error) {
@@ -29105,7 +29108,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ReleaseNotesClient = void 0;
 const github = __importStar(__nccwpck_require__(5438));
 class ReleaseNotesClient {
     api;
@@ -29171,19 +29173,9 @@ class ReleaseNotesClient {
         return releaseLogEntries;
     }
     async getReleaseLogEntry(ref) {
-        try {
-            const commitMessage = await this.getCommitMessage(ref);
-            const releaseLogEntry = this.getFirstCommitLine(commitMessage);
-            return { message: releaseLogEntry };
-        }
-        catch (error) {
-            if (error instanceof Error) {
-                throw new Error(`Failed to retrieve release log entry for ref ${ref}: ${error.message}`);
-            }
-            else {
-                throw new Error(`Failed to retrieve release log entry for ref ${ref}: Unknown error`);
-            }
-        }
+        const commitMessage = await this.getCommitMessage(ref);
+        const releaseLogEntry = this.getFirstCommitLine(commitMessage);
+        return { message: releaseLogEntry };
     }
     getFirstCommitLine(message) {
         if (!message) {
@@ -29213,7 +29205,7 @@ class ReleaseNotesClient {
         return releaseLog.reverse();
     }
 }
-exports.ReleaseNotesClient = ReleaseNotesClient;
+exports["default"] = ReleaseNotesClient;
 
 
 /***/ }),
