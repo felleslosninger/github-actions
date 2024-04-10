@@ -37,6 +37,10 @@ This GitHub Action allows you to write data to InfluxDB, a time-series database.
 
 This GitHub Action automates the process of publishing release notes to a repository based on specified inputs. It extracts release notes from the provided input and, if conditions are met, dispatches an event for updating the releas notes.
 
+### [Get Release Notes](./get-release-notes/README.md)
+
+This GitHub Action retrieves release notes based on the comparison between two commit SHAs in a GitHub repository. It provides an array of release notes as output.
+
 ### [GitHub App Token](./github-app-token/README.md)
 
 This GitHub Action authenticates with GitHub using an App ID, Private Key, Installation ID, and generates a token.
