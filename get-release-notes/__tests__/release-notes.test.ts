@@ -138,57 +138,57 @@ describe("ReleaseNotesClient", () => {
     });
 
     it("should return the first line of the commit message", () => {
-      // Arrange
+      // arrange
       const message = "First line\nSecond line\nThird line";
 
-      // Act
+      // act
       const result = client.getFirstCommitLine(message);
 
-      // Assert
+      // assert
       expect(result).toEqual("First line");
     });
 
     it("should return the whole message if it only has one line", () => {
-      // Arrange
+      // arrange
       const message = "Only one line";
 
-      // Act
+      // act
       const result = client.getFirstCommitLine(message);
 
-      // Assert
+      // assert
       expect(result).toEqual("Only one line");
     });
 
     it("should return an empty string if the message is empty", () => {
-      // Arrange
+      // arrange
       const message = "";
 
-      // Act
+      // act
       const result = client.getFirstCommitLine(message);
 
-      // Assert
+      // assert
       expect(result).toEqual("");
     });
 
     it("should return an empty string if the message is null", () => {
-      // Arrange
+      // arrange
       const message = null;
 
-      // Act
+      // act
       const result = client.getFirstCommitLine(message);
 
-      // Assert
+      // assert
       expect(result).toEqual("");
     });
 
     it("should return an empty string if the message is undefined", () => {
-      // Arrange
+      // arrange
       const message = undefined;
 
-      // Act
+      // act
       const result = client.getFirstCommitLine(message);
 
-      // Assert
+      // assert
       expect(result).toEqual("");
     });
   });
@@ -218,7 +218,7 @@ describe("ReleaseNotesClient", () => {
     });
 
     it("should remove special characters from commit messages", () => {
-      // Arrange
+      // arrange
       const commits = [
         { message: "Fix #123: Bug fix" },
         { message: 'Merge branch "feature-branch"' },
@@ -226,10 +226,10 @@ describe("ReleaseNotesClient", () => {
         { message: '§!"#$%&/()=?`^*@¨æøå' }
       ];
 
-      // Act
+      // act
       const result = client.removeSpecialCharacters(commits);
 
-      // Assert
+      // assert
       expect(result).toEqual([
         { message: "Fix #123: Bug fix" },
         { message: "Merge branch feature-branch" },
@@ -239,28 +239,28 @@ describe("ReleaseNotesClient", () => {
     });
 
     it("should handle empty commit messages", () => {
-      // Arrange
+      // arrange
       const commits = [{ message: "" }, { message: " " }];
 
-      // Act
+      // act
       const result = client.removeSpecialCharacters(commits);
 
-      // Assert
+      // assert
       expect(result).toEqual([{ message: "" }, { message: " " }]);
     });
 
     it("should handle commits with no special characters", () => {
-      // Arrange
+      // arrange
       const commits = [
         { message: "Initial commit" },
         { message: "Update dependencies" },
         { message: "Refactor code" }
       ];
 
-      // Act
+      // act
       const result = client.removeSpecialCharacters(commits);
 
-      // Assert
+      // assert
       expect(result).toEqual([
         { message: "Initial commit" },
         { message: "Update dependencies" },
@@ -294,7 +294,7 @@ describe("ReleaseNotesClient", () => {
     });
 
     it("should remove everything after first line", () => {
-      // Arrange
+      // arrange
       const commits = [
         {
           message:
@@ -303,10 +303,10 @@ describe("ReleaseNotesClient", () => {
         { message: "Update README.md: Add new section\nShould be removed" }
       ];
 
-      // Act
+      // act
       const result = client.trimCommitMessages(commits);
 
-      // Assert
+      // assert
       expect(result).toEqual([
         { message: "Fix #123: Bug fix" },
         { message: "Update README.md: Add new section" }
@@ -314,13 +314,13 @@ describe("ReleaseNotesClient", () => {
     });
 
     it("should handle empty commit messages", () => {
-      // Arrange
+      // arrange
       const commits = [{ message: "" }, { message: " \n\n\n" }];
 
-      // Act
+      // act
       const result = client.trimCommitMessages(commits);
 
-      // Assert
+      // assert
       expect(result).toEqual([{ message: "" }, { message: " " }]);
     });
   });
@@ -331,7 +331,7 @@ describe("ReleaseNotesClient", () => {
     });
 
     it("should return the commit message", async () => {
-      // Arrange
+      // arrange
       const owner = "owner";
       const repo = "repo";
       const ref = "ref";
@@ -362,10 +362,10 @@ describe("ReleaseNotesClient", () => {
         "token"
       );
 
-      // Act
+      // act
       const result = await releaseNotesClient.getCommitMessage(ref);
 
-      // Assert
+      // assert
       expect(result).toEqual("Commit message");
       expect(
         github.getOctokit(token).rest.repos.getCommit
@@ -377,7 +377,7 @@ describe("ReleaseNotesClient", () => {
     });
 
     it("should throw an API error if unable to retrieve the commit message", async () => {
-      // Arrange
+      // arrange
       const owner = "owner";
       const repo = "repo";
       const ref = "ref";
@@ -400,14 +400,14 @@ describe("ReleaseNotesClient", () => {
         "token"
       );
 
-      // Act & Assert
+      // act & Assert
       await expect(releaseNotesClient.getCommitMessage(ref)).rejects.toThrow(
         `Failed to retrieve commit message for ref ${ref}: ${error.message}`
       );
     });
 
     it("should throw an unknown error if unable to retrieve the commit message", async () => {
-      // Arrange
+      // arrange
       const owner = "owner";
       const repo = "repo";
       const ref = "ref";
@@ -430,7 +430,7 @@ describe("ReleaseNotesClient", () => {
         "token"
       );
 
-      // Act & Assert
+      // act & Assert
       await expect(releaseNotesClient.getCommitMessage(ref)).rejects.toThrow(
         `Failed to retrieve commit message for ref ${ref}: Unknown error`
       );
@@ -494,7 +494,7 @@ describe("ReleaseNotesClient", () => {
     });
 
     it("should throw an unknown error if unable to retrieve the commit message", async () => {
-      // Arrange
+      // arrange
       const owner = "owner";
       const repo = "repo";
       const error = "Not an error";
@@ -517,65 +517,67 @@ describe("ReleaseNotesClient", () => {
         "token"
       );
 
-      // Act & Assert
+      // act & Assert
       await expect(
         releaseNotesClient.createReleaseLog(commits)
       ).rejects.toThrow(
         "Failed to create release log: Failed to retrieve commit message for ref head: Unknown error"
       );
     });
-  });
 
-  it("should throw an error if unable to retrieve the commit message", async () => {
-    // Arrange
-    const owner = "owner";
-    const repo = "repo";
-    const error = Error("Something went wrong");
-    const commits: Commit[] = [];
+    it("should throw an error if unable to retrieve the commit message", async () => {
+      // arrange
+      const owner = "owner";
+      const repo = "repo";
+      const error = Error("Something went wrong");
+      const commits: Commit[] = [];
 
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    jest.spyOn(github, "getOctokit").mockReturnValue({
-      rest: {
-        repos: {
-          getCommit: jest.fn<() => Promise<any>>().mockRejectedValue(error)
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      jest.spyOn(github, "getOctokit").mockReturnValue({
+        rest: {
+          repos: {
+            getCommit: jest.fn<() => Promise<any>>().mockRejectedValue(error)
+          }
         }
-      }
-    } as any);
-    /* eslint-enable @typescript-eslint/no-explicit-any */
+      } as any);
+      /* eslint-enable @typescript-eslint/no-explicit-any */
 
-    const releaseNotesClient = new ReleaseNotesClient(
-      `${owner}/${repo}`,
-      "base",
-      "head",
-      "token"
-    );
+      const releaseNotesClient = new ReleaseNotesClient(
+        `${owner}/${repo}`,
+        "base",
+        "head",
+        "token"
+      );
 
-    // Act & Assert
-    await expect(releaseNotesClient.createReleaseLog(commits)).rejects.toThrow(
-      "Failed to create release log: Failed to retrieve commit message for ref head: Something went wrong"
-    );
-  });
+      // act & assert
+      await expect(
+        releaseNotesClient.createReleaseLog(commits)
+      ).rejects.toThrow(
+        "Failed to create release log: Failed to retrieve commit message for ref head: Something went wrong"
+      );
+    });
 
-  it("should throw an unknown error if getReleaseLogEntry fails", async () => {
-    // Arrange
-    const owner = "owner";
-    const repo = "repo";
-    const commits: Commit[] = [];
+    it("should throw an unknown error if getReleaseLogEntry fails", async () => {
+      // arrange
+      const owner = "owner";
+      const repo = "repo";
+      const commits: Commit[] = [];
 
-    const releaseNotesClient = new ReleaseNotesClient(
-      `${owner}/${repo}`,
-      "base",
-      "head",
-      "token"
-    );
+      const releaseNotesClient = new ReleaseNotesClient(
+        `${owner}/${repo}`,
+        "base",
+        "head",
+        "token"
+      );
 
-    jest
-      .spyOn(releaseNotesClient, "getReleaseLogEntry")
-      .mockRejectedValue(undefined);
+      jest
+        .spyOn(releaseNotesClient, "getReleaseLogEntry")
+        .mockRejectedValue(undefined);
 
-    // Act & Assert
-    await expect(releaseNotesClient.createReleaseLog(commits)).rejects.toThrow(
-      "Failed to create release log: Unknown error"
-    );
+      // act & assert
+      await expect(
+        releaseNotesClient.createReleaseLog(commits)
+      ).rejects.toThrow("Failed to create release log: Unknown error");
+    });
   });
 });

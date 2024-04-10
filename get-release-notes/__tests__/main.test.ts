@@ -1,7 +1,7 @@
 import { run } from "../src/main";
 import * as core from "@actions/core";
 import * as InputsHelpers from "../src/helpers/inputs-helper";
-import { describe, it, jest, expect, beforeEach } from "@jest/globals";
+import { describe, it, jest, expect } from "@jest/globals";
 import { Inputs } from "../src/interfaces";
 
 jest.mock("../src/release-notes", () => {
@@ -17,10 +17,6 @@ jest.mock("../src/release-notes", () => {
 });
 
 describe("run", () => {
-  beforeEach(() => {
-    // ReleaseNotesClient.mockClear();
-  });
-
   it("should handle errors", async () => {
     // arrange
     const errorMessage = "Test error";
@@ -41,8 +37,7 @@ describe("run", () => {
   });
 
   it("should call getReleaseNotes and set the output", async () => {
-    // Arrange
-
+    // arrange
     const mockInputs: Inputs = {
       repository: "owner/repo",
       head: "head",
@@ -52,10 +47,10 @@ describe("run", () => {
     jest.spyOn(InputsHelpers, "loadInputs").mockReturnValue(mockInputs);
     jest.spyOn(core, "setOutput");
 
-    // Act
+    // act
     await run();
 
-    // Assert
+    // assert
     expect(InputsHelpers.loadInputs).toHaveBeenCalled();
     expect(core.setOutput).toHaveBeenCalledWith("release-notes", [
       "First commit",

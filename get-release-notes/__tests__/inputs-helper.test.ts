@@ -1,5 +1,4 @@
 import * as core from "@actions/core";
-
 import * as InputsHelpers from "../src/helpers";
 import { Inputs } from "../src/interfaces";
 import { describe, it, jest, expect } from "@jest/globals";
