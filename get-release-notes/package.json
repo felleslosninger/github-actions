@@ -1,6 +1,6 @@
 {
-  "name": "publish-release-notes",
-  "description": "GitHub Action to publish release notes",
+  "name": "get-release-notes",
+  "description": "GitHub Action to get release notes",
   "version": "1.0.0",
   "author": "Digdir Platform Team",
   "private": true,
