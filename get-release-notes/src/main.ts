@@ -10,7 +10,7 @@ export async function run(): Promise<void> {
 
     const client = new ReleaseNotesClient(repository, base, head, githubToken);
 
-    const commits: Commit[] = await client.getReleaseNotes();
+    const commits: Commit[] = await client.retrieveReleaseNotes();
 
     const releaseNotes = commits.map(c => c.message);
 

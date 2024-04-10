@@ -6,7 +6,7 @@ import { Commit } from "../src/interfaces";
 let client: ReleaseNotesClient;
 
 describe("ReleaseNotesClient", () => {
-  describe("getReleaseNotes", () => {
+  describe("retrieveReleaseNotes", () => {
     beforeEach(() => {
       jest.clearAllMocks(); // Reset mock function calls before each test
     });
@@ -42,7 +42,7 @@ describe("ReleaseNotesClient", () => {
       );
 
       // act
-      const result = await client.getReleaseNotes();
+      const result = await client.retrieveReleaseNotes();
 
       // assert
       expect(result).toEqual([
@@ -77,7 +77,7 @@ describe("ReleaseNotesClient", () => {
       );
 
       // act & assert
-      await expect(releaseNotesClient.getReleaseNotes()).rejects.toThrow(
+      await expect(releaseNotesClient.retrieveReleaseNotes()).rejects.toThrow(
         `Failed to retrieve release notes: ${error.message}`
       );
     });
@@ -107,13 +107,13 @@ describe("ReleaseNotesClient", () => {
       );
 
       // act & assert
-      await expect(releaseNotesClient.getReleaseNotes()).rejects.toThrow(
+      await expect(releaseNotesClient.retrieveReleaseNotes()).rejects.toThrow(
         "Failed to retrieve release notes: Unknown error"
       );
     });
   });
 
-  describe("getFirstCommitLine", () => {
+  describe("extractFirstLineFromMessage", () => {
     beforeEach(() => {
       jest.clearAllMocks(); // Reset mock function calls before each test
 
@@ -142,7 +142,7 @@ describe("ReleaseNotesClient", () => {
       const message = "First line\nSecond line\nThird line";
 
       // act
-      const result = client.getFirstCommitLine(message);
+      const result = client.extractFirstLineFromMessage(message);
 
       // assert
       expect(result).toEqual("First line");
@@ -153,7 +153,7 @@ describe("ReleaseNotesClient", () => {
       const message = "Only one line";
 
       // act
-      const result = client.getFirstCommitLine(message);
+      const result = client.extractFirstLineFromMessage(message);
 
       // assert
       expect(result).toEqual("Only one line");
@@ -164,7 +164,7 @@ describe("ReleaseNotesClient", () => {
       const message = "";
 
       // act
-      const result = client.getFirstCommitLine(message);
+      const result = client.extractFirstLineFromMessage(message);
 
       // assert
       expect(result).toEqual("");
@@ -175,7 +175,7 @@ describe("ReleaseNotesClient", () => {
       const message = null;
 
       // act
-      const result = client.getFirstCommitLine(message);
+      const result = client.extractFirstLineFromMessage(message);
 
       // assert
       expect(result).toEqual("");
@@ -186,14 +186,14 @@ describe("ReleaseNotesClient", () => {
       const message = undefined;
 
       // act
-      const result = client.getFirstCommitLine(message);
+      const result = client.extractFirstLineFromMessage(message);
 
       // assert
       expect(result).toEqual("");
     });
   });
 
-  describe("removeSpecialCharacters", () => {
+  describe("sanitizeCommitMessages", () => {
     beforeEach(() => {
       jest.clearAllMocks(); // Reset mock function calls before each test
 
@@ -227,7 +227,7 @@ describe("ReleaseNotesClient", () => {
       ];
 
       // act
-      const result = client.removeSpecialCharacters(commits);
+      const result = client.sanitizeCommitMessages(commits);
 
       // assert
       expect(result).toEqual([
@@ -243,7 +243,7 @@ describe("ReleaseNotesClient", () => {
       const commits = [{ message: "" }, { message: " " }];
 
       // act
-      const result = client.removeSpecialCharacters(commits);
+      const result = client.sanitizeCommitMessages(commits);
 
       // assert
       expect(result).toEqual([{ message: "" }, { message: " " }]);
@@ -258,7 +258,7 @@ describe("ReleaseNotesClient", () => {
       ];
 
       // act
-      const result = client.removeSpecialCharacters(commits);
+      const result = client.sanitizeCommitMessages(commits);
 
       // assert
       expect(result).toEqual([
@@ -269,7 +269,7 @@ describe("ReleaseNotesClient", () => {
     });
   });
 
-  describe("trimCommitMessages", () => {
+  describe("extractFirstLineFromCommits", () => {
     beforeEach(() => {
       jest.clearAllMocks(); // Reset mock function calls before each test
 
@@ -304,7 +304,7 @@ describe("ReleaseNotesClient", () => {
       ];
 
       // act
-      const result = client.trimCommitMessages(commits);
+      const result = client.extractFirstLineFromCommits(commits);
 
       // assert
       expect(result).toEqual([
@@ -318,14 +318,14 @@ describe("ReleaseNotesClient", () => {
       const commits = [{ message: "" }, { message: " \n\n\n" }];
 
       // act
-      const result = client.trimCommitMessages(commits);
+      const result = client.extractFirstLineFromCommits(commits);
 
       // assert
       expect(result).toEqual([{ message: "" }, { message: " " }]);
     });
   });
 
-  describe("getCommitMessage", () => {
+  describe("retrieveCommitMessage", () => {
     beforeEach(() => {
       jest.clearAllMocks(); // Reset mock function calls before each test
     });
@@ -363,7 +363,7 @@ describe("ReleaseNotesClient", () => {
       );
 
       // act
-      const result = await releaseNotesClient.getCommitMessage(ref);
+      const result = await releaseNotesClient.retrieveCommitMessage(ref);
 
       // assert
       expect(result).toEqual("Commit message");
@@ -401,7 +401,9 @@ describe("ReleaseNotesClient", () => {
       );
 
       // act & Assert
-      await expect(releaseNotesClient.getCommitMessage(ref)).rejects.toThrow(
+      await expect(
+        releaseNotesClient.retrieveCommitMessage(ref)
+      ).rejects.toThrow(
         `Failed to retrieve commit message for ref ${ref}: ${error.message}`
       );
     });
@@ -431,13 +433,15 @@ describe("ReleaseNotesClient", () => {
       );
 
       // act & Assert
-      await expect(releaseNotesClient.getCommitMessage(ref)).rejects.toThrow(
+      await expect(
+        releaseNotesClient.retrieveCommitMessage(ref)
+      ).rejects.toThrow(
         `Failed to retrieve commit message for ref ${ref}: Unknown error`
       );
     });
   });
 
-  describe("createReleaseLog", () => {
+  describe("generateReleaseLog", () => {
     it("should return commits in reverse order when list of commits is provided", async () => {
       // arrange
       const commits = [
@@ -446,7 +450,7 @@ describe("ReleaseNotesClient", () => {
       ];
 
       // act
-      const results = await client.createReleaseLog(commits);
+      const results = await client.generateReleaseLog(commits);
 
       // assert
       expect(results).toEqual([
@@ -487,7 +491,7 @@ describe("ReleaseNotesClient", () => {
       );
 
       // act
-      const results = await releaseNotesClient.createReleaseLog(commits);
+      const results = await releaseNotesClient.generateReleaseLog(commits);
 
       // assert
       expect(results).toEqual([{ message: "Head commit message" }]);
@@ -519,7 +523,7 @@ describe("ReleaseNotesClient", () => {
 
       // act & Assert
       await expect(
-        releaseNotesClient.createReleaseLog(commits)
+        releaseNotesClient.generateReleaseLog(commits)
       ).rejects.toThrow(
         "Failed to create release log: Failed to retrieve commit message for ref head: Unknown error"
       );
@@ -551,13 +555,13 @@ describe("ReleaseNotesClient", () => {
 
       // act & assert
       await expect(
-        releaseNotesClient.createReleaseLog(commits)
+        releaseNotesClient.generateReleaseLog(commits)
       ).rejects.toThrow(
         "Failed to create release log: Failed to retrieve commit message for ref head: Something went wrong"
       );
     });
 
-    it("should throw an unknown error if getReleaseLogEntry fails", async () => {
+    it("should throw an unknown error if retrieveReleaseLogEntry fails", async () => {
       // arrange
       const owner = "owner";
       const repo = "repo";
@@ -571,12 +575,12 @@ describe("ReleaseNotesClient", () => {
       );
 
       jest
-        .spyOn(releaseNotesClient, "getReleaseLogEntry")
+        .spyOn(releaseNotesClient, "retrieveReleaseLogEntry")
         .mockRejectedValue(undefined);
 
       // act & assert
       await expect(
-        releaseNotesClient.createReleaseLog(commits)
+        releaseNotesClient.generateReleaseLog(commits)
       ).rejects.toThrow("Failed to create release log: Unknown error");
     });
   });

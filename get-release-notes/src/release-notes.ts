@@ -2,6 +2,9 @@ import * as github from "@actions/github";
 import { Commit, ComparisonResponse } from "./interfaces";
 import type { RestEndpointMethods } from "@octokit/plugin-rest-endpoint-methods/dist-types/generated/method-types";
 
+/**
+ * ReleaseNotesClient is a class responsible for retrieving release notes from a GitHub repository.
+ */
 export default class ReleaseNotesClient {
   private api: RestEndpointMethods;
   private githubToken: string;
@@ -10,6 +13,13 @@ export default class ReleaseNotesClient {
   private head: string;
   private base: string;
 
+  /**
+   * Constructs a new ReleaseNotesClient instance.
+   * @param repository The GitHub repository in the format "owner/repo".
+   * @param base The base branch or tag for comparison.
+   * @param head The head branch or tag for comparison.
+   * @param githubToken The GitHub authentication token.
+   */
   constructor(
     repository: string,
     base: string,
@@ -23,7 +33,12 @@ export default class ReleaseNotesClient {
     this.api = github.getOctokit(this.githubToken).rest;
   }
 
-  async getReleaseNotes(): Promise<Commit[]> {
+  /**
+   * Retrieves the release notes between the base and head commits.
+   * @returns A Promise that resolves to an array of Commit objects representing the release notes.
+   * @throws Error if failed to retrieve release notes.
+   */
+  async retrieveReleaseNotes(): Promise<Commit[]> {
     try {
       const response: ComparisonResponse =
         await this.api.repos.compareCommitsWithBasehead({
@@ -36,9 +51,9 @@ export default class ReleaseNotesClient {
         c => ({ message: c.commit.message }) as Commit
       );
 
-      const releaseNotes = await this.createReleaseLog(commits);
+      const releaseNotes = await this.generateReleaseLog(commits);
 
-      return this.removeSpecialCharacters(releaseNotes);
+      return this.sanitizeCommitMessages(releaseNotes);
     } catch (error: Error | unknown) {
       if (error instanceof Error) {
         throw new Error(`Failed to retrieve release notes: ${error?.message}`);
@@ -48,7 +63,12 @@ export default class ReleaseNotesClient {
     }
   }
 
-  removeSpecialCharacters(commits: Commit[]): Commit[] {
+  /**
+   * Sanitizes commit messages by removing special characters.
+   * @param commits An array of Commit objects.
+   * @returns A new array of Commit objects with special characters removed from commit messages.
+   */
+  sanitizeCommitMessages(commits: Commit[]): Commit[] {
     const regex = new RegExp(/[^\w\s\-,.ÆØÅæøå#:()]/, "g");
 
     const processedArray = commits.map(commit => ({
@@ -58,7 +78,13 @@ export default class ReleaseNotesClient {
     return processedArray;
   }
 
-  async getCommitMessage(ref: string): Promise<string> {
+  /**
+   * Retrieves the first line of the commit message for a given reference.
+   * @param ref The commit reference.
+   * @returns A Promise that resolves to the commit message.
+   * @throws Error if failed to retrieve commit message.
+   */
+  async retrieveCommitMessage(ref: string): Promise<string> {
     try {
       const response = await this.api.repos.getCommit({
         owner: this.owner,
@@ -80,36 +106,50 @@ export default class ReleaseNotesClient {
     }
   }
 
-  trimCommitMessages(commits: Commit[]): Commit[] {
+  /**
+   * Extracts the first line from commit messages.
+   * @param commits An array of Commit objects.
+   * @returns A new array of Commit objects with only the first line of commit messages.
+   */
+  extractFirstLineFromCommits(commits: Commit[]): Commit[] {
     const releaseLogEntries: Commit[] = commits.map(
-      commit => ({ message: this.getFirstCommitLine(commit.message) }) as Commit
+      commit =>
+        ({
+          message: this.extractFirstLineFromMessage(commit.message)
+        }) as Commit
     );
 
     return releaseLogEntries;
   }
 
-  async getReleaseLogEntry(ref: string): Promise<Commit> {
-    const commitMessage = await this.getCommitMessage(ref);
-    const releaseLogEntry = this.getFirstCommitLine(commitMessage);
-
-    return { message: releaseLogEntry };
-  }
-
-  getFirstCommitLine(message: string | null | undefined): string {
+  /**
+   * Retrieves the first line of a commit message.
+   * @param message The commit message.
+   * @returns The first line of the commit message.
+   */
+  extractFirstLineFromMessage(message: string | null | undefined): string {
     if (!message) {
       return "";
     }
     return message.split("\n")[0];
   }
 
-  async createReleaseLog(commits: Commit[]): Promise<Commit[]> {
+  /**
+   * Generates a release log from commits.
+   * @param commits An array of Commit objects.
+   * @returns A Promise that resolves to an array of Commit objects representing the release log.
+   * @throws Error if failed to create release log.
+   */
+  async generateReleaseLog(commits: Commit[]): Promise<Commit[]> {
     const releaseLog: Commit[] = [];
 
     if (commits && commits.length !== 0) {
-      releaseLog.push(...this.trimCommitMessages(commits));
+      releaseLog.push(...this.extractFirstLineFromCommits(commits));
     } else {
       try {
-        const headReleaseLogEntry = await this.getReleaseLogEntry(this.head);
+        const headReleaseLogEntry = await this.retrieveReleaseLogEntry(
+          this.head
+        );
         releaseLog.push(headReleaseLogEntry);
       } catch (error: Error | unknown) {
         if (error instanceof Error) {
@@ -121,5 +161,18 @@ export default class ReleaseNotesClient {
     }
 
     return releaseLog.reverse();
+  }
+
+  /**
+   * Retrieves the release log entry for a given reference.
+   * @param ref The commit reference.
+   * @returns A Promise that resolves to a Commit object representing the release log entry.
+   * @throws Error if failed to retrieve release log entry.
+   */
+  async retrieveReleaseLogEntry(ref: string): Promise<Commit> {
+    const commitMessage = await this.retrieveCommitMessage(ref);
+    const releaseLogEntry = this.extractFirstLineFromMessage(commitMessage);
+
+    return { message: releaseLogEntry };
   }
 }

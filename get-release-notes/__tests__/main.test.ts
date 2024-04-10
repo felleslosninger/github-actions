@@ -7,7 +7,7 @@ import { Inputs } from "../src/interfaces";
 jest.mock("../src/release-notes", () => {
   return function () {
     return {
-      getReleaseNotes: async () =>
+      retrieveReleaseNotes: async () =>
         Promise.resolve([
           { message: "First commit" },
           { message: "Second commit" }
@@ -36,7 +36,7 @@ describe("run", () => {
     expect(mockSetFailed).toHaveBeenCalledWith(errorMessage);
   });
 
-  it("should call getReleaseNotes and set the output", async () => {
+  it("should call retrieveReleaseNotes and set the output", async () => {
     // arrange
     const mockInputs: Inputs = {
       repository: "owner/repo",
