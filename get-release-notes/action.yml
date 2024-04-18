@@ -1,0 +1,29 @@
+name: Get Release Notes
+description: |
+  "..."
+author: Digdir Platform Team
+inputs:
+  repository:
+    description: Name of application repository
+    required: true
+    type: string
+  head:
+    description: Head commit SHA
+    required: true
+    type: string
+  base:
+    description: Base commit SHA
+    required: true
+    type: string
+  github-token:
+    description:
+    required: true
+    type: string
+
+outputs:
+  release-notes:
+    description: Release notes array
+
+runs:
+  using: node20
+  main: dist/index.js
