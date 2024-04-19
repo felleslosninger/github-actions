@@ -1,6 +1,7 @@
 import * as core from "@actions/core";
 import { App } from "@octokit/app";
 import * as github from "@actions/github";
+import { getRepositoryName } from "./repository-name";
 
 /**
  * The main function for the action.
@@ -11,15 +12,14 @@ export async function run(): Promise<void> {
     const appId = core.getInput("app-id");
     const privateKey = core.getInput("private-key");
     const installationId = core.getInput("installation-id");
-    const repository = core.getInput("repository") || github.context.repo.repo;
+    const repository = core.getInput("repository");
 
-    if (!repository) {
-      throw new Error(
-        "Repository was not supplied as an input or environment variable"
-      );
-    }
+    const repositoryName: string = getRepositoryName(
+      repository,
+      github.context.repo.repo
+    );
 
-    core.info(`Repository: ${repository}`);
+    core.info(`Repository: ${repositoryName}`);
 
     const app = new App({
       appId,
@@ -31,7 +31,7 @@ export async function run(): Promise<void> {
     } = await app.octokit.request(
       `POST /app/installations/${installationId}/access_tokens`,
       {
-        repositories: [repository]
+        repositories: [repositoryName]
       }
     );
 
