@@ -49,8 +49,8 @@ runs:
       with:
         repository: felleslosninger/github-actions
         sparse-checkout: |
-          send-slack-notification/tools
-        path: tools
+          send-slack-notification/tools/github-context-utils.js
+        sparse-checkout-cone-mode: false
         ref: remove-external-dependency
 
     - name: Generate tree view of files and folders
@@ -62,7 +62,7 @@ runs:
       uses: actions/github-script@v7
       with:
         script: |
-          const Utils = require('./tools/github-context-utils.js');
+          const Utils = require('./github-context-utils.js');
           const message = Utils.getCommitMessage(${{ toJson(github) }});
           return message;
 
