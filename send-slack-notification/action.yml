@@ -49,6 +49,8 @@ runs:
       with:
         repository: felleslosninger/github-actions
         sparse-checkout: |
+          /*
+          !/*
           send-slack-notification/tools/github-context-utils.js
         sparse-checkout-cone-mode: false
         ref: remove-external-dependency
