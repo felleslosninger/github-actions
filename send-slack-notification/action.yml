@@ -51,6 +51,7 @@ runs:
         sparse-checkout: |
           send-slack-notification/tools
         path: tools
+        ref: remove-external-dependency
 
     - name: Generate tree view of files and folders
       run: find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'
