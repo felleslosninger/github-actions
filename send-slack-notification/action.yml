@@ -52,8 +52,8 @@ runs:
           send-slack-notification/tools
         path: tools
 
-    - name: List files in tools directory
-      run: ls -l tools
+    - name: Generate tree view of files and folders
+      run: find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'
       shell: bash
 
     - name: Get commit message
