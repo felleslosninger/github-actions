@@ -52,6 +52,9 @@ runs:
           send-slack-notification/tools
         path: tools
 
+    - name: List files in tools directory
+      run: ls -l tools
+
     - name: Get commit message
       id: commit-message
       uses: actions/github-script@v7
