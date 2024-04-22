@@ -49,8 +49,6 @@ runs:
       with:
         repository: felleslosninger/github-actions
         sparse-checkout: |
-          /*
-          !/*
           send-slack-notification/tools/github-context-utils.js
         sparse-checkout-cone-mode: false
         ref: remove-external-dependency
@@ -64,7 +62,7 @@ runs:
       uses: actions/github-script@v7
       with:
         script: |
-          const Utils = require('./github-context-utils.js');
+          const Utils = require('./send-slack-notification/tools/github-context-utils.js');
           const message = Utils.getCommitMessage(${{ toJson(github) }});
           return message;
 
