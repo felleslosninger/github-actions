@@ -54,6 +54,7 @@ runs:
 
     - name: List files in tools directory
       run: ls -l tools
+      shell: bash
 
     - name: Get commit message
       id: commit-message
