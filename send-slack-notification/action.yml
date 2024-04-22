@@ -44,7 +44,7 @@ runs:
   using: composite
 
   steps:
-    - name: Checkout JS Tools
+    - name: Checkout tools
       uses: actions/checkout@v4
       with:
         repository: felleslosninger/github-actions
@@ -52,10 +52,6 @@ runs:
           send-slack-notification/tools/github-context-utils.js
         sparse-checkout-cone-mode: false
         ref: remove-external-dependency
-
-    - name: Generate tree view of files and folders
-      run: find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'
-      shell: bash
 
     - name: Get commit message
       id: commit-message
