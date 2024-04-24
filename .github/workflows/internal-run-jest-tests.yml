@@ -31,6 +31,7 @@ jobs:
           - "github-app-token/"
           - "publish-release-notes/"
           - "get-release-notes/"
+          - "validate-pull-request-title/"
           # Add more folders as needed
 
     steps:
