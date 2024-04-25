@@ -38,11 +38,9 @@ export async function run(): Promise<void> {
     core.info("Pull Request title validation passed.");
   } catch (error) {
     if (error instanceof Error) {
-      throw new Error(
-        `Failed to validate pull request title: ${error.message}`
-      );
+      core.setFailed(`Failed to validate pull request title: ${error.message}`);
     } else {
-      throw new Error("Failed to validate pull request title: Unknown error");
+      core.setFailed("Failed to validate pull request title: Unknown error");
     }
   }
 }

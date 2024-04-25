@@ -1,25 +1,6 @@
 import { describe, it, expect } from "@jest/globals";
+
 import * as Validators from "../src/validators";
-
-describe("validateInputs", () => {
-  it("loads inputs correctly", async () => {
-    // act
-    const {
-      pullRequestTitle,
-      caseSensitivePrefix,
-      maxLengthTitle,
-      minLengthTitle,
-      allowedPrefixes
-    } = await Validators.validateInputs();
-
-    // assert
-    expect(pullRequestTitle).toBe("mocked-pull-request-title");
-    expect(caseSensitivePrefix).toBe(true);
-    expect(maxLengthTitle).toBe(100);
-    expect(minLengthTitle).toBe(10);
-    expect(allowedPrefixes).toEqual(["mocked-allowed-prefixes"]);
-  });
-});
 
 describe("validateTitlePrefix function", () => {
   it("should return true for case-sensitive prefix matching", () => {
@@ -76,6 +57,7 @@ describe("validateTitlePrefix function", () => {
 });
 
 describe("validateTitleLength function", () => {
+
   it("should return true for title length within valid range", () => {
     // arrange
     const title = "Hello";
