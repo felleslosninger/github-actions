@@ -23,6 +23,7 @@ inputs:
 
 outputs:
   is-valid:
+    description: Indicates if the title is valid or not
 
 runs:
   using: node20
