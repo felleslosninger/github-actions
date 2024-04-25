@@ -21,7 +21,7 @@ export async function run(): Promise<void> {
       maxLengthTitle
     );
     if (!lengthValidation.isValid) {
-      core.setFailed(lengthValidation.message ?? "Unknown error");
+      core.setOutput("is-valid", false);
       return;
     }
 
@@ -31,11 +31,12 @@ export async function run(): Promise<void> {
       caseSensitivePrefix
     );
     if (!prefixesValidation.isValid) {
-      core.setFailed(prefixesValidation.message ?? "Unknown error");
+      core.setOutput("is-valid", false);
       return;
     }
 
     core.info("Pull Request title validation passed.");
+    core.setOutput("is-valid", true);
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(`Failed to validate pull request title: ${error.message}`);

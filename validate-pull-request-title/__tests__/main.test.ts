@@ -27,38 +27,7 @@ describe("run function", () => {
     );
   });
 
-  it("should setFailed with specific message if validateTitleLength fails", async () => {
-    // arrange
-    const mockInputs = {
-      pullRequestTitle: "Test PR",
-      caseSensitivePrefix: true,
-      maxLengthTitle: 100,
-      minLengthTitle: 10,
-      allowedPrefixes: ["Test"]
-    };
-    const mockLengthValidation = { isValid: false, message: "Title too short" }; // Invalid result
-    const validateInputsSpy = jest
-      .spyOn(Validators, "validateInputs")
-      .mockResolvedValue(mockInputs);
-    const validateTitleLengthSpy = jest
-      .spyOn(Validators, "validateTitleLength")
-      .mockReturnValue(mockLengthValidation);
-    const coreSetFailedSpy = jest.spyOn(core, "setFailed");
-
-    // act
-    await run();
-
-    // assert
-    expect(validateInputsSpy).toHaveBeenCalled();
-    expect(validateTitleLengthSpy).toHaveBeenCalledWith(
-      mockInputs.pullRequestTitle,
-      mockInputs.minLengthTitle,
-      mockInputs.maxLengthTitle
-    );
-    expect(coreSetFailedSpy).toHaveBeenCalledWith("Title too short");
-  });
-
-  it("should setFailed with uknown error message if validateTitleLength fails", async () => {
+  it("should set is-valid to false if validateTitleLength fails", async () => {
     // arrange
     const mockInputs = {
       pullRequestTitle: "Test PR",
@@ -74,7 +43,7 @@ describe("run function", () => {
     const validateTitleLengthSpy = jest
       .spyOn(Validators, "validateTitleLength")
       .mockReturnValue(mockLengthValidation);
-    const coreSetFailedSpy = jest.spyOn(core, "setFailed");
+    const coreSetOutputSpy = jest.spyOn(core, "setOutput");
 
     // act
     await run();
@@ -86,53 +55,10 @@ describe("run function", () => {
       mockInputs.minLengthTitle,
       mockInputs.maxLengthTitle
     );
-    expect(coreSetFailedSpy).toHaveBeenCalledWith("Unknown error");
+    expect(coreSetOutputSpy).toHaveBeenCalledWith("is-valid", false);
   });
 
-  it("should setFailed with specific message if validateTitlePrefixes fails", async () => {
-    // arrange
-    const mockInputs = {
-      pullRequestTitle: "Test PR",
-      caseSensitivePrefix: true,
-      maxLengthTitle: 100,
-      minLengthTitle: 10,
-      allowedPrefixes: ["Test"]
-    };
-    const mockLengthValidation = { isValid: true }; // Valid result
-    const mockPrefixesValidation = {
-      isValid: false,
-      message: "Invalid prefix"
-    }; // Invalid result
-    const validateInputsSpy = jest
-      .spyOn(Validators, "validateInputs")
-      .mockResolvedValue(mockInputs);
-    const validateTitleLengthSpy = jest
-      .spyOn(Validators, "validateTitleLength")
-      .mockReturnValue(mockLengthValidation);
-    const validateTitlePrefixesSpy = jest
-      .spyOn(Validators, "validateTitlePrefixes")
-      .mockReturnValue(mockPrefixesValidation);
-    const coreSetFailedSpy = jest.spyOn(core, "setFailed");
-
-    // act
-    await run();
-
-    // assert
-    expect(validateInputsSpy).toHaveBeenCalled();
-    expect(validateTitleLengthSpy).toHaveBeenCalledWith(
-      mockInputs.pullRequestTitle,
-      mockInputs.minLengthTitle,
-      mockInputs.maxLengthTitle
-    );
-    expect(validateTitlePrefixesSpy).toHaveBeenCalledWith(
-      mockInputs.pullRequestTitle,
-      mockInputs.allowedPrefixes,
-      mockInputs.caseSensitivePrefix
-    );
-    expect(coreSetFailedSpy).toHaveBeenCalledWith("Invalid prefix");
-  });
-
-  it("should setFailed with unknown error message if validateTitlePrefixes fails", async () => {
+  it("should set is-valid to false if validateTitlePrefixes fails", async () => {
     // arrange
     const mockInputs = {
       pullRequestTitle: "Test PR",
@@ -155,7 +81,7 @@ describe("run function", () => {
     const validateTitlePrefixesSpy = jest
       .spyOn(Validators, "validateTitlePrefixes")
       .mockReturnValue(mockPrefixesValidation);
-    const coreSetFailedSpy = jest.spyOn(core, "setFailed");
+    const coreSetOutputSpy = jest.spyOn(core, "setOutput");
 
     // act
     await run();
@@ -172,7 +98,7 @@ describe("run function", () => {
       mockInputs.allowedPrefixes,
       mockInputs.caseSensitivePrefix
     );
-    expect(coreSetFailedSpy).toHaveBeenCalledWith("Unknown error");
+    expect(coreSetOutputSpy).toHaveBeenCalledWith("is-valid", false);
   });
 
   it("should call core.info if all validations pass", async () => {
@@ -201,6 +127,9 @@ describe("run function", () => {
     await run();
 
     // assert
+    expect(validateInputsSpy).toHaveBeenCalled();
+    expect(validateTitleLengthSpy).toHaveBeenCalled();
+    expect(validateTitlePrefixesSpy).toHaveBeenCalled();
     expect(coreInfoSpy).toHaveBeenCalledWith(
       "Pull Request title validation passed."
     );

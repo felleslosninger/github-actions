@@ -24953,22 +24953,23 @@ async function run() {
         const { pullRequestTitle, caseSensitivePrefix, maxLengthTitle, minLengthTitle, allowedPrefixes } = await (0, validators_1.validateInputs)();
         const lengthValidation = (0, validators_1.validateTitleLength)(pullRequestTitle, minLengthTitle, maxLengthTitle);
         if (!lengthValidation.isValid) {
-            core.setFailed(lengthValidation.message ?? "Unknown error");
+            core.setOutput("is-valid", false);
             return;
         }
         const prefixesValidation = (0, validators_1.validateTitlePrefixes)(pullRequestTitle, allowedPrefixes, caseSensitivePrefix);
         if (!prefixesValidation.isValid) {
-            core.setFailed(prefixesValidation.message ?? "Unknown error");
+            core.setOutput("is-valid", false);
             return;
         }
         core.info("Pull Request title validation passed.");
+        core.setOutput("is-valid", true);
     }
     catch (error) {
         if (error instanceof Error) {
-            throw new Error(`Failed to validate pull request title: ${error.message}`);
+            core.setFailed(`Failed to validate pull request title: ${error.message}`);
         }
         else {
-            throw new Error("Failed to validate pull request title: Unknown error");
+            core.setFailed("Failed to validate pull request title: Unknown error");
         }
     }
 }

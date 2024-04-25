@@ -1,6 +1,165 @@
-import { describe, it, expect } from "@jest/globals";
+import { jest, describe, it, expect } from "@jest/globals";
+import * as core from "@actions/core";
 
 import * as Validators from "../src/validators";
+
+describe("validateInputs", () => {
+  it("loads inputs correctly", async () => {
+    // act
+    const {
+      pullRequestTitle,
+      caseSensitivePrefix,
+      maxLengthTitle,
+      minLengthTitle,
+      allowedPrefixes
+    } = await Validators.validateInputs();
+
+    // assert
+    expect(pullRequestTitle).toBe("mocked-pull-request-title");
+    expect(caseSensitivePrefix).toBe(true);
+    expect(maxLengthTitle).toBe(100);
+    expect(minLengthTitle).toBe(10);
+    expect(allowedPrefixes).toEqual(["mocked-allowed-prefixes"]);
+  });
+
+  it("loads inputs with invalid maxLengthTitle", async () => {
+    // arrange
+    jest.mock("@actions/core");
+
+    jest.spyOn(core, "getInput").mockImplementation((name: string) => {
+      if (name === "max-length-title") {
+        return "max-length-title";
+      } else {
+        return "";
+      }
+    });
+
+    // act & assert
+    await expect(Validators.validateInputs()).rejects.toThrow(
+      "Invalid input: max-length-title and min-length-title must be numeric."
+    );
+  });
+
+  it("loads inputs with invalid minLengthTitle", async () => {
+    // arrange
+    jest.mock("@actions/core");
+
+    jest.spyOn(core, "getInput").mockImplementation((name: string) => {
+      if (name === "min-length-title") {
+        return "0";
+      }
+      if (name === "max-length-title") {
+        return "100";
+      } else {
+        return "";
+      }
+    });
+
+    // act & assert
+    await expect(Validators.validateInputs()).rejects.toThrow(
+      "Invalid input: min-length-title must be greater than 0."
+    );
+  });
+
+  it("loads inputs with invalid minLengthTitle and maxLengthTitle combo", async () => {
+    // arrange
+    jest.mock("@actions/core");
+
+    jest.spyOn(core, "getInput").mockImplementation((name: string) => {
+      if (name === "min-length-title") {
+        return "10";
+      }
+      if (name === "max-length-title") {
+        return "9";
+      } else {
+        return "";
+      }
+    });
+
+    // act & assert
+    await expect(Validators.validateInputs()).rejects.toThrow(
+      "Invalid input: max-length-title cannot be smaller than min-length-title."
+    );
+  });
+});
+
+describe("validateTitlePrefixes function", () => {
+  it("should return true if no prefixes are defined", () => {
+    // arrange
+    const title = "Hello World";
+    const allowedPrefixes: string[] = [];
+    const caseSensitive = true;
+
+    // act
+    const result = Validators.validateTitlePrefixes(
+      title,
+      allowedPrefixes,
+      caseSensitive
+    );
+
+    // assert
+    expect(result.isValid).toBe(true);
+    expect(result.message).toBeUndefined();
+  });
+
+  it("should return true if title starts with any of the allowed prefixes", () => {
+    // arrange
+    const title = "Hello World";
+    const allowedPrefixes = ["Hello", "Hola"];
+    const caseSensitive = true;
+
+    // act
+    const result = Validators.validateTitlePrefixes(
+      title,
+      allowedPrefixes,
+      caseSensitive
+    );
+
+    // assert
+    expect(result.isValid).toBe(true);
+    expect(result.message).toBeUndefined();
+  });
+
+  it("should return false with correct error message if title does not start with any of the allowed prefixes", () => {
+    // arrange
+    const title = "Bonjour World";
+    const allowedPrefixes = ["Hello", "Hola"];
+    const caseSensitive = true;
+
+    // act
+    const result = Validators.validateTitlePrefixes(
+      title,
+      allowedPrefixes,
+      caseSensitive
+    );
+
+    // assert
+    expect(result.isValid).toBe(false);
+    expect(result.message).toBe(
+      `Title did not start with any of the required prefixes - Hello, Hola`
+    );
+  });
+
+  it("should return false with correct error message if title does not start with any of the allowed prefixes (case-insensitive)", () => {
+    // arrange
+    const title = "Bonjour World";
+    const allowedPrefixes = ["hello", "hola"];
+    const caseSensitive = false;
+
+    // act
+    const result = Validators.validateTitlePrefixes(
+      title,
+      allowedPrefixes,
+      caseSensitive
+    );
+
+    // assert
+    expect(result.isValid).toBe(false);
+    expect(result.message).toBe(
+      `Title did not start with any of the required prefixes - hello, hola`
+    );
+  });
+});
 
 describe("validateTitlePrefix function", () => {
   it("should return true for case-sensitive prefix matching", () => {
@@ -57,7 +216,6 @@ describe("validateTitlePrefix function", () => {
 });
 
 describe("validateTitleLength function", () => {
-
   it("should return true for title length within valid range", () => {
     // arrange
     const title = "Hello";
@@ -144,83 +302,5 @@ describe("validateTitleLength function", () => {
     // assert
     expect(result.isValid).toBe(true);
     expect(result.message).toBeUndefined();
-  });
-});
-
-describe("validateTitlePrefixes function", () => {
-  it("should return true if no prefixes are defined", () => {
-    // arrange
-    const title = "Hello World";
-    const allowedPrefixes: string[] = [];
-    const caseSensitive = true;
-
-    // act
-    const result = Validators.validateTitlePrefixes(
-      title,
-      allowedPrefixes,
-      caseSensitive
-    );
-
-    // assert
-    expect(result.isValid).toBe(true);
-    expect(result.message).toBeUndefined();
-  });
-
-  it("should return true if title starts with any of the allowed prefixes", () => {
-    // arrange
-    const title = "Hello World";
-    const allowedPrefixes = ["Hello", "Hola"];
-    const caseSensitive = true;
-
-    // act
-    const result = Validators.validateTitlePrefixes(
-      title,
-      allowedPrefixes,
-      caseSensitive
-    );
-
-    // assert
-    expect(result.isValid).toBe(true);
-    expect(result.message).toBeUndefined();
-  });
-
-  it("should return false with correct error message if title does not start with any of the allowed prefixes", () => {
-    // arrange
-    const title = "Bonjour World";
-    const allowedPrefixes = ["Hello", "Hola"];
-    const caseSensitive = true;
-
-    // act
-    const result = Validators.validateTitlePrefixes(
-      title,
-      allowedPrefixes,
-      caseSensitive
-    );
-
-    // assert
-    expect(result.isValid).toBe(false);
-    expect(result.message).toBe(
-      `Title did not start with any of the required prefixes - Hello, Hola`
-    );
-  });
-
-  it("should return false with correct error message if title does not start with any of the allowed prefixes (case-insensitive)", () => {
-    // arrange
-    const title = "Bonjour World";
-    const allowedPrefixes = ["hello", "hola"];
-    const caseSensitive = false;
-
-    // act
-    const result = Validators.validateTitlePrefixes(
-      title,
-      allowedPrefixes,
-      caseSensitive
-    );
-
-    // assert
-    expect(result.isValid).toBe(false);
-    expect(result.message).toBe(
-      `Title did not start with any of the required prefixes - hello, hola`
-    );
   });
 });

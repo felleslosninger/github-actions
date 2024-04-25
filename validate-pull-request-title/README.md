@@ -4,72 +4,79 @@
 
 ## Description
 
-Get Release Notes is a GitHub Action that retrieves release notes based on the
-comparison between two commit SHAs in a GitHub repository.
+The **Validate Pull Request Title** GitHub Action checks if the title of a pull
+request meets specified criteria, including length constraints and required
+prefixes. It helps maintain consistency and clarity in pull request titles
+within your repository.
 
 ## Usage
 
 To use this action, you need to provide the following inputs:
 
-- `repository`: Name of the application repository (required)
-- `head`: Head commit SHA (required)
-- `base`: Base commit SHA (required)
-- `github-token`: GitHub token for authentication (required)
+- `pull-request-title`: The title of the pull request. (required)
+- `case-sensitive-prefix`: Whether to enforce case sensitivity for prefixes.
+  Defaults to true. (optional)
+- `max-length-title`: The maximum allowed length for the pull request title.
+  Defaults to "100" characters. (optional)
+- `min-length-title`: The minimum required length for the pull request title.
+  Defaults to "10" characters. (optional)
+- `allowed-prefixes`: A comma-separated list of prefixes that are allowed in
+  pull request titles. (required)
 
 ## Example Workflow
 
 ```yaml
-name: Get Release Notes Example
+name: Validate Pull Request Title Example
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types: [opened]
 
 jobs:
-  get-release-notes:
+  validate-title:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Check out repository
+        uses: actions/checkout@v2
 
-      - name: Get Release Notes
-        id: release-notes
-        uses: felleslosninger/get-release-notes@v1
+      - name: Validate Pull Request Title
+        id: validate-title
+        uses: felleslosninger/validate-pull-request-title@v1
         with:
-          repository: your-repo-name
-          head: ${{ github.event.after }}
-          base: ${{ github.event.before }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-title: ${{ github.event.pull_request.title }}
+          allowed-prefixes: "fix,feat,docs,refactor,chore"
 
-      - name: Display Release Notes
-        run: echo "${{ steps.release-notes.outputs.release-notes }}"
+      - name: Print validation result
+        run: echo "Is title valid? ${{ steps.validate-title.outputs.is-valid }}"
 ```
 
 ## Inputs
 
-### `repository`
+### `pull-request-title`
 
-Name of the application repository.
+The title of the pull request.
 
-### `head`
+### `case-sensitive-prefix`
 
-Head commit SHA to compare.
+Whether to enforce case sensitivity for prefixes. Defaults to true.
 
-### `base`
+### `max-length-title`
 
-Base commit SHA to compare.
+The maximum allowed length for the pull request title.
 
-### `github-token`
+### `min-length-title`
 
-GitHub token for authentication.
+The minimum required length for the pull request title.
+
+### `allowed-prefixes`
+
+A comma-separated list of prefixes that are allowed in pull request titles.
 
 ## Outputs
 
-### `release-notes`
+### `is-valid`
 
-An array of release notes generated from the comparison between the head and
-base commits.
+A boolean indicating whether the pull request title is valid.
 
 ## License
 

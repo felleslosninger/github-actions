@@ -1,22 +1,23 @@
 name: Validate Pull Request Title
 description: |
-  "..."
+  "The Validate Pull Request Title GitHub Action checks if the title of a pull request meets specified criteria, 
+  including length constraints and required prefixes. 
+  It helps maintain consistency and clarity in pull request titles within your repository."
 author: Digdir Platform Team
 inputs:
-  repository:
-    description: Name of application repository
+  pull-request-title:
     required: true
     type: string
-  head:
-    description: Head commit SHA
-    required: true
+  case-sensitive-prefix:
+    default: true
+    type: boolean
+  max-length-title:
+    default: "100"
     type: string
-  base:
-    description: Base commit SHA
-    required: true
+  min-length-title:
+    default: "10"
     type: string
-  github-token:
-    description:
+  allowed-prefixes:
     required: true
     type: string
 
