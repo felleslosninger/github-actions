@@ -23,8 +23,6 @@ inputs:
 
 outputs:
   is-valid:
-    type: boolean
-    description: Release notes array
 
 runs:
   using: node20
