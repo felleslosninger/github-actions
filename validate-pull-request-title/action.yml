@@ -24,6 +24,10 @@ inputs:
 outputs:
   is-valid:
     description: Indicates if the title is valid or not
+  error-message:
+    ddescription: |
+      A detailed message indicating why the pull request title is invalid. 
+      This may include information such as exceeding maximum length, not meeting minimum length, or lacking required prefixes.
 
 runs:
   using: node20

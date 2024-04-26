@@ -78,6 +78,12 @@ A comma-separated list of prefixes that are allowed in pull request titles.
 
 A boolean indicating whether the pull request title is valid.
 
+### `error-message`
+
+A detailed message indicating why the pull request title is invalid. This may
+include information such as exceeding maximum length, not meeting minimum
+length, or lacking required prefixes.
+
 ## License
 
 This action is licensed under the [MIT License](LICENSE).
