@@ -24954,11 +24954,13 @@ async function run() {
         const lengthValidation = (0, validators_1.validateTitleLength)(pullRequestTitle, minLengthTitle, maxLengthTitle);
         if (!lengthValidation.isValid) {
             core.setOutput("is-valid", false);
+            core.setOutput("error-message", lengthValidation.message);
             return;
         }
         const prefixesValidation = (0, validators_1.validateTitlePrefixes)(pullRequestTitle, allowedPrefixes, caseSensitivePrefix);
         if (!prefixesValidation.isValid) {
             core.setOutput("is-valid", false);
+            core.setOutput("error-message", prefixesValidation.message);
             return;
         }
         core.info("Pull Request title validation passed.");

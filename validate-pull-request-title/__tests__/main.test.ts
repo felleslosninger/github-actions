@@ -29,6 +29,7 @@ describe("run function", () => {
 
   it("should set is-valid to false if validateTitleLength fails", async () => {
     // arrange
+    const errorMessage = "Title length not valid";
     const mockInputs = {
       pullRequestTitle: "Test PR",
       caseSensitivePrefix: true,
@@ -36,7 +37,10 @@ describe("run function", () => {
       minLengthTitle: 10,
       allowedPrefixes: ["Test"]
     };
-    const mockLengthValidation = { isValid: false, message: undefined }; // Invalid result
+    const mockLengthValidation = {
+      isValid: false,
+      message: errorMessage
+    }; // Invalid result
     const validateInputsSpy = jest
       .spyOn(Validators, "validateInputs")
       .mockResolvedValue(mockInputs);
@@ -56,10 +60,15 @@ describe("run function", () => {
       mockInputs.maxLengthTitle
     );
     expect(coreSetOutputSpy).toHaveBeenCalledWith("is-valid", false);
+    expect(coreSetOutputSpy).toHaveBeenCalledWith(
+      "error-message",
+      errorMessage
+    );
   });
 
   it("should set is-valid to false if validateTitlePrefixes fails", async () => {
     // arrange
+    const errorMessage = "Title prefix not valid";
     const mockInputs = {
       pullRequestTitle: "Test PR",
       caseSensitivePrefix: true,
@@ -70,7 +79,7 @@ describe("run function", () => {
     const mockLengthValidation = { isValid: true }; // Valid result
     const mockPrefixesValidation = {
       isValid: false,
-      message: undefined
+      message: errorMessage
     }; // Invalid result
     const validateInputsSpy = jest
       .spyOn(Validators, "validateInputs")
@@ -99,6 +108,10 @@ describe("run function", () => {
       mockInputs.caseSensitivePrefix
     );
     expect(coreSetOutputSpy).toHaveBeenCalledWith("is-valid", false);
+    expect(coreSetOutputSpy).toHaveBeenCalledWith(
+      "error-message",
+      errorMessage
+    );
   });
 
   it("should call core.info if all validations pass", async () => {
@@ -122,6 +135,7 @@ describe("run function", () => {
       .spyOn(Validators, "validateTitlePrefixes")
       .mockReturnValue(mockPrefixesValidation);
     const coreInfoSpy = jest.spyOn(core, "info");
+    const coreSetOutputSpy = jest.spyOn(core, "setOutput");
 
     // act
     await run();
@@ -133,6 +147,7 @@ describe("run function", () => {
     expect(coreInfoSpy).toHaveBeenCalledWith(
       "Pull Request title validation passed."
     );
+    expect(coreSetOutputSpy).toHaveBeenCalledWith("is-valid", true);
   });
 
   it("should throw an error with specific message if error is not an instance of Error", async () => {
@@ -142,6 +157,7 @@ describe("run function", () => {
       .spyOn(Validators, "validateInputs")
       .mockRejectedValue(error);
     const coreSetFailedSpy = jest.spyOn(core, "setFailed");
+    const coreSetOutputSpy = jest.spyOn(core, "setOutput");
 
     // act
     await run();
@@ -151,5 +167,6 @@ describe("run function", () => {
     expect(coreSetFailedSpy).toHaveBeenCalledWith(
       "Failed to validate pull request title: Unknown error"
     );
+    expect(coreSetOutputSpy).not.toHaveBeenCalled();
   });
 });

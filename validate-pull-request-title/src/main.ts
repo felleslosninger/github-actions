@@ -22,6 +22,7 @@ export async function run(): Promise<void> {
     );
     if (!lengthValidation.isValid) {
       core.setOutput("is-valid", false);
+      core.setOutput("error-message", lengthValidation.message);
       return;
     }
 
@@ -32,6 +33,7 @@ export async function run(): Promise<void> {
     );
     if (!prefixesValidation.isValid) {
       core.setOutput("is-valid", false);
+      core.setOutput("error-message", prefixesValidation.message);
       return;
     }
 
