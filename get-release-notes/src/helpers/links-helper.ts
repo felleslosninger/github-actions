@@ -9,7 +9,7 @@ export function addPullRequestLinks(
   return releaseNotes.map(note => {
     // Replace pull-request numbers with links
     return note.replace(prRegex, prNumber => {
-      return `[${prNumber}](${baseUrl}/pull/${prNumber.slice(1)})`;
+      return `[${prNumber}](${baseUrl}/${prNumber.slice(1)})`;
     });
   });
 }

@@ -17,19 +17,19 @@ describe("addPullRequestLinks", () => {
 
     // assert
     expect(result[0]).toBe(
-      `MP-526: Kombinert NoHandler- og NoResource-Exception til en. Fjernet logging av stack-trace. ([#432](${baseUrl}/pull/432))`
+      `MP-526: Kombinert NoHandler- og NoResource-Exception til en. Fjernet logging av stack-trace. ([#432](${baseUrl}/432))`
     );
 
     expect(result[1]).toBe(
-      `MP-499: Legge til security.txt ([#433](${baseUrl}/pull/433))`
+      `MP-499: Legge til security.txt ([#433](${baseUrl}/433))`
     );
 
     expect(result[2]).toBe(
-      `MP-511: Legg til source rammeverk og triggering av rett source authorization ([#429](${baseUrl}/pull/429))`
+      `MP-511: Legg til source rammeverk og triggering av rett source authorization ([#429](${baseUrl}/429))`
     );
 
     expect(result[3]).toBe(
-      `MP-503: Legg til model og interface for authorization_details ([#425](${baseUrl}/pull/425))`
+      `MP-503: Legg til model og interface for authorization_details ([#425](${baseUrl}/425))`
     );
   });
 
@@ -59,13 +59,11 @@ describe("addPullRequestLinks", () => {
     const result = addPullRequestLinks(baseUrl, releaseNotes);
 
     // assert
-    expect(result[0]).toBe(`Fix some bugs ([#123](${baseUrl}/pull/123))`);
+    expect(result[0]).toBe(`Fix some bugs ([#123](${baseUrl}/123))`);
 
     expect(result[1]).toBe("Add feature MP-123");
 
-    expect(result[2]).toBe(
-      `Update documentation ([#456](${baseUrl}/pull/456))`
-    );
+    expect(result[2]).toBe(`Update documentation ([#456](${baseUrl}/456))`);
   });
 });
 
