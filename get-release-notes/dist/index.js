@@ -29224,14 +29224,63 @@ function loadInputs() {
     const head = core.getInput("head", { required: true });
     const base = core.getInput("base", { required: true });
     const githubToken = core.getInput("github-token", { required: true });
+    const showPullRequestLinks = core.getBooleanInput("show-pull-request-links", { required: false });
+    const pullRequestBaseUrl = core.getInput("pull-request-base-url", {
+        required: false
+    });
+    const showJiraLinks = core.getBooleanInput("show-jira-links", {
+        required: false
+    });
+    const jiraBaseUrl = core.getInput("jira-base-url", {
+        required: false
+    });
     return {
         repository,
         head,
         base,
-        githubToken
+        githubToken,
+        showPullRequestLinks,
+        pullRequestBaseUrl,
+        showJiraLinks,
+        jiraBaseUrl
     };
 }
 exports.loadInputs = loadInputs;
+
+
+/***/ }),
+
+/***/ 2083:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.addJiraLinks = exports.addPullRequestLinks = void 0;
+function addPullRequestLinks(baseUrl, releaseNotes) {
+    // Regular expression to match pull-request numbers
+    const prRegex = /#\d+/g;
+    // Iterate over each release note
+    return releaseNotes.map(note => {
+        // Replace pull-request numbers with links
+        return note.replace(prRegex, prNumber => {
+            return `<a href="${baseUrl}/pull/${prNumber.slice(1)}" target="_blank">${prNumber}</a>`;
+        });
+    });
+}
+exports.addPullRequestLinks = addPullRequestLinks;
+function addJiraLinks(baseUrl, releaseNotes) {
+    // Regular expression to match the pattern <alpha><alpha><alpha>-<number><number><number>
+    const jiraRegex = /\b[A-Za-z]{2,3}-\d{1,4}\b/g;
+    // Iterate over each release note
+    return releaseNotes.map(note => {
+        // Replace Jira IDs with links
+        return note.replace(jiraRegex, jiraId => {
+            return `<a href="${baseUrl}/browse/${jiraId}" target="_blank">${jiraId}</a>`;
+        });
+    });
+}
+exports.addJiraLinks = addJiraLinks;
 
 
 /***/ }),
@@ -29272,12 +29321,19 @@ exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const InputsHelpers = __importStar(__nccwpck_require__(4871));
 const release_notes_1 = __importDefault(__nccwpck_require__(9260));
+const links_helper_1 = __nccwpck_require__(2083);
 async function run() {
     try {
-        const { repository, head, base, githubToken } = InputsHelpers.loadInputs();
+        const { repository, head, base, githubToken, showPullRequestLinks, pullRequestBaseUrl, showJiraLinks, jiraBaseUrl } = InputsHelpers.loadInputs();
         const client = new release_notes_1.default(repository, base, head, githubToken);
         const commits = await client.retrieveReleaseNotes();
-        const releaseNotes = commits.map(c => c.message);
+        let releaseNotes = commits.map(c => c.message);
+        if (showPullRequestLinks) {
+            releaseNotes = (0, links_helper_1.addPullRequestLinks)(pullRequestBaseUrl, releaseNotes);
+        }
+        if (showJiraLinks) {
+            releaseNotes = (0, links_helper_1.addJiraLinks)(jiraBaseUrl, releaseNotes);
+        }
         core.setOutput("release-notes", releaseNotes);
     }
     catch (error) {

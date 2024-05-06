@@ -7,10 +7,31 @@ export function loadInputs(): Inputs {
   const base: string = core.getInput("base", { required: true });
   const githubToken: string = core.getInput("github-token", { required: true });
 
+  const showPullRequestLinks: boolean = core.getBooleanInput(
+    "show-pull-request-links",
+    { required: false }
+  );
+
+  const pullRequestBaseUrl: string = core.getInput("pull-request-base-url", {
+    required: false
+  });
+
+  const showJiraLinks: boolean = core.getBooleanInput("show-jira-links", {
+    required: false
+  });
+
+  const jiraBaseUrl: string = core.getInput("jira-base-url", {
+    required: false
+  });
+
   return {
     repository,
     head,
     base,
-    githubToken
+    githubToken,
+    showPullRequestLinks,
+    pullRequestBaseUrl,
+    showJiraLinks,
+    jiraBaseUrl
   };
 }
