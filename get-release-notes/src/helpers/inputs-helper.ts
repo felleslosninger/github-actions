@@ -12,7 +12,7 @@ export function loadInputs(): Inputs {
     { required: false }
   );
 
-  let pullRequestBaseUrl: string = "";
+  let pullRequestBaseUrl = "";
   if (showPullRequestLinks) {
     pullRequestBaseUrl = core.getInput("pull-request-base-url", {
       required: true
@@ -23,7 +23,7 @@ export function loadInputs(): Inputs {
     required: false
   });
 
-  let jiraBaseUrl: string = "";
+  let jiraBaseUrl = "";
   if (showJiraLinks) {
     jiraBaseUrl = core.getInput("jira-base-url", { required: true });
   }

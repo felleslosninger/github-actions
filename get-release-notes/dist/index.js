@@ -29225,15 +29225,19 @@ function loadInputs() {
     const base = core.getInput("base", { required: true });
     const githubToken = core.getInput("github-token", { required: true });
     const showPullRequestLinks = core.getBooleanInput("show-pull-request-links", { required: false });
-    const pullRequestBaseUrl = core.getInput("pull-request-base-url", {
-        required: false
-    });
+    let pullRequestBaseUrl = "";
+    if (showPullRequestLinks) {
+        pullRequestBaseUrl = core.getInput("pull-request-base-url", {
+            required: true
+        });
+    }
     const showJiraLinks = core.getBooleanInput("show-jira-links", {
         required: false
     });
-    const jiraBaseUrl = core.getInput("jira-base-url", {
-        required: false
-    });
+    let jiraBaseUrl = "";
+    if (showJiraLinks) {
+        jiraBaseUrl = core.getInput("jira-base-url", { required: true });
+    }
     return {
         repository,
         head,
