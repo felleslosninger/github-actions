@@ -9,7 +9,7 @@ export function addPullRequestLinks(
   return releaseNotes.map(note => {
     // Replace pull-request numbers with links
     return note.replace(prRegex, prNumber => {
-      return `<a href="${baseUrl}/pull/${prNumber.slice(1)}" target="_blank">${prNumber}</a>`;
+      return `[${prNumber}](${baseUrl}/pull/${prNumber.slice(1)})`;
     });
   });
 }
@@ -25,7 +25,7 @@ export function addJiraLinks(
   return releaseNotes.map(note => {
     // Replace Jira IDs with links
     return note.replace(jiraRegex, jiraId => {
-      return `<a href="${baseUrl}/browse/${jiraId}" target="_blank">${jiraId}</a>`;
+      return `[${jiraId}](${baseUrl}/browse/${jiraId})`;
     });
   });
 }
