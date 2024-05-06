@@ -12,17 +12,21 @@ export function loadInputs(): Inputs {
     { required: false }
   );
 
-  const pullRequestBaseUrl: string = core.getInput("pull-request-base-url", {
-    required: false
-  });
+  let pullRequestBaseUrl: string = "";
+  if (showPullRequestLinks) {
+    pullRequestBaseUrl = core.getInput("pull-request-base-url", {
+      required: true
+    });
+  }
 
   const showJiraLinks: boolean = core.getBooleanInput("show-jira-links", {
     required: false
   });
 
-  const jiraBaseUrl: string = core.getInput("jira-base-url", {
-    required: false
-  });
+  let jiraBaseUrl: string = "";
+  if (showJiraLinks) {
+    jiraBaseUrl = core.getInput("jira-base-url", { required: true });
+  }
 
   return {
     repository,
