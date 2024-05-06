@@ -25,7 +25,7 @@ export function addJiraLinks(
   return releaseNotes.map(note => {
     // Replace Jira IDs with links
     return note.replace(jiraRegex, jiraId => {
-      return `[${jiraId}](${baseUrl}/browse/${jiraId})`;
+      return `[${jiraId}](${baseUrl}/${jiraId})`;
     });
   });
 }
