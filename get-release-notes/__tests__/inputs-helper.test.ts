@@ -8,22 +8,32 @@ jest.mock("@actions/core");
 describe("loadInputs", () => {
   it("loads inputs correctly", () => {
     // act
-    const { repository, head, base, githubToken }: Inputs =
-      InputsHelpers.loadInputs();
+    const {
+      repository,
+      head,
+      base,
+      githubToken,
+      showPullRequestLinks,
+      pullRequestBaseUrl,
+      showJiraLinks,
+      jiraBaseUrl
+    }: Inputs = InputsHelpers.loadInputs();
 
     // assert
     expect(repository).toBe("mocked-repository");
     expect(head).toBe("mocked-head");
     expect(base).toBe("mocked-base");
     expect(githubToken).toBe("mocked-github-token");
+    expect(showPullRequestLinks).toBe(true);
+    expect(pullRequestBaseUrl).toBe("mocked-pull-request-base-url");
+    expect(showJiraLinks).toBe(true);
+    expect(jiraBaseUrl).toBe("mocked-jira-base-url");
   });
 
   it("loads default values", () => {
     // arrange
     jest.spyOn(core, "getInput").mockImplementation((name: string) => {
-      if (name === "product") {
-        return "mocked-product";
-      } else if (name === "release-notes") {
+      if (name === "release-notes") {
         return '[""]';
       } else {
         return "";
@@ -31,13 +41,25 @@ describe("loadInputs", () => {
     });
 
     // act
-    const { repository, head, base, githubToken }: Inputs =
-      InputsHelpers.loadInputs();
+    const {
+      repository,
+      head,
+      base,
+      githubToken,
+      showPullRequestLinks,
+      pullRequestBaseUrl,
+      showJiraLinks,
+      jiraBaseUrl
+    }: Inputs = InputsHelpers.loadInputs();
 
     // assert
     expect(repository).toBe("");
     expect(head).toBe("");
     expect(base).toBe("");
     expect(githubToken).toBe("");
+    expect(showPullRequestLinks).toBe(true);
+    expect(pullRequestBaseUrl).toBe("");
+    expect(showJiraLinks).toBe(true);
+    expect(jiraBaseUrl).toBe("");
   });
 });

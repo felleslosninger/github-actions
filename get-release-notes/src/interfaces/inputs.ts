@@ -3,4 +3,8 @@ export interface Inputs {
   head: string;
   base: string;
   githubToken: string;
+  showPullRequestLinks: boolean;
+  pullRequestBaseUrl: string;
+  showJiraLinks: boolean;
+  jiraBaseUrl: string;
 }

@@ -19,6 +19,24 @@ inputs:
     description:
     required: true
     type: string
+  show-pull-request-links:
+    description: Show PR numbers as links
+    required: false
+    default: false
+    type: boolean
+  pull-request-base-url:
+    description: Pull-request base URL
+    required: false
+    type: string
+  show-jira-links:
+    description;: Show Jira IDs as links
+    required: false
+    default: false
+    type: boolean
+  jira-base-url:
+    description: Jira base URL
+    required: false
+    type: string
 
 outputs:
   release-notes:

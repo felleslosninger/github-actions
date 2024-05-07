@@ -42,7 +42,11 @@ describe("run", () => {
       repository: "owner/repo",
       head: "head",
       base: "base",
-      githubToken: "token"
+      githubToken: "token",
+      showPullRequestLinks: true,
+      pullRequestBaseUrl: "https://github.com/company/repo/",
+      showJiraLinks: true,
+      jiraBaseUrl: "https://company.atlassian.net/"
     };
     jest.spyOn(InputsHelpers, "loadInputs").mockReturnValue(mockInputs);
     jest.spyOn(core, "setOutput");
