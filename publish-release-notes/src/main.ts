@@ -10,6 +10,8 @@ export async function run(): Promise<void> {
       dependabotReplacement,
       eventType,
       githubToken,
+      allowApplications,
+      allowProducts,
       ignoreApplications,
       ignoreCommits,
       ignoreProducts,
@@ -30,6 +32,30 @@ export async function run(): Promise<void> {
       releaseNotes.every(item => item === "")
     ) {
       core.info("release-notes input was empty");
+      core.setOutput("release-notes-created", "false");
+      return;
+    }
+
+    if (
+      allowProducts &&
+      allowProducts.trim().length !== 0 &&
+      !allowProducts.includes(product)
+    ) {
+      core.info(
+        `allow-products does not include the given product (${product})`
+      );
+      core.setOutput("release-notes-created", "false");
+      return;
+    }
+
+    if (
+      allowApplications &&
+      allowApplications.trim().length !== 0 &&
+      !allowApplications.includes(applicationName)
+    ) {
+      core.info(
+        `allow-applications does not include the given application (${applicationName})`
+      );
       core.setOutput("release-notes-created", "false");
       return;
     }

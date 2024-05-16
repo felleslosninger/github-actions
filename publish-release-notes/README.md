@@ -84,6 +84,22 @@ release notes.
   - **Required**: true
   - **Type**: string
 
+- `allow-products`:
+
+  - **Description**: List of products allowed to trigger release notes
+    generation.
+  - **Required**: false
+  - **Default**: ""
+  - **Type**: string
+
+- `allow-applications`:
+
+  - **Description**: List of applications allowed to trigger release notes
+    generation.
+  - **Required**: false
+  - **Default**: ""
+  - **Type**: string
+
 - `ignore-products`:
 
   - **Description**: Comma seperated list of product(s) to ignore when

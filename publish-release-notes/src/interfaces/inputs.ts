@@ -9,9 +9,11 @@ export interface Inputs {
   repositoryName: string;
   eventType: string;
   sha: string;
+  allowProducts: string;
+  allowApplications: string;
   ignoreProducts: string;
   ignoreApplications: string;
-  dependabotReplacement: string;
   ignoreCommits: string;
+  dependabotReplacement: string;
   title: string;
 }
