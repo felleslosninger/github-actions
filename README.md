@@ -49,6 +49,31 @@ The Validate Pull Request Title GitHub Action checks if the title of a pull requ
 
 This GitHub Action allows you to write data to InfluxDB, a time-series database. It's useful for storing and analyzing time-stamped data, such as metrics and events.
 
+## Publishing a New Release
+
+To publish a new release, follow these steps:
+
+1. Create a new signed tag:
+
+   ```bash
+   git tag -s -a v0.7.4 -m "v0.7.4"
+   ```
+
+2. Push the tag to the origin repository:
+
+   ```bash
+   git push origin v0.7.4
+   ```
+
+3. This will trigger the internal-publish-release.yml workflow.
+
+> [!IMPORTANT]
+> Make sure to replace v0.7.4 with your actual version number.
+
+## Linting
+
+Linting is done using [super-linter/super-linter/slim](https://github.com/super-linter/super-linter) and new Actions should be added to the [internal-linter.yml](.github/workflows/internal-linter.yml) to be linted automatically.
+
 ## License
 
 These GitHub Actions are open-source and distributed under the [MIT License](LICENSE). Feel free to use, modify, and distribute them according to your needs.
