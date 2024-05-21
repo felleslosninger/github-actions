@@ -1,5 +1,7 @@
-import * as ReleaseNotes from "../src/release-notes";
 import * as github from "@actions/github";
+import { describe, it, jest, expect } from "@jest/globals";
+
+import * as ReleaseNotes from "../src/release-notes";
 
 describe("filterReleaseNotes", () => {
   it('should filter out items containing "(INTERNAL-COMMIT)"', () => {
@@ -149,7 +151,7 @@ describe("publishReleaseNotes", () => {
     jest.spyOn(github, "getOctokit").mockReturnValue({
       rest: {
         repos: {
-          createDispatchEvent: jest.fn().mockResolvedValue(true)
+          createDispatchEvent: jest.fn().mockImplementation(async () => {})
         }
       }
     } as any);

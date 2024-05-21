@@ -29024,11 +29024,25 @@ function loadInputs() {
     const repositoryName = core.getInput("repository-name", { required: true });
     const eventType = core.getInput("event-type", { required: true });
     const sha = core.getInput("sha") || "";
+    const allowProducts = core.getInput("allow-products") || "";
+    const allowApplications = core.getInput("allow-applications") || "";
     const ignoreProducts = core.getInput("ignore-products") || "";
     const ignoreApplications = core.getInput("ignore-applications") || "";
     const dependabotReplacement = core.getInput("dependabot-replacement") || "";
     const ignoreCommits = core.getInput("ignore-commits") || "";
     const title = core.getInput("title") || product;
+    if (allowProducts &&
+        allowProducts.length > 0 &&
+        ignoreProducts &&
+        ignoreProducts.length > 0) {
+        throw new Error("Setting both allow-products and ignore-products is not allowed");
+    }
+    if (allowApplications &&
+        allowApplications.length > 0 &&
+        ignoreApplications &&
+        ignoreApplications.length > 0) {
+        throw new Error("Setting both allow-applications and ignore-applications is not allowed");
+    }
     return {
         applicationName,
         product,
@@ -29040,10 +29054,12 @@ function loadInputs() {
         repositoryName,
         eventType,
         sha,
+        allowProducts,
+        allowApplications,
         ignoreProducts,
         ignoreApplications,
-        dependabotReplacement,
         ignoreCommits,
+        dependabotReplacement,
         title
     };
 }
@@ -29087,12 +29103,26 @@ const InputsHelpers = __importStar(__nccwpck_require__(4871));
 const ReleaseNotes = __importStar(__nccwpck_require__(9260));
 async function run() {
     try {
-        const { applicationName, dependabotReplacement, eventType, githubToken, ignoreApplications, ignoreCommits, ignoreProducts, product, releaseNotes, repositoryName, repositoryOwner, sha, timestamp, title, version } = InputsHelpers.loadInputs();
+        const { applicationName, dependabotReplacement, eventType, githubToken, allowApplications, allowProducts, ignoreApplications, ignoreCommits, ignoreProducts, product, releaseNotes, repositoryName, repositoryOwner, sha, timestamp, title, version } = InputsHelpers.loadInputs();
         if (!releaseNotes ||
             !Array.isArray(releaseNotes) ||
             releaseNotes.length === 0 ||
             releaseNotes.every(item => item === "")) {
             core.info("release-notes input was empty");
+            core.setOutput("release-notes-created", "false");
+            return;
+        }
+        if (allowProducts &&
+            allowProducts.trim().length !== 0 &&
+            !allowProducts.includes(product)) {
+            core.info(`allow-products does not include the given product (${product})`);
+            core.setOutput("release-notes-created", "false");
+            return;
+        }
+        if (allowApplications &&
+            allowApplications.trim().length !== 0 &&
+            !allowApplications.includes(applicationName)) {
+            core.info(`allow-applications does not include the given application (${applicationName})`);
             core.setOutput("release-notes-created", "false");
             return;
         }

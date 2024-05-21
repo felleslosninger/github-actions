@@ -1,6 +1,7 @@
 name: Publish Release Notes
 description: |
-  "..."
+  Automatically generates and publishes release notes based on provided inputs for applications and products. 
+  This action supports custom configurations to include or exclude specific products, applications, and commits.
 author: Digdir Platform Team
 inputs:
   application-name:
@@ -27,17 +28,31 @@ inputs:
     required: true
     type: string
   repository-owner:
+    description: Owner of the repository
     required: true
     type: string
   repository-name:
+    description: Name of the repository
     required: true
     type: string
   event-type:
+    description: Type of event that triggers the action
     required: true
     type: string
   sha:
     description: Sha of application commit
     required: false
+    type: string
+  allow-products:
+    description: List of products allowed to trigger release notes generation
+    required: false
+    default: ""
+    type: string
+  allow-applications:
+    description: |
+      List of applications allowed to trigger release notes generation
+    required: false
+    default: ""
     type: string
   ignore-products:
     description: Product(s) to ignore when publishing release notes
@@ -49,10 +64,13 @@ inputs:
     required: false
     default: ""
     type: string
-  dependabot-replacement:
+  ignore-commits:
+    description: Commits to ignore when generating release notes
     required: false
     type: string
-  ignore-commits:
+  dependabot-replacement:
+    description: |
+      Replacement text for dependabot-generated commit messages in release notes
     required: false
     type: string
   title:

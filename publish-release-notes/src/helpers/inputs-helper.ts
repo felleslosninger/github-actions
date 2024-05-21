@@ -20,11 +20,35 @@ export function loadInputs(): Inputs {
   const repositoryName = core.getInput("repository-name", { required: true });
   const eventType = core.getInput("event-type", { required: true });
   const sha = core.getInput("sha") || "";
+  const allowProducts = core.getInput("allow-products") || "";
+  const allowApplications = core.getInput("allow-applications") || "";
   const ignoreProducts = core.getInput("ignore-products") || "";
   const ignoreApplications = core.getInput("ignore-applications") || "";
   const dependabotReplacement = core.getInput("dependabot-replacement") || "";
   const ignoreCommits = core.getInput("ignore-commits") || "";
   const title = core.getInput("title") || product;
+
+  if (
+    allowProducts &&
+    allowProducts.length > 0 &&
+    ignoreProducts &&
+    ignoreProducts.length > 0
+  ) {
+    throw new Error(
+      "Setting both allow-products and ignore-products is not allowed"
+    );
+  }
+
+  if (
+    allowApplications &&
+    allowApplications.length > 0 &&
+    ignoreApplications &&
+    ignoreApplications.length > 0
+  ) {
+    throw new Error(
+      "Setting both allow-applications and ignore-applications is not allowed"
+    );
+  }
 
   return {
     applicationName,
@@ -37,10 +61,12 @@ export function loadInputs(): Inputs {
     repositoryName,
     eventType,
     sha,
+    allowProducts,
+    allowApplications,
     ignoreProducts,
     ignoreApplications,
-    dependabotReplacement,
     ignoreCommits,
+    dependabotReplacement,
     title
   } as Inputs;
 }

@@ -1,3 +1,5 @@
+import { jest } from "@jest/globals";
+
 export function getInput(name: string): string {
   switch (name) {
     case "application-name":
@@ -8,6 +10,10 @@ export function getInput(name: string): string {
       return "mocked-event-type";
     case "github-token":
       return "mocked-github-token";
+    case "allow-applications":
+      return "";
+    case "allow-products":
+      return "";
     case "ignore-applications":
       return "mocked-ignore-applications";
     case "ignore-commits":
