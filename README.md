@@ -74,6 +74,10 @@ To publish a new release, follow these steps:
 
 Linting is done using [super-linter/super-linter/slim](https://github.com/super-linter/super-linter) and new Actions should be added to the [internal-linter.yml](.github/workflows/internal-linter.yml) to be linted automatically.
 
+## Creating a new Github Action
+
+New actions should be generated using [typescript-action](https://github.com/actions/typescript-action) template.
+
 ## License
 
 These GitHub Actions are open-source and distributed under the [MIT License](LICENSE). Feel free to use, modify, and distribute them according to your needs.
