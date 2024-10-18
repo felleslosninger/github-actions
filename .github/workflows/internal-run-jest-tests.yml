@@ -39,12 +39,12 @@ jobs:
     steps:
       - name: Checkout code
         id: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # pin@v4.1.4
         with:
           submodules: "true"
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # pin@v4.0.4
         with:
           node-version-file: ${{ matrix.folder }}/.node-version
           cache-dependency-path: ${{ matrix.folder }}/package-lock.json
