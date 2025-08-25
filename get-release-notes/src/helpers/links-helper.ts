@@ -18,8 +18,8 @@ export function addJiraLinks(
   baseUrl: string,
   releaseNotes: string[]
 ): string[] {
-  // Regular expression to match the pattern <alpha><alpha><alpha>-<number><number><number>
-  const jiraRegex = /\b[A-Za-z]{2,3}-\d{1,4}\b/g;
+  // Regular expression to match the pattern <alpha>[<alpha><alpha>]<alpha>-<number><number><number>
+  const jiraRegex = /\b[A-Za-z]{2,4}-\d{1,4}\b/g;
 
   // Iterate over each release note
   return releaseNotes.map(note => {
