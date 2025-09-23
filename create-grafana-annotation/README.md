@@ -6,7 +6,7 @@ This GitHub Action is designed to write deployment text annotations to Grafana d
 
 ## Author
 
-**Digdir Platform Team**
+### Digdir Platform Team
 
 ## Inputs
 
@@ -63,6 +63,7 @@ jobs:
 ```
 
 ## How it Works
-This action utilizes a composite run to execute a Bash script. 
-The script constructs a JSON payload representing the annotation and sends a POST request to the Grafana API to add the annotation to the specified dashboard and panel. 
+
+This action utilizes a composite run to execute a Bash script.
+The script constructs a JSON payload representing the annotation and sends a POST request to the Grafana API to add the annotation to the specified dashboard and panel.
 It then logs the HTTP response code for verification.

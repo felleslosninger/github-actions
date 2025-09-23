@@ -6,7 +6,7 @@ This GitHub Action checks if a specified file exists within the repository. It p
 
 ## Author
 
-**Digdir Platform Team**
+### Digdir Platform Team
 
 ## Usage
 
