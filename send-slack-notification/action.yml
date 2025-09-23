@@ -45,7 +45,7 @@ runs:
 
   steps:
     - name: Checkout tools
-      uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # pin@v4.1.4
+      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # pin@v5.0.0
       with:
         repository: felleslosninger/github-actions
         sparse-checkout: |
@@ -54,7 +54,7 @@ runs:
 
     - name: Get commit message
       id: commit-message
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # pin@v7.0.1
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # pin@v8.0.0
       with:
         script: |
           const Utils = require('./send-slack-notification/tools/github-context-utils.js');
@@ -66,7 +66,7 @@ runs:
         inputs.slack-channel-id != '' && 
         inputs.failed == 'true'
       id: notify-on-failure
-      uses: slackapi/slack-github-action@37ebaef184d7626c5f204ab8d3baff4262dd30f0 # pin@v1.27.0
+      uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # pin@v2.1.1
       env:
         SLACK_BOT_TOKEN: ${{ inputs.slack-bot-token }}
       with:
@@ -122,7 +122,7 @@ runs:
         inputs.slack-channel-id != '' &&
         inputs.failed == 'false'
       id: notify-on-success
-      uses: slackapi/slack-github-action@37ebaef184d7626c5f204ab8d3baff4262dd30f0 # pin@v1.27.0
+      uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # pin@v2.1.1
       env:
         SLACK_BOT_TOKEN: ${{ inputs.slack-bot-token }}
       with:
