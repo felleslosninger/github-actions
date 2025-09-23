@@ -1,0 +1,2 @@
+# Ignore fake private keys in test mocks
+**/__mocks__/**
