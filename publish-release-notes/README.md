@@ -9,7 +9,7 @@ release notes.
 
 ## Author
 
-**Digdir Platform Team**
+### Digdir Platform Team
 
 ## Initial Setup
 
@@ -28,64 +28,54 @@ release notes.
 ## Inputs
 
 - `application-name`:
-
   - **Description**: The name of the application for which release notes are
     generated.
   - **Required**: true
   - **Type**: string
 
 - `product`:
-
   - **Description**: The product associated with the release.
   - **Required**: true
   - **Type**: string
 
 - `version`:
-
   - **Description**: The version number of the release.
   - **Required**: true
   - **Type**: string
 
 - `release-notes`:
-
   - **Description**: The release notes content.
   - **Required**: true
   - **Type**: string
 
 - `timestamp`:
-
   - **Description**: The timestamp of the release.
   - **Required**: true
   - **Type**: string
 
 - `github-token`:
-
   - **Description**: The GitHub token for authentication.
   - **Required**: true
   - **Type**: string
 
 - `repository-owner`:
-
   - **Description**: The owner of the repository to which release notes will be
     published.
   - **Required**: true
   - **Type**: string
 
 - `repository-name`:
-
   - **Description**: The name of the repository to which release notes will be
     published.
   - **Required**: true
   - **Type**: string
 
 - `sha`:
-
   - **Description**: The commit SHA associated with the release.
   - **Required**: true
   - **Type**: string
 
 - `allow-products`:
-
   - **Description**: List of products allowed to trigger release notes
     generation.
   - **Required**: false
@@ -93,7 +83,6 @@ release notes.
   - **Type**: string
 
 - `allow-applications`:
-
   - **Description**: List of applications allowed to trigger release notes
     generation.
   - **Required**: false
@@ -101,7 +90,6 @@ release notes.
   - **Type**: string
 
 - `ignore-products`:
-
   - **Description**: Comma seperated list of product(s) to ignore when
     publishing release notes.
   - **Required**: false
@@ -109,7 +97,6 @@ release notes.
   - **Type**: string
 
 - `ignore-applications`:
-
   - **Description**: Comma seperated list of application(s) to ignore when
     publishing release notes.
   - **Required**: false
@@ -117,20 +104,17 @@ release notes.
   - **Type**: string
 
 - `dependabot-replacement`:
-
   - **Description**: Replacement string for "Bump" commits. If multiple are
     present, they will all be replaced with a single line.
   - **Required**: false
   - **Type**: string
 
 - `ignore-commits`:
-
   - **Description**: Commits to ignore when publishing release notes.
   - **Required**: false
   - **Type**: string
 
 - `title`:
-
   - **Description**: Title to use for public release notes entry (default is
     "product" variable).
   - **Required**: false
@@ -151,7 +135,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # pin@v5.0.0
 
       - name: Publish Release Notes
         uses: felleslosninger/github-actions/publish-release-notes@v1.0.0

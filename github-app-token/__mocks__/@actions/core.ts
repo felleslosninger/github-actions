@@ -19,6 +19,7 @@ export function getInput(name: string): string {
     case "app-id":
       return "1";
     case "private-key":
+      // trivy:ignore:secret-finding This is a fake private key used only for testing
       return `-----BEGIN RSA PRIVATE KEY-----
 MIIEpAIBAAKCAQEA1c7+9z5Pad7OejecsQ0bu3aozN3tihPmljnnudb9G3HECdnH
 lWu2/a1gB9JW5TBQ+AVpum9Okx7KfqkfBKL9mcHgSL0yWMdjMfNOqNtrQqKlN4kE

@@ -6,7 +6,7 @@ This GitHub Action is designed to write JSON content to the workflow summary. It
 
 ## Author
 
-**Digdir Plattform Team**
+### Digdir Plattform Team
 
 ## Inputs
 
@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # pin@v5.0.0
 
       - name: Write JSON to Workload Summary
         uses: felleslosninger/github-actions/json-to-summary@v1

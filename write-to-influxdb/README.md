@@ -10,7 +10,7 @@ events.
 
 ## Author
 
-**Digdir Platform Team**
+### Digdir Platform Team
 
 ## Initial Setup
 

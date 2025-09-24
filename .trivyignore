@@ -1,0 +1,2 @@
+# Ignore fake private keys in test mocks
+publish-release-notes/__mocks__/**

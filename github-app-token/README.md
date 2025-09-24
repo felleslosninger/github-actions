@@ -9,7 +9,7 @@ using an App token.
 
 ## Author
 
-**Digdir Platform Team**
+### Digdir Platform Team
 
 ## Initial Setup
 
@@ -80,7 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # pin@v5.0.0
 
       - name: Generate Token
         id: generate-token

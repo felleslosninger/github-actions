@@ -6,7 +6,7 @@ This GitHub Action runs actionlint, which is a static checker for GitHub Actions
 
 ## Author
 
-**Digdir Plattform Team**
+### Digdir Plattform Team
 
 ## Usage
 
