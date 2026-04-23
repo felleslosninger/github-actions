@@ -23,8 +23,6 @@ module.exports = {
 
   parser: "@typescript-eslint/parser",
 
-  resolvePluginsRelativeTo: path.resolve(__dirname, "../../"),
-
   settings: {
     "import/resolver": {
       node: {
@@ -61,7 +59,6 @@ module.exports = {
     "import/no-namespace": "off",
     "no-console": "off",
     "no-unused-vars": "off",
-    "prettier/prettier": "error",
     semi: "off",
     "@typescript-eslint/array-type": "error",
     "@typescript-eslint/await-thenable": "error",
