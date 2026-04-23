@@ -18,7 +18,7 @@ module.exports = {
     "**/dist/.*",
     "**/coverage/.*",
     "*.json",
-    ".eslintrc.js"
+    "**/.eslintrc.js"
   ],
 
   parser: "@typescript-eslint/parser",
