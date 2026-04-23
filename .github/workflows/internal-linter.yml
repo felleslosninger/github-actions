@@ -20,13 +20,7 @@ on:
       - "validate-pull-request-title/**"
       # Add more folders as needed
 
-permissions:
-  contents: read
-  packages: read
-  statuses: write
-
-env:
-  FILTER_REGEX_EXCLUDE: .*dist/.*
+permissions: read-all
 
 jobs:
   lint:
@@ -46,10 +40,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          # super-linter needs the full git history to get the
-          # list of files that changed across commits
-          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -62,15 +52,10 @@ jobs:
         run: npm ci
         working-directory: ${{ matrix.folder }}
 
-      - name: Lint Codebase
-        uses: super-linter/super-linter/slim@v7
-        env:
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LINTER_RULES_PATH: ${{ matrix.folder }}.github/linters
-          VALIDATE_ALL_CODEBASE: true
-          VALIDATE_TYPESCRIPT_STANDARD: false
-          VALIDATE_TRIVY: false
-          VALIDATE_JSCPD: false
-          TYPESCRIPT_ES_CONFIG_FILE: .eslintrc.js
-          FILTER_REGEX_INCLUDE: .*${{ matrix.folder }}.*
+      - name: Run ESLint
+        run: npm run lint
+        working-directory: ${{ matrix.folder }}
+
+      - name: Run Prettier Check
+        run: npm run format:check
+        working-directory: ${{ matrix.folder }}

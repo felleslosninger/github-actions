@@ -70,9 +70,51 @@ To publish a new release, follow these steps:
 > [!IMPORTANT]
 > Make sure to replace v0.7.4 with your actual version number.
 
-## Linting
+## Development Workflow
 
-Linting is done using [super-linter/super-linter/slim](https://github.com/super-linter/super-linter) and new Actions should be added to the [internal-linter.yml](.github/workflows/internal-linter.yml) to be linted automatically.
+### Pre-commit Hooks
+
+This repository uses [Husky](https://typicode.github.io/husky/) to run automated linting checks before commits:
+
+- **Automatic linting**: ESLint runs on changed TypeScript/JavaScript files
+- **Smart detection**: Only modules with changes are linted (fast!)
+- **Local validation**: Catches issues before pushing to GitHub
+
+When you commit, the pre-commit hook will:
+1. Detect which modules have changed files
+2. Run `npm run lint` on those modules only
+3. Block the commit if linting fails
+
+### Manual Linting
+
+#### Lint a specific module:
+```bash
+cd get-release-notes
+npm run lint
+```
+
+#### Lint all modules (same as CI):
+```bash
+npm run lint:all
+```
+
+#### Lint only changed modules:
+```bash
+npm run lint:changed
+```
+
+### Skipping Hooks (Not Recommended)
+
+If you need to bypass the pre-commit hook:
+```bash
+git commit --no-verify
+```
+
+**Note:** GitHub Actions will still run linting checks on all modules as a safety net.
+
+### Linting in CI/CD
+
+Linting runs automatically in GitHub Actions for all TypeScript/Node.js modules. New Actions should be added to the [internal-linter.yml](.github/workflows/internal-linter.yml) workflow.
 
 ## Creating a new Github Action
 
