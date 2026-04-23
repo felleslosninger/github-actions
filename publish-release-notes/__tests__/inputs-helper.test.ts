@@ -222,8 +222,6 @@ describe("loadInputs", () => {
 
     expect(() => {
       InputsHelpers.loadInputs();
-    }).toThrow(
-      'Invalid environment: "staging". Valid values are: prod, kt'
-    );
+    }).toThrow('Invalid environment: "staging". Valid values are: prod, kt');
   });
 });
