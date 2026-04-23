@@ -72,4 +72,5 @@ jobs:
           VALIDATE_TYPESCRIPT_STANDARD: false
           VALIDATE_TRIVY: false
           VALIDATE_JSCPD: false
+          TYPESCRIPT_ES_CONFIG_FILE: .eslintrc.js
           FILTER_REGEX_INCLUDE: .*${{ matrix.folder }}.*
