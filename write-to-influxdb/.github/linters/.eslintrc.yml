@@ -22,6 +22,10 @@ settings:
       extensions:
         - ".js"
         - ".ts"
+  n:
+    tryExtensions:
+      - ".js"
+      - ".ts"
 
 parserOptions:
   ecmaVersion: 2023
