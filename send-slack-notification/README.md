@@ -6,7 +6,7 @@ This GitHub Action is designed to notify designated Slack channels about workflo
 
 ## Author
 
-**Digdir Platform Team**
+### Digdir Platform Team
 
 ## Inputs
 
