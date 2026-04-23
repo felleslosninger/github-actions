@@ -23,17 +23,6 @@ module.exports = {
 
   parser: "@typescript-eslint/parser",
 
-  settings: {
-    "import/resolver": {
-      node: {
-        extensions: [".js", ".ts"]
-      }
-    },
-    n: {
-      tryExtensions: [".js", ".ts"]
-    }
-  },
-
   parserOptions: {
     ecmaVersion: 2023,
     sourceType: "module",
@@ -47,16 +36,11 @@ module.exports = {
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:github/recommended",
     "plugin:jest/recommended"
   ],
 
   rules: {
     camelcase: "off",
-    "eslint-comments/no-use": "off",
-    "eslint-comments/no-unused-disable": "off",
-    "i18n-text/no-en": "off",
-    "import/no-namespace": "off",
     "no-console": "off",
     "no-unused-vars": "off",
     semi: "off",
@@ -98,8 +82,6 @@ module.exports = {
     "@typescript-eslint/semi": ["error", "always"],
     "@typescript-eslint/space-before-function-paren": "off",
     "@typescript-eslint/type-annotation-spacing": "error",
-    "@typescript-eslint/unbound-method": "error",
-    "n/no-missing-import": "off",
-    "n/no-missing-require": "off"
+    "@typescript-eslint/unbound-method": "error"
   }
 };
