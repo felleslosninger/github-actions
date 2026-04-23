@@ -5,5 +5,5 @@
     "noEmit": true
   },
   "include": ["../../__tests__/**/*", "../../src/**/*", "../../__mocks__/**/*"],
-  "exclude": ["../../dist", "../../node_modules", "../../coverage", "*.json"]
+  "exclude": ["../../dist", "../../node_modules", "../../coverage", "*.json", ".eslintrc.js"]
 }
