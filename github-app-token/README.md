@@ -34,25 +34,21 @@ using an App token.
 ## Inputs
 
 - `app-id`:
-
   - **Description**: The ID of the GitHub App.
   - **Required**: true
   - **Type**: string
 
 - `private-key`:
-
   - **Description**: The private key of the GitHub App.
   - **Required**: true
   - **Type**: string
 
 - `installation-id`:
-
   - **Description**: The ID of the installation.
   - **Required**: true
   - **Type**: string
 
 - `repository`:
-
   - **Description**: The repository name. If not provided, it defaults to the
     current repository.
   - **Required**: false
@@ -61,7 +57,6 @@ using an App token.
 ## Outputs
 
 - `token`:
-
   - **Description**: The authentication token.
   - **Type**: string
 

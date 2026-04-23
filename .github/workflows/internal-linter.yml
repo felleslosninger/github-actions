@@ -67,8 +67,9 @@ jobs:
         env:
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TYPESCRIPT_DEFAULT_STYLE: prettier
+          LINTER_RULES_PATH: ${{ matrix.folder }}.github/linters
           VALIDATE_ALL_CODEBASE: true
-          VALIDATE_JAVASCRIPT_STANDARD: false
+          VALIDATE_TYPESCRIPT_STANDARD: false
+          VALIDATE_TRIVY: false
           VALIDATE_JSCPD: false
           FILTER_REGEX_INCLUDE: .*${{ matrix.folder }}.*
