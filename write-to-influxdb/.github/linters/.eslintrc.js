@@ -39,6 +39,17 @@ module.exports = {
     "plugin:jest/recommended"
   ],
 
+  overrides: [
+    {
+      files: ["**/*.js"],
+      parser: "espree",
+      parserOptions: {
+        ecmaVersion: 2023,
+        sourceType: "module"
+      }
+    }
+  ],
+
   rules: {
     camelcase: "off",
     "no-console": "off",
