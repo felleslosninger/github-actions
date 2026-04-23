@@ -11,7 +11,6 @@ This GitHub Action is designed to notify designated Slack channels about workflo
 ## Inputs
 
 - `slack-channel-id`:
-
   - **Description**: The ID of the Slack channel to which notifications will be sent.
   - **Required**: true
   - **Type**: string

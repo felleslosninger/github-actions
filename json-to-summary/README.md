@@ -11,7 +11,6 @@ This GitHub Action is designed to write JSON content to the workflow summary. It
 ## Inputs
 
 - `json`:
-
   - **Description**: The JSON content to be displayed in the workflow summary.
   - **Required**: true
 

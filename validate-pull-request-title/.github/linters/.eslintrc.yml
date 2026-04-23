@@ -91,4 +91,6 @@ rules:
     "@typescript-eslint/space-before-function-paren": "off",
     "@typescript-eslint/type-annotation-spacing": "error",
     "@typescript-eslint/unbound-method": "error",
+    "n/no-missing-import": "off",
+    "n/no-missing-require": "off"
   }
