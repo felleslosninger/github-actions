@@ -23,6 +23,8 @@ module.exports = {
 
   parser: "@typescript-eslint/parser",
 
+  resolvePluginsRelativeTo: path.resolve(__dirname, "../../"),
+
   settings: {
     "import/resolver": {
       node: {
@@ -41,7 +43,7 @@ module.exports = {
     project: ["./.github/linters/tsconfig.json", "./tsconfig.json"]
   },
 
-  plugins: ["jest", "@typescript-eslint", "prettier"],
+  plugins: ["jest", "@typescript-eslint"],
 
   extends: [
     "eslint:recommended",
