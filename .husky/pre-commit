@@ -1,7 +1,27 @@
-echo "🔍 Pre-commit hook"
-echo ""
-echo "Kjører følgende sjekker på endrede filer:"
-echo "  1. Prettier   - Formaterer kode (--write)"
-echo "  2. ESLint     - Kodestandard og best practices (--fix --max-warnings 0)"
-echo ""
+BOLD='\033[1m'
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+RESET='\033[0m'
+
+printf "\n${BOLD}🔍 Pre-commit${RESET}\n"
+printf "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+printf "Sjekker som kjøres på endrede filer:\n"
+printf "  ${BLUE}prettier${RESET}  – Formaterer kode automatisk (--write)\n"
+printf "  ${BLUE}eslint${RESET}    – Kodestandard og beste praksis (--fix --max-warnings 0)\n\n"
+
 npx lint-staged
+EXIT_CODE=$?
+
+if [ $EXIT_CODE -ne 0 ]; then
+  printf "\n${BOLD}${RED}✖ Pre-commit feilet${RESET}\n"
+  printf "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+  printf "${YELLOW}💡 Slik fikser du det:${RESET}\n"
+  printf "  Formateringsfeil:  ${BOLD}npx prettier --write .${RESET}\n"
+  printf "  Linting-feil:      ${BOLD}npx eslint --fix <fil>${RESET}\n"
+  printf "  Manuelle feil:     Se feilmeldingene over for hvilke filer og linjer som må rettes\n\n"
+  exit 1
+fi
+
+printf "\n${GREEN}✔ Alle sjekker OK!${RESET}\n\n"
