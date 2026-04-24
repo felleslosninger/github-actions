@@ -23,8 +23,11 @@ jobs:
       - name: Install dependencies
         run: cd publish-release-notes && npm ci
 
-      - name: Build action
-        run: cd publish-release-notes && npm run build && npm run package
+      - name: Run tests
+        run: cd publish-release-notes && npm run ci-test
+
+      - name: Package action
+        run: cd publish-release-notes && npm run package
 
       - name: Test environment=prod in dispatch payload
         uses: actions/github-script@v7
