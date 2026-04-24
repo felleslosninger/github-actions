@@ -2,7 +2,8 @@
 
 ## Description
 
-This GitHub Action checks if a specified file exists within the repository. It provides an output indicating whether the file exists or not.
+This GitHub Action checks if a specified file exists within the repository. It
+provides an output indicating whether the file exists or not.
 
 ## Author
 
@@ -30,7 +31,8 @@ jobs:
 
 ## How it Works
 
-This action uses a composite run to execute a Bash script that checks the existence of the specified file within the repository.
+This action uses a composite run to execute a Bash script that checks the
+existence of the specified file within the repository.
 
 ### Inputs
 
@@ -38,7 +40,8 @@ This action uses a composite run to execute a Bash script that checks the existe
 
 ### Outputs
 
-- `exists`: Indicates whether the file exists or not. Possible values are "true" or "false".
+- `exists`: Indicates whether the file exists or not. Possible values are "true"
+  or "false".
 
 ### Example
 
@@ -50,4 +53,5 @@ This action uses a composite run to execute a Bash script that checks the existe
     file-path: "path/to/your/file.txt"
 ```
 
-This action can be used in various workflows to ensure the presence of specific files before proceeding with subsequent steps.
+This action can be used in various workflows to ensure the presence of specific
+files before proceeding with subsequent steps.

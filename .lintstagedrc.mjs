@@ -11,6 +11,9 @@ export default {
     const commands = [];
     const projectFiles = {};
 
+    // Prettier first – format before ESLint checks
+    commands.push(`prettier --write ${filenames.join(" ")}`);
+
     for (const file of filenames) {
       const parts = file.split("/");
       if (parts.length > 1) {
@@ -27,8 +30,6 @@ export default {
         `cd ${project} && npx eslint --fix --cache --max-warnings 0 ${files.join(" ")}`
       );
     }
-
-    commands.push(`prettier --write ${filenames.join(" ")}`);
 
     return commands;
   }

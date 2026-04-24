@@ -2,7 +2,9 @@
 
 ## Description
 
-This GitHub Action is designed to write JSON content to the workflow summary. It enables you to present structured data in a clear and readable format in the GitHub Actions UI. The action accepts a JSON input and an optional title.
+This GitHub Action is designed to write JSON content to the workflow summary. It
+enables you to present structured data in a clear and readable format in the
+GitHub Actions UI. The action accepts a JSON input and an optional title.
 
 ## Author
 
@@ -11,7 +13,6 @@ This GitHub Action is designed to write JSON content to the workflow summary. It
 ## Inputs
 
 - `json`:
-
   - **Description**: The JSON content to be displayed in the workflow summary.
   - **Required**: true
 
@@ -46,4 +47,6 @@ jobs:
 
 ## How it Works
 
-This action uses a composite run to execute a Bash script. The script dynamically constructs a Markdown-formatted section in the workflow summary, including the specified title and JSON content.
+This action uses a composite run to execute a Bash script. The script
+dynamically constructs a Markdown-formatted section in the workflow summary,
+including the specified title and JSON content.

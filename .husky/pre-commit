@@ -1,7 +1,7 @@
 echo "🔍 Pre-commit hook"
 echo ""
 echo "Kjører følgende sjekker på endrede filer:"
-echo "  ✓ ESLint     - Kodestandard og best practices (--fix --max-warnings 0)"
-echo "  ✓ Prettier   - Formatering (--write)"
+echo "  1. Prettier   - Formaterer kode (--write)"
+echo "  2. ESLint     - Kodestandard og best practices (--fix --max-warnings 0)"
 echo ""
 npx lint-staged
