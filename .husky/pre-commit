@@ -1,13 +1,13 @@
 #!/bin/sh
 
-# Run lint-staged to format and lint changed files
+echo "🔍 Pre-commit: Running lint-staged (Prettier + ESLint on changed files)..."
 npx lint-staged
 
 # Get changed TypeScript/JavaScript files to check which modules changed
 changedFiles=$(git diff --cached --name-only --diff-filter=d | grep -E '\.(ts|js)$' || true)
 
 if [ -z "$changedFiles" ]; then
-  echo "✅ No TypeScript/JavaScript files changed"
+  echo "\n✅ Pre-commit: Ingen TypeScript/JavaScript filer endret - hopper over type-sjekk og lisenssjekk"
   exit 0
 fi
 
@@ -15,17 +15,17 @@ fi
 modules=$(echo "$changedFiles" | grep -E '^(get-release-notes|validate-pull-request-title|publish-release-notes|github-app-token|write-to-influxdb)/' | cut -d'/' -f1 | sort -u)
 
 if [ -z "$modules" ]; then
-  echo "✅ No TypeScript/Node.js modules changed"
+  echo "\n✅ Pre-commit: Ingen TypeScript/Node.js moduler endret - hopper over type-sjekk og lisenssjekk"
   exit 0
 fi
 
-echo "\n📦 Changed modules: $(echo $modules | tr '\n' ' ')"
-echo ""
+echo "\n📦 Pre-commit: Endrede moduler - $(echo $modules | tr '\n' ' ')"
+echo "   Kjører type-sjekk (TypeScript) og lisenssjekk på disse modulene...\n"
 
 # Run type check and license check on changed modules
 failed=false
 for module in $modules; do
-  echo "🔍 Type checking $module..."
+  echo "🔍 Pre-commit: Type-sjekker $module (tsc --noEmit)..."
   if (cd $module && npx tsc --noEmit); then
     echo "✅ Type check passed"
   else
@@ -33,7 +33,7 @@ for module in $modules; do
     failed=true
   fi
   
-  echo "\n📋 Checking licenses in $module..."
+  echo "\n📋 Pre-commit: Sjekker lisenser i $module (npm run lisenssjekk)..."
   if (cd $module && npm run lisenssjekk >/dev/null 2>&1); then
     echo "✅ License check passed"
   else
@@ -44,9 +44,9 @@ for module in $modules; do
 done
 
 if [ "$failed" = true ]; then
-  echo "❌ Pre-commit checks failed. Please fix the errors before committing."
+  echo "❌ Pre-commit: Noen sjekker feilet. Rett feilene før du committer."
   exit 1
 fi
 
-echo "✅ All pre-commit checks passed!"
+echo "✅ Pre-commit: Alle sjekker fullført!"
 exit 0
