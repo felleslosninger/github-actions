@@ -79,6 +79,13 @@ inputs:
       variable)
     required: false
     type: string
+  environment:
+    description: |
+      Environment the release notes are for. Valid values: prod, kt.
+      Default is prod (backward compatible).
+    required: false
+    default: "prod"
+    type: string
 
 outputs:
   release-notes-created:
