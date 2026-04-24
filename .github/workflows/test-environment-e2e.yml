@@ -1,0 +1,144 @@
+name: E2E Test Environment Dispatch
+
+on:
+  pull_request:
+    paths:
+      - 'publish-release-notes/**'
+      - '.github/workflows/test-environment-e2e.yml'
+
+jobs:
+  test-dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
+
+      - name: Send test dispatch event (prod environment)
+        uses: actions/github-script@v7
+        with:
+          script: |
+            console.log('📤 Sending test dispatch event with environment=prod');
+            
+            await github.rest.repos.createDispatchEvent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: 'test-environment-verification',
+              client_payload: {
+                'application-name': 'test-app',
+                'product': 'test-product',
+                'version': '1.0.0-test',
+                'release-notes': JSON.stringify(['Test: environment verification']),
+                'timestamp': new Date().toISOString(),
+                'date': new Date().toLocaleString(),
+                'sha': context.sha,
+                'title': 'Environment Test Release',
+                'github-token': context.token,
+                'repository-owner': context.repo.owner,
+                'repository-name': context.repo.repo,
+                'event-type': 'test-environment-verification',
+                'environment': 'prod'
+              }
+            });
+
+      - name: Wait for dispatch event to be processed
+        run: sleep 3
+
+  verify-dispatch-received:
+    runs-on: ubuntu-latest
+    needs: test-dispatch
+    if: always()
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
+
+      - name: Check dispatch event was received
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // This job receives the repository_dispatch event
+            const payload = context.payload.client_payload || {};
+            
+            console.log('📥 Received client_payload:');
+            console.log(JSON.stringify(payload, null, 2));
+            
+            // Verify environment is present and correct
+            if (payload.environment === undefined) {
+              console.error('❌ FAILED: environment not found in payload');
+              process.exit(1);
+            }
+            
+            if (payload.environment !== 'prod') {
+              console.error(`❌ FAILED: expected environment='prod', got '${payload.environment}'`);
+              process.exit(1);
+            }
+            
+            console.log('✅ SUCCESS: environment correctly received as', payload.environment);
+            
+            // Verify other fields too
+            const required = ['application-name', 'product', 'version', 'release-notes', 'sha'];
+            for (const field of required) {
+              if (payload[field] === undefined) {
+                console.error(`❌ FAILED: required field '${field}' missing`);
+                process.exit(1);
+              }
+            }
+            
+            console.log('✅ All required fields present');
+
+  test-dispatch-kt:
+    runs-on: ubuntu-latest
+    needs: verify-dispatch-received
+    if: always()
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
+
+      - name: Send test dispatch event (kt environment)
+        uses: actions/github-script@v7
+        with:
+          script: |
+            console.log('📤 Sending test dispatch event with environment=kt');
+            
+            await github.rest.repos.createDispatchEvent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: 'test-environment-verification',
+              client_payload: {
+                'application-name': 'test-app',
+                'product': 'test-product',
+                'version': '1.0.0-test',
+                'release-notes': JSON.stringify(['Test: kt environment']),
+                'timestamp': new Date().toISOString(),
+                'date': new Date().toLocaleString(),
+                'sha': context.sha,
+                'title': 'Environment Test Release (KT)',
+                'github-token': context.token,
+                'repository-owner': context.repo.owner,
+                'repository-name': context.repo.repo,
+                'event-type': 'test-environment-verification',
+                'environment': 'kt'
+              }
+            });
+
+      - name: Wait for dispatch event to be processed
+        run: sleep 3
+
+  verify-dispatch-received-kt:
+    runs-on: ubuntu-latest
+    needs: test-dispatch-kt
+    if: always()
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
+
+      - name: Check dispatch event was received (kt)
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const payload = context.payload.client_payload || {};
+            
+            console.log('📥 Received client_payload (KT):');
+            console.log(JSON.stringify(payload, null, 2));
+            
+            if (payload.environment !== 'kt') {
+              console.error(`❌ FAILED: expected environment='kt', got '${payload.environment}'`);
+              process.exit(1);
+            }
+            
+            console.log('✅ SUCCESS: environment correctly received as', payload.environment);
