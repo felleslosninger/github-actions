@@ -3,6 +3,9 @@ name: E2E Test - Verify Environment Event
 on:
   repository_dispatch:
     types: [test-environment-verification]
+  workflow_run:
+    workflows: ['E2E Test Environment Dispatch']
+    types: [completed]
 
 jobs:
   verify-event:
