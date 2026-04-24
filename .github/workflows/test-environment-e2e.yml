@@ -4,14 +4,13 @@ on:
   pull_request:
     paths:
       - 'publish-release-notes/**'
-      - '.github/workflows/test-environment-e2e.yml'
+      - '.github/workflows/test-environment-e2e*.yml'
 
 jobs:
-  e2e-test:
+  send-test-event:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      actions: read
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
 
@@ -20,75 +19,43 @@ jobs:
         with:
           node-version-file: 'publish-release-notes/.node-version'
 
-      - name: Install dependencies
-        run: cd publish-release-notes && npm ci
+      - name: Install and test
+        run: cd publish-release-notes && npm ci && npm run ci-test && npm run package
 
-      - name: Run tests
-        run: cd publish-release-notes && npm run ci-test
-
-      - name: Package action
-        run: cd publish-release-notes && npm run package
-
-      - name: Test environment=prod in dispatch payload
+      - name: Send repository_dispatch event
         uses: actions/github-script@v7
         with:
           script: |
-            const fs = require('fs');
-            const path = require('path');
+            console.log('\n🚀 SENDING GITHUB REPOSITORY_DISPATCH EVENT\n');
             
-            // Read the built dist/index.js to verify environment is included
-            const distPath = '${{ github.workspace }}/publish-release-notes/dist/index.js';
-            const distContent = fs.readFileSync(distPath, 'utf8');
-            
-            // Check that environment is in the clientPayload
-            if (!distContent.includes('environment')) {
-              throw new Error('❌ FAILED: "environment" not found in built action');
-            }
-            
-            console.log('✅ Environment field is included in built action');
-            
-            // Simulate what the action sends
-            const mockPayload = {
-              'application-name': 'test-app',
-              'product': 'test-product',
-              'release-notes': JSON.stringify(['Test: environment verification']),
-              'sha': 'abc123',
-              'title': 'Test Release',
+            const testPayload = {
+              'application-name': 'e2e-test-app',
+              'product': 'e2e-test-product',
+              'release-notes': JSON.stringify(['E2E Test: environment verification']),
+              'sha': context.sha,
+              'title': 'E2E Test Release',
               'date': new Date().toISOString(),
               'environment': 'prod'
             };
             
-            console.log('\n📦 Simulated dispatch payload:');
-            console.log(JSON.stringify(mockPayload, null, 2));
+            console.log('📤 Event details:');
+            console.log('   Type: repository_dispatch');
+            console.log('   Event: test-environment-verification');
+            console.log('\n📋 Payload being sent:');
+            Object.entries(testPayload).forEach(([key, value]) => {
+              const display = typeof value === 'string' && value.length > 50 
+                ? value.substring(0, 50) + '...' 
+                : value;
+              console.log(`   ${key}: ${display}`);
+            });
             
-            // Verify environment is in payload
-            if (!mockPayload.environment) {
-              throw new Error('❌ FAILED: environment missing from payload');
-            }
+            await github.rest.repos.createDispatchEvent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: 'test-environment-verification',
+              client_payload: testPayload
+            });
             
-            if (mockPayload.environment !== 'prod') {
-              throw new Error(`❌ FAILED: expected environment='prod', got '${mockPayload.environment}'`);
-            }
-            
-            console.log('\n✅ SUCCESS: environment correctly included with value "prod"');
-            
-            // Test with kt environment
-            mockPayload.environment = 'kt';
-            if (mockPayload.environment !== 'kt') {
-              throw new Error(`❌ FAILED: expected environment='kt', got '${mockPayload.environment}'`);
-            }
-            
-            console.log('✅ SUCCESS: environment correctly set to "kt"');
+            console.log('\n✅ Event dispatched to GitHub');
+            console.log('\n⏳ Listener workflow will now receive and verify this event...');
 
-      - name: Verify tests pass
-        run: cd publish-release-notes && npm test -- --coverage=false
-
-      - name: Summary
-        if: success()
-        run: |
-          echo "## ✅ E2E Test Results"
-          echo ""
-          echo "✅ Action builds successfully with environment support"
-          echo "✅ Environment field is included in dispatch payload"
-          echo "✅ Both 'prod' and 'kt' values verified"
-          echo "✅ All unit tests pass"
