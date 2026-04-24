@@ -52,10 +52,18 @@ jobs:
         run: npm ci
         working-directory: ${{ matrix.folder }}
 
-      - name: Run ESLint
-        run: npm run lint
+      - name: Check Licenses
+        run: npm run lisenssjekk
         working-directory: ${{ matrix.folder }}
 
       - name: Run Prettier Check
         run: npm run format:check
+        working-directory: ${{ matrix.folder }}
+
+      - name: Run ESLint
+        run: npm run lint
+        working-directory: ${{ matrix.folder }}
+
+      - name: Run TypeScript Type Check
+        run: npx tsc --noEmit
         working-directory: ${{ matrix.folder }}

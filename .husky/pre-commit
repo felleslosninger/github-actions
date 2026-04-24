@@ -1,1 +1,52 @@
-node scripts/lint-changed-modules.js
+#!/bin/sh
+
+# Run lint-staged to format and lint changed files
+npx lint-staged
+
+# Get changed TypeScript/JavaScript files to check which modules changed
+changedFiles=$(git diff --cached --name-only --diff-filter=d | grep -E '\.(ts|js)$' || true)
+
+if [ -z "$changedFiles" ]; then
+  echo "✅ No TypeScript/JavaScript files changed"
+  exit 0
+fi
+
+# Extract unique modules from changed files
+modules=$(echo "$changedFiles" | grep -E '^(get-release-notes|validate-pull-request-title|publish-release-notes|github-app-token|write-to-influxdb)/' | cut -d'/' -f1 | sort -u)
+
+if [ -z "$modules" ]; then
+  echo "✅ No TypeScript/Node.js modules changed"
+  exit 0
+fi
+
+echo "\n📦 Changed modules: $(echo $modules | tr '\n' ' ')"
+echo ""
+
+# Run type check and license check on changed modules
+failed=false
+for module in $modules; do
+  echo "🔍 Type checking $module..."
+  if (cd $module && npx tsc --noEmit); then
+    echo "✅ Type check passed"
+  else
+    echo "❌ Type check failed"
+    failed=true
+  fi
+  
+  echo "\n📋 Checking licenses in $module..."
+  if (cd $module && npm run lisenssjekk >/dev/null 2>&1); then
+    echo "✅ License check passed"
+  else
+    echo "❌ License check failed"
+    failed=true
+  fi
+  echo ""
+done
+
+if [ "$failed" = true ]; then
+  echo "❌ Pre-commit checks failed. Please fix the errors before committing."
+  exit 1
+fi
+
+echo "✅ All pre-commit checks passed!"
+exit 0

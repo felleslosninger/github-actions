@@ -6,17 +6,34 @@
   "scripts": {
     "prepare": "husky",
     "lint:changed": "node scripts/lint-changed-modules.js",
-    "lint:all": "node scripts/lint-all-modules.js"
+    "lint:all": "node scripts/lint-all-modules.js",
+    "license:all": "node scripts/license-check-all.js",
+    "type-check:all": "node scripts/type-check-all.js"
   },
   "devDependencies": {
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2"
   },
   "lint-staged": {
-    "get-release-notes/**/*.{ts,js}": "cd get-release-notes && npm run lint",
-    "validate-pull-request-title/**/*.{ts,js}": "cd validate-pull-request-title && npm run lint",
-    "publish-release-notes/**/*.{ts,js}": "cd publish-release-notes && npm run lint",
-    "github-app-token/**/*.{ts,js}": "cd github-app-token && npm run lint",
-    "write-to-influxdb/**/*.{ts,js}": "cd write-to-influxdb && npm run lint"
+    "get-release-notes/**/*.{ts,js}": [
+      "cd get-release-notes && npm run format:write",
+      "cd get-release-notes && npm run lint"
+    ],
+    "validate-pull-request-title/**/*.{ts,js}": [
+      "cd validate-pull-request-title && npm run format:write",
+      "cd validate-pull-request-title && npm run lint"
+    ],
+    "publish-release-notes/**/*.{ts,js}": [
+      "cd publish-release-notes && npm run format:write",
+      "cd publish-release-notes && npm run lint"
+    ],
+    "github-app-token/**/*.{ts,js}": [
+      "cd github-app-token && npm run format:write",
+      "cd github-app-token && npm run lint"
+    ],
+    "write-to-influxdb/**/*.{ts,js}": [
+      "cd write-to-influxdb && npm run format:write",
+      "cd write-to-influxdb && npm run lint"
+    ]
   }
 }

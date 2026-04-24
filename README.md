@@ -74,47 +74,82 @@ To publish a new release, follow these steps:
 
 ### Pre-commit Hooks
 
-This repository uses [Husky](https://typicode.github.io/husky/) to run automated linting checks before commits:
+This repository uses [Husky](https://typicode.github.io/husky/) with [lint-staged](https://github.com/lint-staged/lint-staged) to run automated checks before commits:
 
-- **Automatic linting**: ESLint runs on changed TypeScript/JavaScript files
-- **Smart detection**: Only modules with changes are linted (fast!)
-- **Local validation**: Catches issues before pushing to GitHub
+**What runs automatically on changed files:**
+- ✨ **Prettier** - Auto-formats code (TypeScript/JavaScript)
+- 🔍 **ESLint** - Lints code for errors and style issues
+- 📝 **TypeScript** - Type checking on changed modules
+- 📋 **License Check** - Verifies all dependencies have compatible licenses
 
-When you commit, the pre-commit hook will:
-1. Detect which modules have changed files
-2. Run `npm run lint` on those modules only
-3. Block the commit if linting fails
+**How it works:**
+1. You stage files with `git add`
+2. On commit, `lint-staged` runs:
+   - Prettier formats your staged `.ts` and `.js` files
+   - ESLint checks the formatted files
+3. Then checks run on changed modules:
+   - TypeScript type checking (`tsc --noEmit`)
+   - License compatibility check
+4. If all checks pass, the commit succeeds
+5. If any check fails, the commit is blocked
 
-### Manual Linting
+**Benefits:**
+- Only changed files are processed (fast!)
+- Auto-formatting means less manual work
+- Catches issues before they reach CI/CD
+- Ensures license compliance
+
+### Manual Commands
 
 #### Lint a specific module:
 ```bash
 cd get-release-notes
-npm run lint
+npm run lint              # ESLint
+npm run format:check      # Prettier check
+npm run format:write      # Prettier auto-fix
+npm run lisenssjekk       # License check
+npx tsc --noEmit          # Type check
 ```
 
-#### Lint all modules (same as CI):
+#### Run checks on all modules:
 ```bash
-npm run lint:all
-```
-
-#### Lint only changed modules:
-```bash
-npm run lint:changed
+npm run lint:all          # Lint all modules
+npm run license:all       # Check licenses in all modules
+npm run type-check:all    # Type check all modules
 ```
 
 ### Skipping Hooks (Not Recommended)
 
-If you need to bypass the pre-commit hook:
+If you absolutely need to bypass the pre-commit hook:
 ```bash
 git commit --no-verify
 ```
 
-**Note:** GitHub Actions will still run linting checks on all modules as a safety net.
+⚠️ **Warning:** GitHub Actions will still run all checks as a safety net. Skipping hooks locally just delays finding issues.
 
-### Linting in CI/CD
+### CI/CD Checks
 
-Linting runs automatically in GitHub Actions for all TypeScript/Node.js modules. New Actions should be added to the [internal-linter.yml](.github/workflows/internal-linter.yml) workflow.
+GitHub Actions runs the following checks on every PR and push to main:
+
+1. **License Check** - Verifies all dependencies use approved licenses
+2. **Prettier** - Ensures code is properly formatted
+3. **ESLint** - Checks for code quality and errors
+4. **TypeScript** - Type checking with `tsc --noEmit`
+5. **Tests** - Runs Jest test suites
+
+New Actions should be added to the [internal-linter.yml](.github/workflows/internal-linter.yml) workflow.
+
+### Approved Licenses
+
+The following licenses are approved for use:
+- MIT
+- Apache-2.0
+- BSD-3-Clause / BSD-2-Clause
+- ISC
+- BlueOak-1.0.0
+- CC-BY-3.0 / CC-BY-4.0 / CC0-1.0
+- 0BSD
+- Python-2.0
 
 ## Creating a new Github Action
 
