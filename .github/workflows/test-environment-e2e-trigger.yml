@@ -1,0 +1,42 @@
+name: E2E Test - Send Environment Event
+
+on:
+  pull_request:
+    paths:
+      - 'publish-release-notes/**'
+      - '.github/workflows/test-environment-e2e-*.yml'
+
+jobs:
+  send-test-event:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
+
+      - name: Send dispatch event with environment=prod
+        uses: actions/github-script@v7
+        with:
+          script: |
+            console.log('📤 Sending test dispatch event with environment=prod');
+            
+            await github.rest.repos.createDispatchEvent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: 'test-environment-verification',
+              client_payload: {
+                'application-name': 'test-app',
+                'product': 'test-product',
+                'version': '1.0.0-test',
+                'release-notes': JSON.stringify(['Test: environment verification']),
+                'timestamp': new Date().toISOString(),
+                'date': new Date().toLocaleString(),
+                'sha': context.sha,
+                'title': 'Environment Test Release',
+                'github-token': context.token,
+                'repository-owner': context.repo.owner,
+                'repository-name': context.repo.repo,
+                'event-type': 'test-environment-verification',
+                'environment': 'prod'
+              }
+            });
+            
+            console.log('✅ Dispatch event sent');
