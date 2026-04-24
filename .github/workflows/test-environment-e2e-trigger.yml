@@ -25,18 +25,12 @@ jobs:
               client_payload: {
                 'application-name': 'test-app',
                 'product': 'test-product',
-                'version': '1.0.0-test',
                 'release-notes': JSON.stringify(['Test: environment verification']),
-                'timestamp': new Date().toISOString(),
-                'date': new Date().toLocaleString(),
                 'sha': context.sha,
-                'title': 'Environment Test Release',
-                'github-token': context.token,
-                'repository-owner': context.repo.owner,
-                'repository-name': context.repo.repo,
-                'event-type': 'test-environment-verification',
+                'title': 'Environment Test Release (prod)',
+                'date': new Date().toISOString(),
                 'environment': 'prod'
               }
             });
             
-            console.log('✅ Dispatch event sent');
+            console.log('✅ Dispatch event sent with 7 properties');
