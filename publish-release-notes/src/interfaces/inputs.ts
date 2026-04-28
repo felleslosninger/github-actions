@@ -16,4 +16,5 @@ export interface Inputs {
   ignoreCommits: string;
   dependabotReplacement: string;
   title: string;
+  environment: string;
 }
