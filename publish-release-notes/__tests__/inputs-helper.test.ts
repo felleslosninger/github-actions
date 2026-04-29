@@ -123,7 +123,8 @@ describe("loadInputs", () => {
       sha,
       timestamp,
       title,
-      version
+      version,
+      environment
     }: Inputs = InputsHelpers.loadInputs();
 
     // assert
@@ -145,6 +146,18 @@ describe("loadInputs", () => {
     expect(ignoreProducts).toBe("");
     expect(ignoreApplications).toBe("");
     expect(title).toBe("mocked-product");
+    expect(environment).toBe("prod");
+  });
+
+  it("defaults environment to prod when not provided", () => {
+    jest.spyOn(core, "getInput").mockImplementation((name: string) => {
+      if (name === "release-notes") return JSON.stringify(["some-note"]);
+      return "";
+    });
+
+    const { environment } = InputsHelpers.loadInputs();
+
+    expect(environment).toBe("prod");
   });
 
   it("throws an error when both allow-products and ignore-products are set", () => {
@@ -192,6 +205,25 @@ describe("loadInputs", () => {
       InputsHelpers.loadInputs();
     }).toThrow(
       "Setting both allow-applications and ignore-applications is not allowed"
+    );
+  });
+
+  it("throws an error when environment is invalid", () => {
+    jest.spyOn(core, "getInput").mockImplementation((name: string) => {
+      switch (name) {
+        case "release-notes":
+          return JSON.stringify(["mocked-release-notes-1"]);
+        case "environment":
+          return "staging";
+        default:
+          return "";
+      }
+    });
+
+    expect(() => {
+      InputsHelpers.loadInputs();
+    }).toThrow(
+      'Invalid environment: "staging". Valid values are: prod, kt'
     );
   });
 });

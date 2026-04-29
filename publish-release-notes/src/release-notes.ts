@@ -53,7 +53,8 @@ export async function publishReleaseNotes(
   version: string,
   ignoreCommits: string,
   eventType: string,
-  dependabotReplacement: string
+  dependabotReplacement: string,
+  environment: string
 ): Promise<boolean> {
   const filteredReleaseNotes: string[] = filterReleaseNotes(
     releaseNotes,
@@ -79,7 +80,8 @@ export async function publishReleaseNotes(
     version,
     date,
     sha,
-    title
+    title,
+    environment
   };
 
   core.info(`client_payload: ${JSON.stringify(clientPayload)}`);
