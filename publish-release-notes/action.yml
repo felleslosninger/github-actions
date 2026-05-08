@@ -1,6 +1,6 @@
 name: Publish Release Notes
 description: |
-  Automatically generates and publishes release notes based on provided inputs for applications and products. 
+  Automatically generates and publishes release notes based on provided inputs for applications and products.
   This action supports custom configurations to include or exclude specific products, applications, and commits.
 author: Digdir Platform Team
 inputs:
@@ -92,5 +92,5 @@ outputs:
     description: Indicates if release notes were created or not
 
 runs:
-  using: node20
+  using: node24
   main: dist/index.js

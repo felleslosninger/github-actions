@@ -30,5 +30,5 @@ outputs:
     description: "GitHub Token"
 
 runs:
-  using: node20
+  using: node24
   main: dist/index.js
