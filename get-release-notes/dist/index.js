@@ -2371,7 +2371,7 @@ module.exports = __toCommonJS(dist_src_exports);
 var import_universal_user_agent = __nccwpck_require__(5030);
 
 // pkg/dist-src/version.js
-var VERSION = "9.0.5";
+var VERSION = "9.0.6";
 
 // pkg/dist-src/defaults.js
 var userAgent = `octokit-endpoint.js/${VERSION} ${(0, import_universal_user_agent.getUserAgent)()}`;
@@ -2476,9 +2476,9 @@ function addQueryParameters(url, parameters) {
 }
 
 // pkg/dist-src/util/extract-url-variable-names.js
-var urlVariableRegex = /\{[^}]+\}/g;
+var urlVariableRegex = /\{[^{}}]+\}/g;
 function removeNonChars(variableName) {
-  return variableName.replace(/^\W+|\W+$/g, "").split(/,/);
+  return variableName.replace(/(?:^\W+)|(?:(?<!\W)\W+$)/g, "").split(/,/);
 }
 function extractUrlVariableNames(url) {
   const matches = url.match(urlVariableRegex);
@@ -2664,7 +2664,7 @@ function parse(options) {
     }
     if (url.endsWith("/graphql")) {
       if (options.mediaType.previews?.length) {
-        const previewsFromAcceptHeader = headers.accept.match(/[\w-]+(?=-preview)/g) || [];
+        const previewsFromAcceptHeader = headers.accept.match(/(?<![\w-])[\w-]+(?=-preview)/g) || [];
         headers.accept = previewsFromAcceptHeader.concat(options.mediaType.previews).map((preview) => {
           const format = options.mediaType.format ? `.${options.mediaType.format}` : "+json";
           return `application/vnd.github.${preview}-preview${format}`;
@@ -2913,7 +2913,7 @@ __export(dist_src_exports, {
 module.exports = __toCommonJS(dist_src_exports);
 
 // pkg/dist-src/version.js
-var VERSION = "9.2.1";
+var VERSION = "9.2.2";
 
 // pkg/dist-src/normalize-paginated-list-response.js
 function normalizePaginatedListResponse(response) {
@@ -2961,7 +2961,7 @@ function iterator(octokit, route, parameters) {
           const response = await requestMethod({ method, url, headers });
           const normalizedResponse = normalizePaginatedListResponse(response);
           url = ((normalizedResponse.headers.link || "").match(
-            /<([^>]+)>;\s*rel="next"/
+            /<([^<>]+)>;\s*rel="next"/
           ) || [])[1];
           return { value: normalizedResponse };
         } catch (error) {
@@ -5513,7 +5513,7 @@ var RequestError = class extends Error {
     if (options.request.headers.authorization) {
       requestCopy.headers = Object.assign({}, options.request.headers, {
         authorization: options.request.headers.authorization.replace(
-          / .*$/,
+          /(?<! ) .*$/,
           " [REDACTED]"
         )
       });
@@ -5581,7 +5581,7 @@ var import_endpoint = __nccwpck_require__(9440);
 var import_universal_user_agent = __nccwpck_require__(5030);
 
 // pkg/dist-src/version.js
-var VERSION = "8.4.0";
+var VERSION = "8.4.1";
 
 // pkg/dist-src/is-plain-object.js
 function isPlainObject(value) {
@@ -5640,7 +5640,7 @@ function fetchWrapper(requestOptions) {
       headers[keyAndValue[0]] = keyAndValue[1];
     }
     if ("deprecation" in headers) {
-      const matches = headers.link && headers.link.match(/<([^>]+)>; rel="deprecation"/);
+      const matches = headers.link && headers.link.match(/<([^<>]+)>; rel="deprecation"/);
       const deprecationLink = matches && matches.pop();
       log.warn(
         `[@octokit/request] "${requestOptions.method} ${requestOptions.url}" is deprecated. It is scheduled to be removed on ${headers.sunset}${deprecationLink ? `. See ${deprecationLink}` : ""}`
@@ -29274,8 +29274,8 @@ function addPullRequestLinks(baseUrl, releaseNotes) {
 }
 exports.addPullRequestLinks = addPullRequestLinks;
 function addJiraLinks(baseUrl, releaseNotes) {
-    // Regular expression to match the pattern <alpha><alpha><alpha>-<number><number><number>
-    const jiraRegex = /\b[A-Za-z]{2,3}-\d{1,4}\b/g;
+    // Regular expression to match the pattern <alpha>[<alpha><alpha>]<alpha>-<number><number><number>
+    const jiraRegex = /\b[A-Za-z]{2,4}-\d{1,4}\b/g;
     // Iterate over each release note
     return releaseNotes.map(note => {
         // Replace Jira IDs with links
