@@ -1,46 +1,44 @@
 name: Get Release Notes
 description: |
-  "..."
+  A GitHub Action that generates release notes based on the commits between two
+  specified commit SHAs. The action takes inputs such as the repository name,
+  head and base commit SHAs, and options for formatting the release notes. It
+  outputs an array of release notes that can be used in subsequent steps of a
+  workflow. Useful for automating the generation of release notes during
+  deployment or release processes.
 author: Digdir Platform Team
+
 inputs:
   repository:
-    description: Name of application repository
+    description: "Name of application repository"
     required: true
-    type: string
   head:
-    description: Head commit SHA
+    description: "Head commit SHA"
     required: true
-    type: string
   base:
-    description: Base commit SHA
+    description: "Base commit SHA"
     required: true
-    type: string
   github-token:
-    description:
+    description: "GitHub token for authentication"
     required: true
-    type: string
   show-pull-request-links:
-    description: Show PR numbers as links
+    description: "Show PR numbers as links"
     required: false
-    default: false
-    type: boolean
+    default: "false"
   pull-request-base-url:
-    description: Pull-request base URL
+    description: "Pull-request base URL"
     required: false
-    type: string
   show-jira-links:
-    description;: Show Jira IDs as links
+    description: "Show Jira IDs as links"
     required: false
-    default: false
-    type: boolean
+    default: "false"
   jira-base-url:
-    description: Jira base URL
+    description: "Jira base URL"
     required: false
-    type: string
 
 outputs:
   release-notes:
-    description: Release notes array
+    description: "Release notes array"
 
 runs:
   using: node24
