@@ -1,28 +1,30 @@
 name: "GitHub App Token"
 description: |
-  "This GitHub Action allows ..."
+  A GitHub Action that generates a token for a GitHub App based on the provided
+  App ID, private key, and installation ID. The action can be used to
+  authenticate API requests on behalf of the GitHub App, allowing it to perform
+  actions such as creating issues, commenting on pull requests, or accessing
+  repository data. The generated token is outputted for use in subsequent steps
+  of a workflow.
 author: "Digdir Platform Team"
+
 inputs:
   app-id:
-    description: "..."
+    description: "GitHub App ID"
     required: true
   private-key:
-    description: "..."
-    type: string
+    description: "GitHub App private key in PEM format"
     required: true
   installation-id:
-    description: "..."
-    type: string
+    description: "GitHub App installation ID"
     required: true
   repository:
     description: |
       "Repository to create token for. Defaults to current repository."
-    type: string
     required: false
   owner:
     description: |
       "GitHub App owner. Defaults to current repository owner."
-    type: string
     required: false
 
 outputs:
