@@ -1,43 +1,44 @@
 name: Send Slack notification
 description: |
-  This GitHub Action is designed to notify designated Slack channels about workflow events. 
-  It enables teams to stay informed about GitHub Actions workflows, 
-  facilitating rapid response and resolution.
+  This GitHub Action is designed to notify designated Slack channels about
+  workflow events. It enables teams to stay informed about GitHub Actions
+  workflows, facilitating rapid response and resolution.
 author: Digdir Platform Team
+
 inputs:
   slack-channel-id:
-    type: string
+    description: "ID of the Slack channel to send notifications to"
     required: true
   slack-bot-token:
-    type: string
+    description: "Slack Bot User OAuth Token with permissions to post in the channel"
     required: true
   failed:
-    type: string
+    description: "Indicates whether the workflow has failed or succeeded (true/false)"
     required: false
     default: "false"
   application-name:
-    type: string
+    description: "Name of the application being deployed"
     required: false
   environment:
-    type: string
+    description: "Environment where the application is deployed"
     required: false
   product:
-    type: string
+    description: "Product to which the application belongs"
     required: false
   jira-id:
-    type: string
+    description: "Jira ID associated with the deployment"
     required: false
   version:
-    type: string
+    description: "Version of the application being deployed"
     required: false
   repository:
-    type: string
+    description: "Repository where the application is hosted"
     required: false
   pr-number:
-    type: string
+    description: "Pull request number"
     required: false
   initiated-by:
-    type: string
+    description: "User who initiated the workflow"
     required: false
 
 runs:
@@ -45,7 +46,7 @@ runs:
 
   steps:
     - name: Checkout tools
-      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # pin@v5.0.0
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # pin@v6.0.2
       with:
         repository: felleslosninger/github-actions
         sparse-checkout: |
@@ -54,7 +55,7 @@ runs:
 
     - name: Get commit message
       id: commit-message
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # pin@v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # pin@v9.0.0
       with:
         script: |
           const Utils = require('./send-slack-notification/tools/github-context-utils.js');
@@ -63,56 +64,62 @@ runs:
 
     - name: Notify on failure
       if: |
-        inputs.slack-channel-id != '' && 
+        inputs.slack-channel-id != '' &&
         inputs.failed == 'true'
       id: notify-on-failure
-      uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # pin@v2.1.1
-      env:
-        SLACK_BOT_TOKEN: ${{ inputs.slack-bot-token }}
+      uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # pin@v3.0.3
       with:
-        channel-id: ${{ inputs.slack-channel-id }}
+        # Using bot token
+        method: chat.postMessage
+        token: ${{ inputs.slack-bot-token }}
         payload: |
           {
+            "channel": "${{ inputs.slack-channel-id }}",
             "text": "GitHub Action failed",
-            "blocks": [
+            "attachments": [
               {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": ":x: GitHub Action - Workflow failed\n*${{ fromJson(steps.commit-message.outputs.result) }}*"
-                }
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "*Workflow*\n${{ github.workflow_ref }}"
-                }
-              },
-              {
-                "type": "section",
-                "fields": [
+                "color": "#e96d76",
+                "blocks": [
                   {
-                    "type": "mrkdwn",
-                    "text": "*Repository*\n${{ github.repository }}"
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": ":x: GitHub Action - Workflow failed\n*${{ fromJson(steps.commit-message.outputs.result) }}*"
+                    }
                   },
                   {
-                    "type": "mrkdwn",
-                    "text": "*Run id*\n*<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.run_id }}>*"
-                  }
-                ]
-              },
-              {
-                "type": "section",
-                "fields": [
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "*Workflow*\n${{ github.workflow_ref }}"
+                    }
+                  },
                   {
-                    "type": "mrkdwn",
-                    "text": "*Committer*\n${{ github.actor }}"
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Repository*\n${{ github.repository }}"
+                      },
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Run id*\n*<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.run_id }}>*"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Committer*\n${{ github.actor }}"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "divider"
                   }
                 ]
-              },
-              {
-                "type": "divider"
               }
             ]
           }
@@ -122,72 +129,77 @@ runs:
         inputs.slack-channel-id != '' &&
         inputs.failed == 'false'
       id: notify-on-success
-      uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # pin@v2.1.1
-      env:
-        SLACK_BOT_TOKEN: ${{ inputs.slack-bot-token }}
+      uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # pin@v3.0.3
       with:
-        channel-id: ${{ inputs.slack-channel-id }}
+        method: chat.postMessage
+        token: ${{ inputs.slack-bot-token }}
         payload: |
           {
+            "channel": "${{ inputs.slack-channel-id }}",
             "text": "Successfully deployed",
-            "blocks": [
+            "attachments": [
               {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": ":white_check_mark: Application successfully deployed"
-                }
-              },
-              {
-                "type": "section",
-                "fields": [
+                "color": "#18be52",
+                "blocks": [
                   {
-                    "type": "mrkdwn",
-                    "text": "*Application name:*\n${{ inputs.application-name }}"
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": ":white_check_mark: Application successfully deployed"
+                    }
                   },
                   {
-                    "type": "mrkdwn",
-                    "text": "*Environment:*\n${{ inputs.environment }}"
-                  }
-                ]
-              },
-              {
-                "type": "section",
-                "fields": [
-                  {
-                    "type": "mrkdwn",
-                    "text": "*Product:*\n${{ inputs.product }}"
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Application name:*\n${{ inputs.application-name }}"
+                      },
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Environment:*\n${{ inputs.environment }}"
+                      }
+                    ]
                   },
                   {
-                    "type": "mrkdwn",
-                    "text": "*Jira id:*\n<https://digdir.atlassian.net/browse/${{ inputs.jira-id }}|${{ inputs.jira-id }}>"
-                  }
-                ]
-              },
-              {
-                "type": "section",
-                "fields": [
-                  {
-                    "type": "mrkdwn",
-                    "text": "*Version:*\n${{ inputs.version }}"
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Product:*\n${{ inputs.product }}"
+                      },
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Jira id:*\n${{ ((inputs.jira-id == '' || inputs.jira-id == 'Dependabot') && 'N/A') || format('<https://digdir.atlassian.net/browse/{0}|{0}>', inputs.jira-id) }}"
+                      }
+                    ]
                   },
                   {
-                    "type": "mrkdwn",
-                    "text": "*Application PR:*\n<https://github.com/${{ inputs.repository }}/pull/${{ inputs.pr-number }}|#${{ inputs.pr-number }}>"
-                  }
-                ]
-              },
-              {
-                "type": "section",
-                "fields": [
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Version:*\n${{ inputs.version }}"
+                      },
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Application PR:*\n${{ (inputs.pr-number == '' && 'N/A') || format('<https://github.com/{0}/pull/{1}|#{1}>', inputs.repository, inputs.pr-number) }}"
+                      }
+                    ]
+                  },
                   {
-                    "type": "mrkdwn",
-                    "text": "*Initiated by:*\n${{ inputs.initiated-by }}"
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Initiated by:*\n${{ inputs.initiated-by }}"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "divider"
                   }
                 ]
-              },
-              {
-                "type": "divider"
               }
             ]
           }

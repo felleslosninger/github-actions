@@ -29,24 +29,24 @@ jobs:
     strategy:
       matrix:
         folder:
-          - "write-to-influxdb/"
-          - "github-app-token/"
-          - "publish-release-notes/"
-          - "get-release-notes/"
-          - "validate-pull-request-title/"
+          - "write-to-influxdb"
+          - "github-app-token"
+          - "publish-release-notes"
+          - "get-release-notes"
+          - "validate-pull-request-title"
           # Add more folders as needed
 
     steps:
       - name: Checkout code
         id: checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # pin@v5.0.0
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # pin@v6.0.2
         with:
           submodules: "true"
 
       - name: Setup Node.js
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # pin@v5.0.0
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # pin@v6.4.0
         with:
-          node-version-file: ${{ matrix.folder }}/.node-version
+          node-version-file: .node-version
           cache-dependency-path: ${{ matrix.folder }}/package-lock.json
           cache: npm
 

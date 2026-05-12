@@ -22,11 +22,6 @@ on:
 
 permissions:
   contents: read
-  packages: read
-  statuses: write
-
-env:
-  FILTER_REGEX_EXCLUDE: .*dist/.*
 
 jobs:
   lint:
@@ -36,25 +31,21 @@ jobs:
     strategy:
       matrix:
         folder:
-          - "write-to-influxdb/"
-          - "github-app-token/"
-          - "publish-release-notes/"
-          - "get-release-notes/"
-          - "validate-pull-request-title/"
+          - "write-to-influxdb"
+          - "github-app-token"
+          - "publish-release-notes"
+          - "get-release-notes"
+          - "validate-pull-request-title"
           # Add more folders as needed
 
     steps:
       - name: Checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # pin@v5.0.0
-        with:
-          # super-linter needs the full git history to get the
-          # list of files that changed across commits
-          fetch-depth: 0
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # pin@v6.0.2
 
       - name: Setup Node.js
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # pin@v5.0.0
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # pin@v6.4.0
         with:
-          node-version-file: ${{ matrix.folder }}/.node-version
+          node-version-file: .node-version
           cache-dependency-path: ${{ matrix.folder }}/package-lock.json
           cache: npm
 
@@ -62,13 +53,10 @@ jobs:
         run: npm ci
         working-directory: ${{ matrix.folder }}
 
-      - name: Lint Codebase
-        uses: super-linter/super-linter/slim@ffde3b2b33b745cb612d787f669ef9442b1339a6 # pin@v8.1.0
-        env:
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TYPESCRIPT_DEFAULT_STYLE: prettier
-          VALIDATE_ALL_CODEBASE: true
-          VALIDATE_JAVASCRIPT_STANDARD: false
-          VALIDATE_JSCPD: false
-          FILTER_REGEX_INCLUDE: .*${{ matrix.folder }}.*
+      - name: Lint
+        run: npm run lint
+        working-directory: ${{ matrix.folder }}
+
+      - name: Check Formatting
+        run: npm run format:check
+        working-directory: ${{ matrix.folder }}

@@ -1,96 +1,81 @@
 name: Publish Release Notes
 description: |
-  Automatically generates and publishes release notes based on provided inputs for applications and products. 
-  This action supports custom configurations to include or exclude specific products, applications, and commits.
+  Automatically generates and publishes release notes based on provided inputs
+  for applications and products. This action supports custom configurations to
+  include or exclude specific products, applications, and commits.
 author: Digdir Platform Team
+
 inputs:
   application-name:
-    description: Name of application
+    description: "Name of application"
     required: true
-    type: string
   product:
-    description: Name of product
+    description: "Name of product"
     required: true
-    type: string
   version:
-    description: Application version
+    description: "Application version"
     required: true
-    type: string
   release-notes:
-    description: Release notes array
+    description: "Release notes array"
     required: true
-    type: string
   timestamp:
-    description: Timestamp for deployment
+    description: "Timestamp for deployment"
     required: true
-    type: string
   github-token:
+    description: "GitHub token"
     required: true
-    type: string
   repository-owner:
-    description: Owner of the repository
+    description: "Owner of the repository"
     required: true
-    type: string
   repository-name:
-    description: Name of the repository
+    description: "Name of the repository"
     required: true
-    type: string
   event-type:
-    description: Type of event that triggers the action
+    description: "Type of event that triggers the action"
     required: true
-    type: string
   sha:
-    description: Sha of application commit
+    description: "Sha of application commit"
     required: false
-    type: string
   allow-products:
-    description: List of products allowed to trigger release notes generation
+    description: "List of products allowed to trigger release notes generation"
     required: false
     default: ""
-    type: string
   allow-applications:
     description: |
-      List of applications allowed to trigger release notes generation
+      "List of applications allowed to trigger release notes generation"
     required: false
     default: ""
-    type: string
   ignore-products:
-    description: Product(s) to ignore when publishing release notes
+    description: "Product(s) to ignore when publishing release notes"
     required: false
     default: ""
-    type: string
   ignore-applications:
-    description: Application(s) to ignore when publishing release notes
+    description: "Application(s) to ignore when publishing release notes"
     required: false
     default: ""
-    type: string
   ignore-commits:
-    description: Commits to ignore when generating release notes
+    description: "Commits to ignore when generating release notes"
     required: false
-    type: string
   dependabot-replacement:
     description: |
-      Replacement text for dependabot-generated commit messages in release notes
+      "Replacement text for dependabot-generated commit messages in release notes"
     required: false
-    type: string
   title:
     description: |
-      Title to use for public release notes entry (default is "product"
-      variable)
+      "Title to use for public release notes entry (default is "product"
+      variable)"
     required: false
-    type: string
   environment:
     description: |
-      Environment the release notes are for. Valid values: prod, kt.
-      Default is prod (backward compatible).
+      "Environment the release notes are for. Valid values: prod, kt.
+      Default is prod (backward compatible)"
     required: false
     default: "prod"
-    type: string
 
 outputs:
   release-notes-created:
     description: Indicates if release notes were created or not
 
 runs:
-  using: node20
+  using: node24
   main: dist/index.js

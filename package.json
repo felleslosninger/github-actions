@@ -1,0 +1,13 @@
+{
+  "name": "github-actions",
+  "private": true,
+  "description": "Digdir GitHub Actions monorepo",
+  "scripts": {
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.0",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.2.5"
+  }
+}

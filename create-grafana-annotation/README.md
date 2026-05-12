@@ -2,7 +2,9 @@
 
 ## Description
 
-This GitHub Action is designed to write deployment text annotations to Grafana dashboards. It allows you to annotate Grafana dashboards with deployment information, enhancing observability and tracking changes effectively.
+This GitHub Action is designed to write deployment text annotations to Grafana
+dashboards. It allows you to annotate Grafana dashboards with deployment
+information, enhancing observability and tracking changes effectively.
 
 ## Author
 
@@ -11,12 +13,14 @@ This GitHub Action is designed to write deployment text annotations to Grafana d
 ## Inputs
 
 - `dashboard-id`:
-  - **Description**: The ID of the Grafana dashboard where the annotation will be added.
+  - **Description**: The ID of the Grafana dashboard where the annotation will
+    be added.
   - **Required**: true
   - **Type**: string
 
 - `panel-id`:
-  - **Description**: The ID of the panel within the Grafana dashboard where the annotation will be placed.
+  - **Description**: The ID of the panel within the Grafana dashboard where the
+    annotation will be placed.
   - **Required**: true
   - **Type**: string
 
@@ -26,7 +30,8 @@ This GitHub Action is designed to write deployment text annotations to Grafana d
   - **Type**: string
 
 - `grafana-token`:
-  - **Description**: The Grafana API token with write permissions required to add annotations.
+  - **Description**: The Grafana API token with write permissions required to
+    add annotations.
   - **Required**: true
   - **Type**: string
 
@@ -64,6 +69,7 @@ jobs:
 
 ## How it Works
 
-This action utilizes a composite run to execute a Bash script.
-The script constructs a JSON payload representing the annotation and sends a POST request to the Grafana API to add the annotation to the specified dashboard and panel.
+This action utilizes a composite run to execute a Bash script. The script
+constructs a JSON payload representing the annotation and sends a POST request
+to the Grafana API to add the annotation to the specified dashboard and panel.
 It then logs the HTTP response code for verification.
