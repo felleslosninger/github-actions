@@ -26,11 +26,6 @@ This GitHub Action retrieves release notes based on the comparison between two
 commit SHAs in a GitHub repository. It provides an array of release notes as
 output.
 
-### [GitHub App Token](./github-app-token/README.md)
-
-This GitHub Action authenticates with GitHub using an App ID, Private Key,
-Installation ID, and generates a token.
-
 ### [JSON to Summary](./json-to-summary/README.md)
 
 This GitHub Action enables you to write JSON content to the workflow summary,
