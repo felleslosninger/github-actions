@@ -1,9 +1,7 @@
 const projects = [
   "get-release-notes",
   "write-to-influxdb",
-  "github-app-token",
-  "publish-release-notes",
-  "validate-pull-request-title"
+  "publish-release-notes"
 ];
 
 export default {

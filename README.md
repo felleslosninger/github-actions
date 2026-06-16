@@ -50,13 +50,6 @@ into your workflows, helping maintain code quality.
 This GitHub Action notifies designated Slack channels about workflow events,
 enabling teams to stay informed and facilitate rapid response and resolution.
 
-### [Validate Pull Request Title](./validate-pull-request-title/README.md)
-
-The Validate Pull Request Title GitHub Action checks if the title of a pull
-request meets specified criteria, including length constraints and required
-prefixes. It helps maintain consistency and clarity in pull request titles
-within your repository.
-
 ### [Write to InfluxDB](./write-to-influxdb/README.md)
 
 This GitHub Action allows you to write data to InfluxDB, a time-series database.
