@@ -13,6 +13,7 @@ export interface Inputs {
   allowApplications: string;
   ignoreProducts: string;
   ignoreApplications: string;
+  allowCommits: string;
   ignoreCommits: string;
   dependabotReplacement: string;
   title: string;

@@ -29252,6 +29252,7 @@ function loadInputs() {
     const ignoreProducts = core.getInput("ignore-products") || "";
     const ignoreApplications = core.getInput("ignore-applications") || "";
     const dependabotReplacement = core.getInput("dependabot-replacement") || "";
+    const allowCommits = core.getInput("allow-commits") || "";
     const ignoreCommits = core.getInput("ignore-commits") || "";
     const title = core.getInput("title") || product;
     const VALID_ENVIRONMENTS = ["prod", "kt"];
@@ -29271,6 +29272,12 @@ function loadInputs() {
         ignoreApplications.length > 0) {
         throw new Error("Setting both allow-applications and ignore-applications is not allowed");
     }
+    if (allowCommits &&
+        allowCommits.length > 0 &&
+        ignoreCommits &&
+        ignoreCommits.length > 0) {
+        throw new Error("Setting both allow-commits and ignore-commits is not allowed");
+    }
     return {
         applicationName,
         product,
@@ -29286,6 +29293,7 @@ function loadInputs() {
         allowApplications,
         ignoreProducts,
         ignoreApplications,
+        allowCommits,
         ignoreCommits,
         dependabotReplacement,
         title,
@@ -29332,7 +29340,7 @@ const InputsHelpers = __importStar(__nccwpck_require__(4871));
 const ReleaseNotes = __importStar(__nccwpck_require__(9260));
 async function run() {
     try {
-        const { applicationName, dependabotReplacement, eventType, githubToken, allowApplications, allowProducts, ignoreApplications, ignoreCommits, ignoreProducts, product, releaseNotes, repositoryName, repositoryOwner, sha, timestamp, title, version, environment } = InputsHelpers.loadInputs();
+        const { applicationName, dependabotReplacement, eventType, githubToken, allowApplications, allowCommits, allowProducts, ignoreApplications, ignoreCommits, ignoreProducts, product, releaseNotes, repositoryName, repositoryOwner, sha, timestamp, title, version, environment } = InputsHelpers.loadInputs();
         if (!releaseNotes ||
             !Array.isArray(releaseNotes) ||
             releaseNotes.length === 0 ||
@@ -29370,7 +29378,7 @@ async function run() {
             return;
         }
         let success = false;
-        success = await ReleaseNotes.publishReleaseNotes(applicationName, timestamp, githubToken, product, releaseNotes, repositoryName, repositoryOwner, sha, title, version, ignoreCommits, eventType, dependabotReplacement, environment);
+        success = await ReleaseNotes.publishReleaseNotes(applicationName, timestamp, githubToken, product, releaseNotes, repositoryName, repositoryOwner, sha, title, version, ignoreCommits, eventType, dependabotReplacement, environment, allowCommits);
         // Set the output indicating if release notes were created or not
         core.setOutput("release-notes-created", success.toString());
     }
@@ -29417,12 +29425,16 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.publishReleaseNotes = exports.filterReleaseNotes = void 0;
 const github = __importStar(__nccwpck_require__(5438));
 const core = __importStar(__nccwpck_require__(2186));
-function filterReleaseNotes(releaseNotes, ignoreCommits, dependabotReplacement) {
+function filterReleaseNotes(releaseNotes, ignoreCommits, dependabotReplacement, allowCommits = "") {
     if (!releaseNotes || releaseNotes.length === 0) {
         return [];
     }
-    const ignorePatterns = ignoreCommits.split(",");
     let bumpReplaced = false; // Flag to track if "Bump" has been replaced
+    if (allowCommits && allowCommits.length !== 0) {
+        const allowPatterns = allowCommits.split(",");
+        releaseNotes = releaseNotes.filter(item => allowPatterns.some(pattern => item.includes(pattern)));
+    }
+    const ignorePatterns = ignoreCommits.split(",");
     if (ignoreCommits && ignoreCommits.length !== 0) {
         releaseNotes = releaseNotes.filter(item => {
             // Removes all commits that match the provided `ignoreCommits` list
@@ -29447,8 +29459,8 @@ function filterReleaseNotes(releaseNotes, ignoreCommits, dependabotReplacement) 
     return releaseNotes;
 }
 exports.filterReleaseNotes = filterReleaseNotes;
-async function publishReleaseNotes(applicationName, date, githubToken, product, releaseNotes, repositoryName, repositoryOwner, sha, title, version, ignoreCommits, eventType, dependabotReplacement, environment) {
-    const filteredReleaseNotes = filterReleaseNotes(releaseNotes, ignoreCommits, dependabotReplacement);
+async function publishReleaseNotes(applicationName, date, githubToken, product, releaseNotes, repositoryName, repositoryOwner, sha, title, version, ignoreCommits, eventType, dependabotReplacement, environment, allowCommits = "") {
+    const filteredReleaseNotes = filterReleaseNotes(releaseNotes, ignoreCommits, dependabotReplacement, allowCommits);
     if (!filteredReleaseNotes ||
         !Array.isArray(filteredReleaseNotes) ||
         filteredReleaseNotes.length === 0 ||
