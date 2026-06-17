@@ -6,7 +6,6 @@ on:
       - "write-to-influxdb/**"
       - "publish-release-notes/**"
       - "get-release-notes/**"
-      - "validate-pull-request-title/**"
       # Add more folders as needed
   push:
     branches:
@@ -15,7 +14,6 @@ on:
       - "write-to-influxdb/**"
       - "publish-release-notes/**"
       - "get-release-notes/**"
-      - "validate-pull-request-title/**"
       # Add more folders as needed
 
 permissions:
@@ -32,7 +30,6 @@ jobs:
           - "write-to-influxdb"
           - "publish-release-notes"
           - "get-release-notes"
-          - "validate-pull-request-title"
           # Add more folders as needed
 
     steps:
