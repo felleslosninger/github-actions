@@ -19,7 +19,7 @@ release notes.
    npm install
    ```
 
-1. Run tests
+2. Run tests
 
    ```bash
    npm test
