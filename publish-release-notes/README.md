@@ -109,6 +109,13 @@ release notes.
   - **Required**: false
   - **Type**: string
 
+- `allow-commits`:
+  - **Description**: Comma separated list of commit patterns to allow when publishing
+    release notes. If specified, only commits containing one of these patterns
+    will be included in the release notes.
+  - **Required**: false
+  - **Type**: string
+
 - `ignore-commits`:
   - **Description**: Commits to ignore when publishing release notes.
   - **Required**: false
