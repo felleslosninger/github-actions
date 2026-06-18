@@ -53,6 +53,9 @@ inputs:
     description: "Application(s) to ignore when publishing release notes"
     required: false
     default: ""
+  allow-commits:
+    description: "Commits to include when generating release notes (whitelist). Cannot be combined with ignore-commits."
+    required: false
   ignore-commits:
     description: "Commits to ignore when generating release notes"
     required: false
