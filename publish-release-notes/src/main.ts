@@ -11,6 +11,7 @@ export async function run(): Promise<void> {
       eventType,
       githubToken,
       allowApplications,
+      allowCommits,
       allowProducts,
       ignoreApplications,
       ignoreCommits,
@@ -99,7 +100,8 @@ export async function run(): Promise<void> {
       ignoreCommits,
       eventType,
       dependabotReplacement,
-      environment
+      environment,
+      allowCommits
     );
 
     // Set the output indicating if release notes were created or not

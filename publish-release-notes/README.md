@@ -19,7 +19,7 @@ release notes.
    npm install
    ```
 
-1. Run tests
+2. Run tests
 
    ```bash
    npm test
@@ -106,6 +106,13 @@ release notes.
 - `dependabot-replacement`:
   - **Description**: Replacement string for "Bump" commits. If multiple are
     present, they will all be replaced with a single line.
+  - **Required**: false
+  - **Type**: string
+
+- `allow-commits`:
+  - **Description**: Comma separated list of commit patterns to allow when publishing
+    release notes. If specified, only commits containing one of these patterns
+    will be included in the release notes.
   - **Required**: false
   - **Type**: string
 

@@ -4,15 +4,23 @@ import * as core from "@actions/core";
 export function filterReleaseNotes(
   releaseNotes: string[],
   ignoreCommits: string,
-  dependabotReplacement: string
+  dependabotReplacement: string,
+  allowCommits: string
 ): string[] {
   if (!releaseNotes || releaseNotes.length === 0) {
     return [];
   }
 
-  const ignorePatterns: string[] = ignoreCommits.split(",");
-
   let bumpReplaced = false; // Flag to track if "Bump" has been replaced
+
+  if (allowCommits && allowCommits.length !== 0) {
+    const allowPatterns: string[] = allowCommits.split(",");
+    releaseNotes = releaseNotes.filter(item =>
+      allowPatterns.some(pattern => item.includes(pattern))
+    );
+  }
+
+  const ignorePatterns: string[] = ignoreCommits.split(",");
 
   if (ignoreCommits && ignoreCommits.length !== 0) {
     releaseNotes = releaseNotes.filter(item => {
@@ -54,12 +62,14 @@ export async function publishReleaseNotes(
   ignoreCommits: string,
   eventType: string,
   dependabotReplacement: string,
-  environment: string
+  environment: string,
+  allowCommits: string
 ): Promise<boolean> {
   const filteredReleaseNotes: string[] = filterReleaseNotes(
     releaseNotes,
     ignoreCommits,
-    dependabotReplacement
+    dependabotReplacement,
+    allowCommits
   );
 
   if (
