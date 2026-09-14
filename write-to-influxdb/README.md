@@ -35,45 +35,38 @@ events.
 ## Inputs
 
 - `json`:
-
   - **Description**: Tags and fields data to be written to InfluxDB.
   - **Required**: true
   - **Type**: string
 
 - `influxdb-url`:
-
   - **Description**: The URL of the InfluxDB instance where data will be
     written.
   - **Required**: true
   - **Type**: string
 
 - `influxdb-token`:
-
   - **Description**: The InfluxDB authentication token.
   - **Required**: true
   - **Type**: string
 
 - `organization`:
-
   - **Description**: The organization name within InfluxDB.
   - **Required**: true
   - **Type**: string
 
 - `bucket`:
-
   - **Description**: The name of the bucket in InfluxDB where data will be
     stored.
   - **Required**: true
   - **Type**: string
 
 - `measurement-name`:
-
   - **Description**: The name of the measurement in InfluxDB.
   - **Required**: true
   - **Type**: string
 
 - `precision`:
-
   - **Description**: The precision of the timestamps in the data. Default is
     "ns" (nanoseconds).
   - **Required**: false
