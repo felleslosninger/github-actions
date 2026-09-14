@@ -120,6 +120,15 @@ release notes.
   - **Required**: false
   - **Type**: string
 
+- `environment`:
+
+  - **Description**: Environment the release notes are for. Valid values:
+    `prod`, `kt`. Defaults to `prod` if not specified (for backward
+    compatibility).
+  - **Required**: false
+  - **Default**: `prod`
+  - **Type**: string
+
 ## Example Usage
 
 ```yaml
@@ -155,6 +164,7 @@ jobs:
           dependabot-replacement: "Dependencies update"
           ignore-commits: "(INTERNAL)"
           title: "Your Release Notes Title"
+          environment: "prod"
 ```
 
 ## How it Works

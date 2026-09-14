@@ -2,7 +2,9 @@
 
 ## Description
 
-This GitHub Action is designed to notify designated Slack channels about workflow events. It enables teams to stay informed about GitHub Actions workflows, facilitating rapid response and resolution.
+This GitHub Action is designed to notify designated Slack channels about
+workflow events. It enables teams to stay informed about GitHub Actions
+workflows, facilitating rapid response and resolution.
 
 ## Author
 
@@ -11,8 +13,8 @@ This GitHub Action is designed to notify designated Slack channels about workflo
 ## Inputs
 
 - `slack-channel-id`:
-
-  - **Description**: The ID of the Slack channel to which notifications will be sent.
+  - **Description**: The ID of the Slack channel to which notifications will be
+    sent.
   - **Required**: true
   - **Type**: string
 
@@ -47,4 +49,8 @@ jobs:
 
 ## How it Works
 
-This action utilizes a composite run to execute various steps. It checks out the necessary tools, retrieves the commit message using GitHub script, and then notifies the specified Slack channel about the workflow event, providing essential details such as the commit message, workflow reference, repository, run ID, and committer.
+This action utilizes a composite run to execute various steps. It checks out the
+necessary tools, retrieves the commit message using GitHub script, and then
+notifies the specified Slack channel about the workflow event, providing
+essential details such as the commit message, workflow reference, repository,
+run ID, and committer.
