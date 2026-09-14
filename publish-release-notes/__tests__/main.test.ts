@@ -48,7 +48,8 @@ describe("run", () => {
       title: "TestTitle",
       eventType: "TestEvent",
       dependabotReplacement: "",
-      ignoreCommits: ""
+      ignoreCommits: "",
+      environment: "prod"
     }));
 
     jest.spyOn(ReleaseNotes, "publishReleaseNotes").mockResolvedValue(true);
@@ -72,7 +73,8 @@ describe("run", () => {
       "1.0.0",
       "",
       "TestEvent",
-      ""
+      "",
+      "prod"
     );
 
     expect(core.setOutput).toHaveBeenCalledWith(
@@ -100,7 +102,8 @@ describe("run", () => {
       title: "TestTitle",
       eventType: "TestEvent",
       dependabotReplacement: "",
-      ignoreCommits: ""
+      ignoreCommits: "",
+      environment: "prod"
     }));
 
     jest.spyOn(ReleaseNotes, "publishReleaseNotes").mockResolvedValue(true);
@@ -139,7 +142,8 @@ describe("run", () => {
       title: "TestTitle",
       eventType: "TestEvent",
       dependabotReplacement: "",
-      ignoreCommits: ""
+      ignoreCommits: "",
+      environment: "prod"
     }));
 
     jest.spyOn(ReleaseNotes, "publishReleaseNotes").mockResolvedValue(true);
@@ -177,7 +181,8 @@ describe("run", () => {
       title: "TestTitle",
       eventType: "TestEvent",
       dependabotReplacement: "",
-      ignoreCommits: ""
+      ignoreCommits: "",
+      environment: "prod"
     }));
 
     jest.spyOn(ReleaseNotes, "publishReleaseNotes").mockResolvedValue(true);
@@ -215,7 +220,8 @@ describe("run", () => {
       title: "TestTitle",
       eventType: "TestEvent",
       dependabotReplacement: "",
-      ignoreCommits: ""
+      ignoreCommits: "",
+      environment: "prod"
     }));
 
     jest.spyOn(ReleaseNotes, "publishReleaseNotes").mockResolvedValue(true);
@@ -239,7 +245,8 @@ describe("run", () => {
       "1.0.0",
       "",
       "TestEvent",
-      ""
+      "",
+      "prod"
     );
 
     expect(core.setOutput).toHaveBeenCalledWith(
@@ -267,7 +274,8 @@ describe("run", () => {
       title: "TestTitle",
       eventType: "TestEvent",
       dependabotReplacement: "",
-      ignoreCommits: ""
+      ignoreCommits: "",
+      environment: "prod"
     }));
 
     jest.spyOn(ReleaseNotes, "publishReleaseNotes").mockResolvedValue(true);
@@ -306,7 +314,8 @@ describe("run", () => {
       title: "TestTitle",
       eventType: "TestEvent",
       dependabotReplacement: "",
-      ignoreCommits: ""
+      ignoreCommits: "",
+      environment: "prod"
     }));
 
     jest.spyOn(ReleaseNotes, "publishReleaseNotes").mockResolvedValue(true);
@@ -330,7 +339,8 @@ describe("run", () => {
       "1.0.0",
       "",
       "TestEvent",
-      ""
+      "",
+      "prod"
     );
 
     expect(core.setOutput).toHaveBeenCalledWith(
@@ -358,7 +368,8 @@ describe("run", () => {
       title: "TestTitle",
       eventType: "TestEvent",
       dependabotReplacement: "",
-      ignoreCommits: ""
+      ignoreCommits: "",
+      environment: "prod"
     }));
 
     jest.spyOn(ReleaseNotes, "publishReleaseNotes").mockResolvedValue(true);

@@ -2,7 +2,9 @@
 
 ## Description
 
-This GitHub Action runs actionlint, which is a static checker for GitHub Actions workflow files. It helps ensure the validity and correctness of your GitHub Actions workflows.
+This GitHub Action runs actionlint, which is a static checker for GitHub Actions
+workflow files. It helps ensure the validity and correctness of your GitHub
+Actions workflows.
 
 ## Author
 
@@ -25,4 +27,5 @@ jobs:
 
 ## How it Works
 
-This action uses a composite run to execute a Bash script that downloads and runs actionlint, a static checker for GitHub Actions workflow files.
+This action uses a composite run to execute a Bash script that downloads and
+runs actionlint, a static checker for GitHub Actions workflow files.

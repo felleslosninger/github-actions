@@ -22,7 +22,8 @@ export async function run(): Promise<void> {
       sha,
       timestamp,
       title,
-      version
+      version,
+      environment
     }: Inputs = InputsHelpers.loadInputs();
 
     if (
@@ -97,7 +98,8 @@ export async function run(): Promise<void> {
       version,
       ignoreCommits,
       eventType,
-      dependabotReplacement
+      dependabotReplacement,
+      environment
     );
 
     // Set the output indicating if release notes were created or not

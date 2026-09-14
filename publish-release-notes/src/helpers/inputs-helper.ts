@@ -27,6 +27,14 @@ export function loadInputs(): Inputs {
   const dependabotReplacement = core.getInput("dependabot-replacement") || "";
   const ignoreCommits = core.getInput("ignore-commits") || "";
   const title = core.getInput("title") || product;
+  const VALID_ENVIRONMENTS = ["prod", "kt"];
+  const environment = core.getInput("environment") || "prod";
+
+  if (!VALID_ENVIRONMENTS.includes(environment)) {
+    throw new Error(
+      `Invalid environment: "${environment}". Valid values are: ${VALID_ENVIRONMENTS.join(", ")}`
+    );
+  }
 
   if (
     allowProducts &&
@@ -67,6 +75,7 @@ export function loadInputs(): Inputs {
     ignoreApplications,
     ignoreCommits,
     dependabotReplacement,
-    title
+    title,
+    environment
   } as Inputs;
 }
