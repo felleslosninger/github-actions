@@ -193,6 +193,51 @@ describe("ReleaseNotesClient", () => {
         []
       );
     });
+
+    it("should include commits when a file was renamed from the configured path", async () => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      jest.spyOn(github, "getOctokit").mockReturnValue({
+        rest: {
+          repos: {
+            compareCommitsWithBasehead: jest
+              .fn<() => Promise<any>>()
+              .mockResolvedValue({
+                data: {
+                  commits: [
+                    {
+                      sha: "rename",
+                      commit: { message: "Move application file" }
+                    }
+                  ]
+                }
+              }),
+            getCommit: jest.fn<() => Promise<any>>().mockResolvedValue({
+              data: {
+                files: [
+                  {
+                    filename: "shared/index.ts",
+                    previous_filename: "apps/application-2/src/index.ts"
+                  }
+                ]
+              }
+            })
+          }
+        }
+      } as any);
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+
+      const releaseNotesClient = new ReleaseNotesClient(
+        "owner/repo",
+        "base",
+        "head",
+        "token",
+        "apps/application-2"
+      );
+
+      await expect(releaseNotesClient.retrieveReleaseNotes()).resolves.toEqual([
+        { message: "Move application file" }
+      ]);
+    });
   });
 
   describe("extractFirstLineFromMessage", () => {

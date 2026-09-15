@@ -29450,9 +29450,14 @@ class ReleaseNotesClient {
             });
             const files = response.data.files ?? [];
             const changesApplication = files.some(file => {
-                const filename = file.filename.replace(/^\/|\/$/g, "");
-                return (filename === this.applicationPath ||
-                    filename.startsWith(`${this.applicationPath}/`));
+                return [file.filename, file.previous_filename].some(filename => {
+                    if (!filename) {
+                        return false;
+                    }
+                    const normalizedFilename = filename.replace(/^\/|\/$/g, "");
+                    return (normalizedFilename === this.applicationPath ||
+                        normalizedFilename.startsWith(`${this.applicationPath}/`));
+                });
             });
             return changesApplication ? commit : undefined;
         }));
