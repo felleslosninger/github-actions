@@ -111,6 +111,88 @@ describe("ReleaseNotesClient", () => {
         "Failed to retrieve release notes: Unknown error"
       );
     });
+
+    it("should only return commits that changed files below the configured path", async () => {
+      const compareResponse = {
+        data: {
+          commits: [
+            { sha: "app-1", commit: { message: "Application 1 change" } },
+            { sha: "app-2", commit: { message: "Application 2 change" } }
+          ]
+        }
+      };
+
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const getCommit = jest
+        .fn<(options: { ref: string }) => Promise<any>>()
+        .mockImplementation(async ({ ref }: { ref: string }) => ({
+          data: {
+            files:
+              ref === "app-1"
+                ? [{ filename: "apps/application-1/src/index.ts" }]
+                : [{ filename: "apps/application-2/src/index.ts" }]
+          }
+        }));
+      jest.spyOn(github, "getOctokit").mockReturnValue({
+        rest: {
+          repos: {
+            compareCommitsWithBasehead: jest
+              .fn<() => Promise<any>>()
+              .mockResolvedValue(compareResponse),
+            getCommit
+          }
+        }
+      } as any);
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+
+      const releaseNotesClient = new ReleaseNotesClient(
+        "owner/repo",
+        "base",
+        "head",
+        "token",
+        "apps/application-2/"
+      );
+
+      await expect(releaseNotesClient.retrieveReleaseNotes()).resolves.toEqual([
+        { message: "Application 2 change" }
+      ]);
+      expect(getCommit).toHaveBeenCalledTimes(2);
+    });
+
+    it("should return no release notes when no commit changed the configured path", async () => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      jest.spyOn(github, "getOctokit").mockReturnValue({
+        rest: {
+          repos: {
+            compareCommitsWithBasehead: jest
+              .fn<() => Promise<any>>()
+              .mockResolvedValue({
+                data: {
+                  commits: [
+                    { sha: "other", commit: { message: "Other change" } }
+                  ]
+                }
+              }),
+            getCommit: jest.fn<() => Promise<any>>().mockResolvedValue({
+              data: { files: [{ filename: "apps/other/src/index.ts" }] }
+            })
+          }
+        }
+      } as any);
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+
+      const releaseNotesClient = new ReleaseNotesClient(
+        "owner/repo",
+        "base",
+        "head",
+        "token",
+        "apps/application-2"
+      );
+
+      await expect(releaseNotesClient.retrieveReleaseNotes()).resolves.toEqual(
+        []
+      );
+    });
   });
 
   describe("extractFirstLineFromMessage", () => {
