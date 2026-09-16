@@ -59,8 +59,9 @@ export default class ReleaseNotesClient {
         c => ({ message: c.commit.message }) as Commit
       );
 
+      const shouldFallBackToHead = !this.applicationPath;
       const generatedReleaseLog =
-        commitsForPath.length > 0
+        commitsForPath.length > 0 || shouldFallBackToHead
           ? this.generateReleaseLog(releaseNotes)
           : Promise.resolve([]);
 
