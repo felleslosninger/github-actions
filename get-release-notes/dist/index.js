@@ -29223,6 +29223,7 @@ function loadInputs() {
     const repository = core.getInput("repository", { required: true });
     const head = core.getInput("head", { required: true });
     const base = core.getInput("base", { required: true });
+    const applicationPath = core.getInput("application-path");
     const githubToken = core.getInput("github-token", { required: true });
     const showPullRequestLinks = core.getBooleanInput("show-pull-request-links", { required: false });
     let pullRequestBaseUrl = "";
@@ -29242,6 +29243,7 @@ function loadInputs() {
         repository,
         head,
         base,
+        applicationPath,
         githubToken,
         showPullRequestLinks,
         pullRequestBaseUrl,
@@ -29328,8 +29330,8 @@ const release_notes_1 = __importDefault(__nccwpck_require__(9260));
 const links_helper_1 = __nccwpck_require__(2083);
 async function run() {
     try {
-        const { repository, head, base, githubToken, showPullRequestLinks, pullRequestBaseUrl, showJiraLinks, jiraBaseUrl } = InputsHelpers.loadInputs();
-        const client = new release_notes_1.default(repository, base, head, githubToken);
+        const { repository, head, base, applicationPath, githubToken, showPullRequestLinks, pullRequestBaseUrl, showJiraLinks, jiraBaseUrl } = InputsHelpers.loadInputs();
+        const client = new release_notes_1.default(repository, base, head, githubToken, applicationPath);
         const commits = await client.retrieveReleaseNotes();
         let releaseNotes = commits.map(c => c.message);
         if (showPullRequestLinks) {
@@ -29391,18 +29393,21 @@ class ReleaseNotesClient {
     repo;
     head;
     base;
+    applicationPath;
     /**
      * Constructs a new ReleaseNotesClient instance.
      * @param repository The GitHub repository in the format "owner/repo".
      * @param base The base branch or tag for comparison.
      * @param head The head branch or tag for comparison.
      * @param githubToken The GitHub authentication token.
+     * @param applicationPath Optional path to the application in the repository.
      */
-    constructor(repository, base, head, githubToken) {
+    constructor(repository, base, head, githubToken, applicationPath = "") {
         [this.owner, this.repo] = repository.split("/");
         this.githubToken = githubToken;
         this.base = base;
         this.head = head;
+        this.applicationPath = applicationPath.trim().replace(/^\/|\/$/g, "");
         this.api = github.getOctokit(this.githubToken).rest;
     }
     /**
@@ -29417,9 +29422,15 @@ class ReleaseNotesClient {
                 repo: this.repo,
                 basehead: `${this.base}...${this.head}`
             });
-            const commits = response.data.commits.map(c => ({ message: c.commit.message }));
-            const releaseNotes = await this.generateReleaseLog(commits);
-            return this.sanitizeCommitMessages(releaseNotes);
+            const commits = response.data.commits;
+            const commitsForPath = this.applicationPath
+                ? await this.filterCommitsByPath(commits)
+                : commits;
+            const releaseNotes = commitsForPath.map(c => ({ message: c.commit.message }));
+            const generatedReleaseLog = commitsForPath.length > 0
+                ? this.generateReleaseLog(releaseNotes)
+                : Promise.resolve([]);
+            return this.sanitizeCommitMessages(await generatedReleaseLog);
         }
         catch (error) {
             if (error instanceof Error) {
@@ -29429,6 +29440,28 @@ class ReleaseNotesClient {
                 throw new Error(`Failed to retrieve release notes: Unknown error`);
             }
         }
+    }
+    async filterCommitsByPath(commits) {
+        const commitsWithFiles = await Promise.all(commits.map(async (commit) => {
+            const response = await this.api.repos.getCommit({
+                owner: this.owner,
+                repo: this.repo,
+                ref: commit.sha
+            });
+            const files = response.data.files ?? [];
+            const changesApplication = files.some(file => {
+                return [file.filename, file.previous_filename].some(filename => {
+                    if (!filename) {
+                        return false;
+                    }
+                    const normalizedFilename = filename.replace(/^\/|\/$/g, "");
+                    return (normalizedFilename === this.applicationPath ||
+                        normalizedFilename.startsWith(`${this.applicationPath}/`));
+                });
+            });
+            return changesApplication ? commit : undefined;
+        }));
+        return commitsWithFiles.filter((commit) => commit !== undefined);
     }
     /**
      * Sanitizes commit messages by removing special characters.
