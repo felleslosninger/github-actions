@@ -26,11 +26,6 @@ This GitHub Action retrieves release notes based on the comparison between two
 commit SHAs in a GitHub repository. It provides an array of release notes as
 output.
 
-### [GitHub App Token](./github-app-token/README.md)
-
-This GitHub Action authenticates with GitHub using an App ID, Private Key,
-Installation ID, and generates a token.
-
 ### [JSON to Summary](./json-to-summary/README.md)
 
 This GitHub Action enables you to write JSON content to the workflow summary,
@@ -54,13 +49,6 @@ into your workflows, helping maintain code quality.
 
 This GitHub Action notifies designated Slack channels about workflow events,
 enabling teams to stay informed and facilitate rapid response and resolution.
-
-### [Validate Pull Request Title](./validate-pull-request-title/README.md)
-
-The Validate Pull Request Title GitHub Action checks if the title of a pull
-request meets specified criteria, including length constraints and required
-prefixes. It helps maintain consistency and clarity in pull request titles
-within your repository.
 
 ### [Write to InfluxDB](./write-to-influxdb/README.md)
 
