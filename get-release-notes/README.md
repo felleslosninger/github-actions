@@ -14,6 +14,8 @@ To use this action, you need to provide the following inputs:
 - `repository`: Name of the application repository (required)
 - `head`: Head commit SHA (required)
 - `base`: Base commit SHA (required)
+- `application-path`: Optional repository path for the application (useful in a monorepo)
+  (default: all paths)
 - `github-token`: GitHub token for authentication (required)
 - `show-pull-request-links`: Show PR numbers as links (optional, default: false)
 - `pull-request-base-url`: Pull-request base URL (optional, but required if
@@ -46,6 +48,7 @@ jobs:
           repository: your-repo-name
           head: ${{ github.event.after }}
           base: ${{ github.event.before }}
+          application-path: apps/your-application
           github-token: ${{ secrets.GITHUB_TOKEN }}
           show-pull-request-links: true
           pull-request-base-url: https://your-pull-request-url.com
@@ -69,6 +72,12 @@ Head commit SHA to compare.
 ### `base`
 
 Base commit SHA to compare.
+
+### `application-path`
+
+Optional path to the application in the repository. When supplied, only
+commits that changed files under this path are included in the release notes.
+This is useful when several applications share one repository.
 
 ### `github-token`
 
