@@ -6,6 +6,8 @@ export function getInput(name: string): string {
       return "mocked-base";
     case "head":
       return "mocked-head";
+    case "application-path":
+      return "mocked-path";
     case "github-token":
       return "mocked-github-token";
     case "pull-request-base-url":
