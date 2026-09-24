@@ -124,7 +124,8 @@ describe("publishReleaseNotes", () => {
       version,
       ignoreCommits,
       eventType,
-      dependabotReplacement
+      dependabotReplacement,
+      "prod"
     );
 
     // assert
@@ -173,7 +174,8 @@ describe("publishReleaseNotes", () => {
       version,
       ignoreCommits,
       eventType,
-      dependabotReplacement
+      dependabotReplacement,
+      "prod"
     );
 
     // assert
@@ -191,7 +193,8 @@ describe("publishReleaseNotes", () => {
         version,
         date: timestamp,
         sha,
-        title: publicTitle
+        title: publicTitle,
+        environment: "prod"
       }
     });
     expect(result).toBe(true);

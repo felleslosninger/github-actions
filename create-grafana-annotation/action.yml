@@ -1,22 +1,27 @@
 name: Write Deployment To Grafana
-description:
+description: |
+  A GitHub Action that creates an annotation in Grafana with details about a
+  deployment. The action takes inputs such as dashboard ID, panel ID, annotation
+  text, and an optional URL. It uses the Grafana API to add the annotation and
+  logs the result in the GitHub Actions summary. Useful for tracking deployments
+  and related events directly in Grafana dashboards.
 author: Digdir Platform Team
 
 inputs:
   dashboard-id:
+    description: "Grafana dashboard ID where the annotation should be added"
     required: true
-    type: string
   panel-id:
+    description: "Grafana panel ID where the annotation should be added"
     required: true
-    type: string
   annotation-text:
+    description: "The text for the annotation"
     required: true
-    type: string
   grafana-token:
+    description: "The token for authenticating with Grafana"
     required: true
-    type: string
   annotation-url:
-    type: string
+    description: "The URL for the annotation"
     default: ""
 
 runs:
@@ -48,7 +53,7 @@ runs:
             --header "Content-Type: application/json" \
             --header "Authorization: Bearer ${{ inputs.grafana-token }}" \
             -d "$ANNOTATION_JSON"
-        );  
+        );
 
         echo "response-http-code=$RESPONSE_HTTP_CODE" >> $GITHUB_OUTPUT
 
