@@ -18,6 +18,10 @@ inputs:
   base:
     description: "Base commit SHA"
     required: true
+  application-path:
+    description: "Optional repository path used to scope release notes"
+    required: false
+    default: ""
   github-token:
     description: "GitHub token for authentication"
     required: true
