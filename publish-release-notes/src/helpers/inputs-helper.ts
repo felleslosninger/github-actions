@@ -25,6 +25,7 @@ export function loadInputs(): Inputs {
   const ignoreProducts = core.getInput("ignore-products") || "";
   const ignoreApplications = core.getInput("ignore-applications") || "";
   const dependabotReplacement = core.getInput("dependabot-replacement") || "";
+  const allowCommits = core.getInput("allow-commits") || "";
   const ignoreCommits = core.getInput("ignore-commits") || "";
   const title = core.getInput("title") || product;
   const VALID_ENVIRONMENTS = ["prod", "kt"];
@@ -58,6 +59,17 @@ export function loadInputs(): Inputs {
     );
   }
 
+  if (
+    allowCommits &&
+    allowCommits.length > 0 &&
+    ignoreCommits &&
+    ignoreCommits.length > 0
+  ) {
+    throw new Error(
+      "Setting both allow-commits and ignore-commits is not allowed"
+    );
+  }
+
   return {
     applicationName,
     product,
@@ -73,6 +85,7 @@ export function loadInputs(): Inputs {
     allowApplications,
     ignoreProducts,
     ignoreApplications,
+    allowCommits,
     ignoreCommits,
     dependabotReplacement,
     title,

@@ -48,6 +48,7 @@ describe("run", () => {
       title: "TestTitle",
       eventType: "TestEvent",
       dependabotReplacement: "",
+      allowCommits: "",
       ignoreCommits: "",
       environment: "prod"
     }));
@@ -74,7 +75,8 @@ describe("run", () => {
       "",
       "TestEvent",
       "",
-      "prod"
+      "prod",
+      ""
     );
 
     expect(core.setOutput).toHaveBeenCalledWith(
@@ -102,6 +104,7 @@ describe("run", () => {
       title: "TestTitle",
       eventType: "TestEvent",
       dependabotReplacement: "",
+      allowCommits: "",
       ignoreCommits: "",
       environment: "prod"
     }));
@@ -142,6 +145,7 @@ describe("run", () => {
       title: "TestTitle",
       eventType: "TestEvent",
       dependabotReplacement: "",
+      allowCommits: "",
       ignoreCommits: "",
       environment: "prod"
     }));
@@ -181,6 +185,7 @@ describe("run", () => {
       title: "TestTitle",
       eventType: "TestEvent",
       dependabotReplacement: "",
+      allowCommits: "",
       ignoreCommits: "",
       environment: "prod"
     }));
@@ -220,6 +225,7 @@ describe("run", () => {
       title: "TestTitle",
       eventType: "TestEvent",
       dependabotReplacement: "",
+      allowCommits: "",
       ignoreCommits: "",
       environment: "prod"
     }));
@@ -246,7 +252,8 @@ describe("run", () => {
       "",
       "TestEvent",
       "",
-      "prod"
+      "prod",
+      ""
     );
 
     expect(core.setOutput).toHaveBeenCalledWith(
@@ -274,6 +281,7 @@ describe("run", () => {
       title: "TestTitle",
       eventType: "TestEvent",
       dependabotReplacement: "",
+      allowCommits: "",
       ignoreCommits: "",
       environment: "prod"
     }));
@@ -314,6 +322,7 @@ describe("run", () => {
       title: "TestTitle",
       eventType: "TestEvent",
       dependabotReplacement: "",
+      allowCommits: "",
       ignoreCommits: "",
       environment: "prod"
     }));
@@ -340,7 +349,8 @@ describe("run", () => {
       "",
       "TestEvent",
       "",
-      "prod"
+      "prod",
+      ""
     );
 
     expect(core.setOutput).toHaveBeenCalledWith(
@@ -368,6 +378,7 @@ describe("run", () => {
       title: "TestTitle",
       eventType: "TestEvent",
       dependabotReplacement: "",
+      allowCommits: "",
       ignoreCommits: "",
       environment: "prod"
     }));
