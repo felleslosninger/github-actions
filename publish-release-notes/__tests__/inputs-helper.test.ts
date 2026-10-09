@@ -108,6 +108,7 @@ describe("loadInputs", () => {
     // act
     const {
       applicationName,
+      allowCommits,
       dependabotReplacement,
       eventType,
       githubToken,
@@ -129,6 +130,7 @@ describe("loadInputs", () => {
 
     // assert
     expect(applicationName).toBe("");
+    expect(allowCommits).toBe("");
     expect(dependabotReplacement).toBe("");
     expect(eventType).toBe("");
     expect(githubToken).toBe("");
@@ -223,5 +225,24 @@ describe("loadInputs", () => {
     expect(() => {
       InputsHelpers.loadInputs();
     }).toThrow('Invalid environment: "staging". Valid values are: prod, kt');
+  });
+
+  it("throws an error when both allow-commits and ignore-commits are set", () => {
+    jest.spyOn(core, "getInput").mockImplementation((name: string) => {
+      switch (name) {
+        case "release-notes":
+          return JSON.stringify(["mocked-release-notes-1"]);
+        case "allow-commits":
+          return "feat,fix";
+        case "ignore-commits":
+          return "(INTERNAL-COMMIT)";
+        default:
+          return "";
+      }
+    });
+
+    expect(() => {
+      InputsHelpers.loadInputs();
+    }).toThrow("Setting both allow-commits and ignore-commits is not allowed");
   });
 });

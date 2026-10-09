@@ -15,7 +15,8 @@ describe("filterReleaseNotes", () => {
     const result = ReleaseNotes.filterReleaseNotes(
       releaseNotes,
       ignoreCommits,
-      dependabotReplacement
+      dependabotReplacement,
+      ""
     );
 
     // assert
@@ -33,7 +34,8 @@ describe("filterReleaseNotes", () => {
     const result = ReleaseNotes.filterReleaseNotes(
       releaseNotes,
       ignoreCommits,
-      dependabotReplacement
+      dependabotReplacement,
+      ""
     );
 
     // assert
@@ -51,7 +53,8 @@ describe("filterReleaseNotes", () => {
     const result = ReleaseNotes.filterReleaseNotes(
       releaseNotes,
       ignoreCommits,
-      dependabotReplacement
+      dependabotReplacement,
+      ""
     );
 
     // assert
@@ -68,7 +71,8 @@ describe("filterReleaseNotes", () => {
     const result = ReleaseNotes.filterReleaseNotes(
       releaseNotes,
       ignoreCommits,
-      dependabotReplacement
+      dependabotReplacement,
+      ""
     );
 
     // assert
@@ -85,11 +89,57 @@ describe("filterReleaseNotes", () => {
     const result = ReleaseNotes.filterReleaseNotes(
       releaseNotes,
       ignoreCommits,
-      dependabotReplacement
+      dependabotReplacement,
+      ""
     );
 
     // assert
     expect(result).toEqual(expect.arrayContaining(expected));
+  });
+
+  it("should keep only commits matching allow-commits pattern", () => {
+    const releaseNotes = ["Add feature", "Fix bug", "Update docs"];
+    const allowCommits = "Fix";
+    const expected = ["Fix bug"];
+
+    const result = ReleaseNotes.filterReleaseNotes(
+      releaseNotes,
+      "",
+      "",
+      allowCommits
+    );
+
+    expect(result).toEqual(expected);
+  });
+
+  it("should keep commits matching any pattern in allow-commits", () => {
+    const releaseNotes = ["Add feature", "Fix bug", "Update docs", "Refactor"];
+    const allowCommits = "Fix,Add";
+    const expected = ["Add feature", "Fix bug"];
+
+    const result = ReleaseNotes.filterReleaseNotes(
+      releaseNotes,
+      "",
+      "",
+      allowCommits
+    );
+
+    expect(result).toEqual(expect.arrayContaining(expected));
+    expect(result.length).toBe(2);
+  });
+
+  it("should return empty array when no commits match allow-commits", () => {
+    const releaseNotes = ["Add feature", "Fix bug"];
+    const allowCommits = "INTERNAL-COMMIT";
+
+    const result = ReleaseNotes.filterReleaseNotes(
+      releaseNotes,
+      "",
+      "",
+      allowCommits
+    );
+
+    expect(result).toEqual([]);
   });
 });
 
@@ -107,6 +157,7 @@ describe("publishReleaseNotes", () => {
     const sha = "test_sha";
     const publicTitle = "TestTitle";
     const ignoreCommits = "";
+    const allowCommits = "";
     const eventType = "";
     const dependabotReplacement = "";
 
@@ -125,7 +176,8 @@ describe("publishReleaseNotes", () => {
       ignoreCommits,
       eventType,
       dependabotReplacement,
-      "prod"
+      "prod",
+      allowCommits
     );
 
     // assert
@@ -145,6 +197,7 @@ describe("publishReleaseNotes", () => {
     const sha = "test_sha";
     const publicTitle = "TestTitle";
     const ignoreCommits = "";
+    const allowCommits = "";
     const eventType = "";
     const dependabotReplacement = "";
 
@@ -175,7 +228,8 @@ describe("publishReleaseNotes", () => {
       ignoreCommits,
       eventType,
       dependabotReplacement,
-      "prod"
+      "prod",
+      allowCommits
     );
 
     // assert
