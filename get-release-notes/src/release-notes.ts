@@ -1,5 +1,5 @@
 import * as github from "@actions/github";
-import { Commit, ComparisonResponse } from "./interfaces";
+import { Commit, ComparedCommit, ComparisonResponse } from "./interfaces";
 import type { RestEndpointMethods } from "@octokit/plugin-rest-endpoint-methods/dist-types/generated/method-types";
 
 /**
@@ -12,6 +12,7 @@ export default class ReleaseNotesClient {
   private repo: string;
   private head: string;
   private base: string;
+  private applicationPath: string;
 
   /**
    * Constructs a new ReleaseNotesClient instance.
@@ -19,17 +20,20 @@ export default class ReleaseNotesClient {
    * @param base The base branch or tag for comparison.
    * @param head The head branch or tag for comparison.
    * @param githubToken The GitHub authentication token.
+   * @param applicationPath Optional path to the application in the repository.
    */
   constructor(
     repository: string,
     base: string,
     head: string,
-    githubToken: string
+    githubToken: string,
+    applicationPath = ""
   ) {
     [this.owner, this.repo] = repository.split("/");
     this.githubToken = githubToken;
     this.base = base;
     this.head = head;
+    this.applicationPath = applicationPath.trim().replace(/^\/|\/$/g, "");
     this.api = github.getOctokit(this.githubToken).rest;
   }
 
@@ -47,13 +51,21 @@ export default class ReleaseNotesClient {
           basehead: `${this.base}...${this.head}`
         });
 
-      const commits: Commit[] = response.data.commits.map(
+      const commits = response.data.commits;
+      const commitsForPath = this.applicationPath
+        ? await this.filterCommitsByPath(commits)
+        : commits;
+      const releaseNotes: Commit[] = commitsForPath.map(
         c => ({ message: c.commit.message }) as Commit
       );
 
-      const releaseNotes = await this.generateReleaseLog(commits);
+      const shouldFallBackToHead = !this.applicationPath;
+      const generatedReleaseLog =
+        commitsForPath.length > 0 || shouldFallBackToHead
+          ? this.generateReleaseLog(releaseNotes)
+          : Promise.resolve([]);
 
-      return this.sanitizeCommitMessages(releaseNotes);
+      return this.sanitizeCommitMessages(await generatedReleaseLog);
     } catch (error: Error | unknown) {
       if (error instanceof Error) {
         throw new Error(`Failed to retrieve release notes: ${error?.message}`);
@@ -61,6 +73,41 @@ export default class ReleaseNotesClient {
         throw new Error(`Failed to retrieve release notes: Unknown error`);
       }
     }
+  }
+
+  private async filterCommitsByPath(
+    commits: ComparedCommit[]
+  ): Promise<ComparedCommit[]> {
+    const commitsWithFiles = await Promise.all(
+      commits.map(async commit => {
+        const response = await this.api.repos.getCommit({
+          owner: this.owner,
+          repo: this.repo,
+          ref: commit.sha
+        });
+
+        const files = response.data.files ?? [];
+        const changesApplication = files.some(file => {
+          return [file.filename, file.previous_filename].some(filename => {
+            if (!filename) {
+              return false;
+            }
+
+            const normalizedFilename = filename.replace(/^\/|\/$/g, "");
+            return (
+              normalizedFilename === this.applicationPath ||
+              normalizedFilename.startsWith(`${this.applicationPath}/`)
+            );
+          });
+        });
+
+        return changesApplication ? commit : undefined;
+      })
+    );
+
+    return commitsWithFiles.filter(
+      (commit): commit is ComparedCommit => commit !== undefined
+    );
   }
 
   /**

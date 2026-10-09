@@ -12,6 +12,7 @@ describe("loadInputs", () => {
       repository,
       head,
       base,
+      applicationPath,
       githubToken,
       showPullRequestLinks,
       pullRequestBaseUrl,
@@ -23,6 +24,7 @@ describe("loadInputs", () => {
     expect(repository).toBe("mocked-repository");
     expect(head).toBe("mocked-head");
     expect(base).toBe("mocked-base");
+    expect(applicationPath).toBe("mocked-path");
     expect(githubToken).toBe("mocked-github-token");
     expect(showPullRequestLinks).toBe(true);
     expect(pullRequestBaseUrl).toBe("mocked-pull-request-base-url");
@@ -45,6 +47,7 @@ describe("loadInputs", () => {
       repository,
       head,
       base,
+      applicationPath,
       githubToken,
       showPullRequestLinks,
       pullRequestBaseUrl,
@@ -56,6 +59,7 @@ describe("loadInputs", () => {
     expect(repository).toBe("");
     expect(head).toBe("");
     expect(base).toBe("");
+    expect(applicationPath).toBe("");
     expect(githubToken).toBe("");
     expect(showPullRequestLinks).toBe(true);
     expect(pullRequestBaseUrl).toBe("");

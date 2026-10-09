@@ -42,6 +42,7 @@ describe("run", () => {
       repository: "owner/repo",
       head: "head",
       base: "base",
+      applicationPath: "",
       githubToken: "token",
       showPullRequestLinks: true,
       pullRequestBaseUrl: "https://github.com/company/repo/",

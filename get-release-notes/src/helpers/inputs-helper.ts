@@ -5,6 +5,7 @@ export function loadInputs(): Inputs {
   const repository: string = core.getInput("repository", { required: true });
   const head: string = core.getInput("head", { required: true });
   const base: string = core.getInput("base", { required: true });
+  const applicationPath: string = core.getInput("application-path");
   const githubToken: string = core.getInput("github-token", { required: true });
 
   const showPullRequestLinks: boolean = core.getBooleanInput(
@@ -32,6 +33,7 @@ export function loadInputs(): Inputs {
     repository,
     head,
     base,
+    applicationPath,
     githubToken,
     showPullRequestLinks,
     pullRequestBaseUrl,

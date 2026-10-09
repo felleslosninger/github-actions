@@ -10,6 +10,7 @@ export async function run(): Promise<void> {
       repository,
       head,
       base,
+      applicationPath,
       githubToken,
       showPullRequestLinks,
       pullRequestBaseUrl,
@@ -17,7 +18,13 @@ export async function run(): Promise<void> {
       jiraBaseUrl
     }: Inputs = InputsHelpers.loadInputs();
 
-    const client = new ReleaseNotesClient(repository, base, head, githubToken);
+    const client = new ReleaseNotesClient(
+      repository,
+      base,
+      head,
+      githubToken,
+      applicationPath
+    );
 
     const commits: Commit[] = await client.retrieveReleaseNotes();
 
